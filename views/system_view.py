@@ -10,8 +10,8 @@ class SystemView:
         print("0 - Sair")
 
         while True:
-            chosen = input("Sua escolha: ")
-            if not chosen.isnumeric() or int(chosen) not in [0, 1, 2, 3, 4]:
+            option = input("Sua escolha: ")
+            if not option.isnumeric() or int(option) not in [0, 1, 2, 3, 4]:
                 print("Por favor, escolha um número dentre as opções.")
                 continue
-            return int(chosen)
+            return int(option)
