@@ -47,7 +47,7 @@ class UserView:
     def read_cpf(self):
         while True:
             cpf = input("Digite o CPF do usuário: ")
-            if not cpf.isnumeric or int(cpf) <= 0:
+            if not cpf.isnumeric() or int(cpf) <= 0:
                 print("O CPF precisa ser um inteiro maior que 0")
                 continue
             return int(cpf)
