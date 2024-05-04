@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, name: str, surname: str, email: str, password: str, cpf: str):
+    def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
         if isinstance(name, str):
             self.__name = name
         if isinstance(surname, str):
@@ -8,7 +8,7 @@ class User:
             self.__email = email
         if isinstance(password, str):
             self.__password = password
-        if isinstance(cpf, str):
+        if isinstance(cpf, int):
             self.__cpf = cpf
         self.__description = ""
 
@@ -58,7 +58,7 @@ class User:
             self.__description = description
 
     @property
-    def cpf(self) -> str:
+    def cpf(self) -> int:
         return self.__cpf
 
     def buy_course(self):
