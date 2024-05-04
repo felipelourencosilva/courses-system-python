@@ -1,5 +1,5 @@
 class Video:
-    def __init__(video_url: str):
+    def __init__(self, video_url: str):
         self.__video_url = video_url
 
     @property
