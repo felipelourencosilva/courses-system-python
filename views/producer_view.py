@@ -1,11 +1,11 @@
-class SystemView:
+class ProducerView:
 
     def view_options(self) -> int:
-        print("------- MENU -------")
+        print("------- PRODUTOR -------")
         print("Escolha alguma opção:")
-        print("1 - Ir para tela de Usuário")
-        print("2 - Ir para tela de Estatísticas")
-        print("0 - Sair")
+        print("1 - ...")
+        print("2 - ...")
+        print("0 - Voltar")
 
         while True:
             chosen = input("Sua escolha: ")

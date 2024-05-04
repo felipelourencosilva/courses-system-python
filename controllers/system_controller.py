@@ -6,8 +6,8 @@ from controllers.sale_controller import *
 class SystemController:
 
     def __init__(self):
-        self.__user_controller = UserController()
-        self.__sale_controller = SaleController()
+        self.__user_controller = UserController(self)
+        self.__sale_controller = SaleController(self)
         self.__system_view = SystemView()
 
     @property
@@ -38,5 +38,5 @@ class SystemController:
         }
 
         while True:
-            chosen_option = self.__system_view.show_options()
+            chosen_option = self.__system_view.view_options()
             options[chosen_option]()
