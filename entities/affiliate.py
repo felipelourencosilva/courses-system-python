@@ -1,8 +1,8 @@
-from user import *
+from entities.user import *
 
 class Affiliate(User):
     def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
-        super().__init__(name, surname, email, password, str, cpf)
+        super().__init__(name, surname, email, password, cpf)
         self.__balance = 0.0
 
     @property

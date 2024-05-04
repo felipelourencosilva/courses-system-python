@@ -26,9 +26,9 @@ class UserController:
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
 
-        if (user is not None):
+        if user is not None:
             user_data = self.__user_view.get_edit_user_data()
-            user.nome = user_data["name"]
+            user.name = user_data["name"]
             user.surname = user_data["surname"]
             user.email = user_data["email"]
             user.password = user_data["password"]
@@ -47,7 +47,7 @@ class UserController:
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
 
-        if (user is not None):
+        if user is not None:
             self.__users.remove(user)
         else:
             self.__user_view.show_message("Usuário não encontrado")

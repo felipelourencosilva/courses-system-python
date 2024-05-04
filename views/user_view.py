@@ -11,7 +11,7 @@ class UserView:
 
         while True:
             option = input("Sua escolha: ")
-            if not option.isnumeric or int(option) not in range(0, 5):
+            if not option.isnumeric() or int(option) not in range(0, 5):
                 print("Por favor, escolha um número dentre as opções.")
                 continue
             return int(option)
@@ -21,7 +21,7 @@ class UserView:
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")
-        password = input("Password: ")
+        password = input("Senha: ")
         cpf = int(input("CPF: "))
 
         return {"name": name, "surname": surname, "email": email,
@@ -42,7 +42,7 @@ class UserView:
         print("Email do usuário: ", user_data["email"])
         print("Senha do usuário: ", user_data["password"])
         print("CPF do usuário: ", user_data["cpf"])
-        print("\n")
+        print()
 
     def read_cpf(self):
         while True:
