@@ -4,12 +4,14 @@ class SystemView:
         print("------- MENU -------")
         print("Escolha alguma opção:")
         print("1 - Ir para tela de Usuário")
-        print("2 - Ir para tela de Estatísticas")
+        print("2 - Ir para tela de Produtor")
+        print("3 - Ir para tela de Afiliado")
+        print("4 - Ir para tela de Estatísticas")
         print("0 - Sair")
 
         while True:
             chosen = input("Sua escolha: ")
-            if not chosen.isnumeric or int(chosen) not in [0, 1, 2]:
+            if not chosen.isnumeric or int(chosen) not in [0, 1, 2, 3, 4]:
                 print("Por favor, escolha um número dentre as opções.")
                 continue
             return int(chosen)

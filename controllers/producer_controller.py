@@ -1,9 +1,9 @@
-from views.sale_view import *
+from views.producer_view import *
 
 
-class SaleController:
+class ProducerController:
     def __init__(self, system_controller):
-        self.__sale_view = SaleView()
+        self.__producer_view = ProducerView()
         self.__system_controller = system_controller
 
     def previous_view(self):
@@ -13,4 +13,4 @@ class SaleController:
         options = {
             0: self.previous_view
         }
-        self.__sale_view.view_options()
+        self.__producer_view.show_view()

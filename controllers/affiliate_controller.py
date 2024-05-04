@@ -1,9 +1,9 @@
-from views.sale_view import *
+from views.affiliate_view import *
 
 
-class SaleController:
+class AffiliateController:
     def __init__(self, system_controller):
-        self.__sale_view = SaleView()
+        self.__affiliate_view = AffiliateView()
         self.__system_controller = system_controller
 
     def previous_view(self):
@@ -13,4 +13,4 @@ class SaleController:
         options = {
             0: self.previous_view
         }
-        self.__sale_view.view_options()
+        self.__affiliate_view.show_view()
