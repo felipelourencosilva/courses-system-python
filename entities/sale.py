@@ -3,7 +3,7 @@ from course import *
 from affiliate import *
 
 
-class Venda:
+class Sale:
     def __init__(self, user: User, course: Course, affiliate: None):
         if isinstance(user, User):
             self.__user = user
