@@ -11,7 +11,7 @@ class UserController:
     def get_user_by_cpf(self, cpf: int):
         if isinstance(cpf, int):
             for user in self.__users:
-                if (user.cpf == cpf):
+                if user.cpf == cpf:
                     return user
         return None
 
@@ -37,7 +37,7 @@ class UserController:
 
     def list_users(self):
         for user in self.__users:
-            self.__user_view.show_user({"nome": user.name + " " + user.surname, "email": user.email, "senha": user.password, "cpf": user.cpf})
+            self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email, "password": user.password, "cpf": user.cpf})
 
     def remove_user(self):
         self.list_users()
