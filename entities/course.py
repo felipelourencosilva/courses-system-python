@@ -55,6 +55,11 @@ class Course:
     def comission_percentage(self, comission_percentage: int):
         if isinstance(comission_percentage, int):
             self.__comission_percentage = comission_percentage
+            self.__comission_price = (self.__comission_percentage / 100) * self.__price
+
+    @property
+    def comission_price(self) -> float:
+        return self.__comission_price
 
     def add_module(self):
         pass
