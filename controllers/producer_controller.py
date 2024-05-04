@@ -13,4 +13,4 @@ class ProducerController:
         options = {
             0: self.previous_view
         }
-        self.__producer_view.show_view()
+        self.__producer_view.view_options()
