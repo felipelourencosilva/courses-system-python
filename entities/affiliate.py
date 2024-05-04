@@ -1,6 +1,6 @@
 from user import *
 
-class Affiliate:
+class Affiliate(User):
     def __init__(name: str, surname: str, email: str, password: str, cpf: str):
         super().__init__(name, surname, email, password, str, cpf)
         self.__balance = 0.0
