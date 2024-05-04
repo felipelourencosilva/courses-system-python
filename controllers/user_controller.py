@@ -1,10 +1,9 @@
 from views.user_view import *
-from controllers.system_controller import *
 from entities.user import *
 
 
 class UserController:
-    def __init__(self, system_controller: SystemController):
+    def __init__(self, system_controller):
         self.__users = []
         self.__user_view = UserView()
         self.__system_controller = system_controller
@@ -54,20 +53,12 @@ class UserController:
         self.__system_controller.show_view()
 
     def show_view(self):
-        lista_opcoes = {1: self.incluir_amigo, 2: self.alterar_amigo, 3: self.lista_amigos, 4: self.excluir_amigo,
-                        0: self.retornar}
-
-        continua = True
-        while continua:
-            lista_opcoes[self.__tela_amigo.tela_opcoes()]()
-
-    def show_view(self):
         options = {
-            1: self.add_user(),
-            2: self.remove_user(),
-            3: self.edit_user(),
-            4: self.list_users(),
-            0: self.exit
+            1: self.add_user,
+            2: self.remove_user,
+            3: self.edit_user,
+            4: self.list_users,
+            0: self.previous_view
         }
 
         while True:
