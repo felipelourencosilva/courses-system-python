@@ -2,7 +2,7 @@ from producer import *
 
 
 class Course:
-    def __init__(self, name: str, producer: Producer, description: str, price: float, comission_percentage: int):
+    def __init__(self, name: str, producer: Producer, description: str, price: float, commission_percentage: int):
         if isinstance(name, str):
             self.__name = name
         if isinstance(producer, Producer):
@@ -11,10 +11,10 @@ class Course:
             self.__description = description
         if isinstance(price, float):
             self.__price = price
-        if isinstance(comission_percentage, int):
-            self.__comission_percentage = comission_percentage
+        if isinstance(commission_percentage, int):
+            self.__commission_percentage = commission_percentage
 
-        self.__comission_price = (self.__comission_percentage/100) * self.__price
+        self.__commission_price = (self.__commission_percentage/100) * self.__price
 
     @property
     def name(self) -> str:
@@ -48,18 +48,18 @@ class Course:
             self.__price = price
 
     @property
-    def comission_percentage(self) -> int:
-        return self.__comission_percentage
+    def commission_percentage(self) -> int:
+        return self.__commission_percentage
 
-    @comission_percentage.setter
-    def comission_percentage(self, comission_percentage: int):
-        if isinstance(comission_percentage, int):
-            self.__comission_percentage = comission_percentage
-            self.__comission_price = (self.__comission_percentage / 100) * self.__price
+    @commission_percentage.setter
+    def commission_percentage(self, commission_percentage: int):
+        if isinstance(commission_percentage, int):
+            self.__commission_percentage = commission_percentage
+            self.__commission_price = (self.__commission_percentage / 100) * self.__price
 
     @property
-    def comission_price(self) -> float:
-        return self.__comission_price
+    def commission_price(self) -> float:
+        return self.__commission_price
 
     def add_module(self):
         pass
