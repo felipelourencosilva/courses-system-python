@@ -1,5 +1,8 @@
+from entities.user import *
+
+
 class Comment:
-    def __init__(author: User, comment: str):
+    def __init__(self, author: User, comment: str):
         if isinstance(author, User):
             self.__author = author
         if isinstance(comment, str):
