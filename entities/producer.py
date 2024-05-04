@@ -1,4 +1,5 @@
-from user import *
+from entities.user import *
+
 
 class Producer(User):
     def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
