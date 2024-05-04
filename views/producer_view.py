@@ -11,7 +11,7 @@ class ProducerView:
 
         while True:
             option = input("Sua escolha: ")
-            if not option.isnumeric or int(option) not in range(0, 5):
+            if not option.isnumeric() or int(option) not in range(0, 5):
                 print("Por favor, escolha um número dentre as opções.")
                 continue
             return int(option)
