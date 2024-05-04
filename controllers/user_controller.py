@@ -36,8 +36,11 @@ class UserController:
             self.__user_view.show_message("Usuário não encontrado")
 
     def list_users(self):
-        for user in self.__users:
-            self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email, "password": user.password, "cpf": user.cpf})
+        if len(self.__users) == 0:
+            self.__user_view.show_message("Não há usuários cadastrados")
+        else:
+            for user in self.__users:
+                self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email, "password": user.password, "cpf": user.cpf})
 
     def remove_user(self):
         self.list_users()
