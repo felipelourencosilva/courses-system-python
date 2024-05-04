@@ -32,6 +32,8 @@ class SystemController:
 
     def show_view(self):
         options = {
+            1: self.to_user_view,
+            2: self.to_sale_view,
             0: self.exit
         }
 
