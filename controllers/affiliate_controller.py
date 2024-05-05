@@ -23,6 +23,8 @@ class AffiliateController:
 
     def edit_affiliate(self):
         self.list_affiliates()
+        if len(self.__affiliates) == 0:
+            return
         affiliate_cpf = self.__affiliate_view.read_cpf()
         affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
 
@@ -50,6 +52,8 @@ class AffiliateController:
 
     def remove_affiliate(self):
         self.list_affiliates()
+        if len(self.__affiliates) == 0:
+            return
         affiliate_cpf = self.__affiliate_view.read_cpf()
         affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
 

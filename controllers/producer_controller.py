@@ -23,6 +23,8 @@ class ProducerController:
 
     def edit_producer(self):
         self.list_producer()
+        if len(self.__producers) == 0:
+            return
         producer_cpf = self.__producer_view.read_cpf()
         producer = self.get_producer_by_cpf(producer_cpf)
 
@@ -46,6 +48,8 @@ class ProducerController:
 
     def remove_producer(self):
         self.list_producer()
+        if len(self.__producers) == 0:
+            return
         producer_cpf = self.__producer_view.read_cpf()
         producer = self.get_producer_by_cpf(producer_cpf)
 
