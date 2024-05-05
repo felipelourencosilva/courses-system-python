@@ -67,7 +67,7 @@ class CourseController:
         if len(self.__courses) == 0:
             return
         id = self.__course_view.read_id()
-        cpf = self.__course_view.read_cpf()
+        cpf = self.__course_view.read_cpf("CPF do Usuário: ")
 
         if id is not None and id in self.__courses:
             course = self.__courses[id]

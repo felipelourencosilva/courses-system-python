@@ -37,6 +37,14 @@ class AbstractView(ABC):
             else:
                 return int(num)
 
+    def read_int_range(self, default_msg: str, error_msg: str, min: int, max: int):
+        while True:
+            num = self.read_int(default_msg, error_msg)
+            if num < min or num > max:
+                print(error_msg)
+            else:
+                return num
+
     def read_float(self, default_msg: str, error_msg: str):
         while True:
             num = input(default_msg)
@@ -69,11 +77,15 @@ class AbstractView(ABC):
             else:
                 return str
 
-    def read_cpf(self):
+    def read_cpf(self, default_msg: str = None, error_msg: str = None):
+        if default_msg is None:
+            default_msg = "CPF: "
+        if error_msg is None:
+            error_msg = "O CPF deve ser um inteiro maior que 0."
         while True:
-            cpf = self.read_int("CPF: ", "O CPF deve ser um inteiro maior que 0.")
+            cpf = self.read_int(default_msg, error_msg)
             if (cpf <= 0):
-                self.show_message("O CPF deve ser um inteiro maior que 0.")
+                self.show_message(error_msg)
             else:
                 return cpf
     def print_title(self, title: str):

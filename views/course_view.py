@@ -19,12 +19,7 @@ class CourseView(AbstractView):
 
     def get_add_course_data(self):
         data = self.get_edit_course_data()
-
-        cpf = input("CPF do Produtor: ")
-        while not cpf.isnumeric() or int(cpf) <= 0:
-            print("O CPF deve ser um inteiro maior que 0.")
-            cpf = input("CPF: ")
-        data["cpf"] = int(cpf)
+        data["cpf"] = self.read_cpf("CPF do Produtor: ")
         return data
 
     def get_edit_course_data(self):
@@ -34,14 +29,12 @@ class CourseView(AbstractView):
         data["description"] = input("Descrição: ")
         data["price"] = self.read_value("Preço: ", "Preço deve ser um número decimal separado por '.'.")
 
-        while True:
-            commission_percentage = self.read_int("Porcentagem da comissão (Ex: 15, 25, 50): ", "Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
-            if (commission_percentage < 0 or commission_percentage > 100):
-                print("Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
-            else:
-                data["commission_percentage"] = commission_percentage
-                break
-
+        data["commission_percentage"] = self.read_int_range(
+            "Porcentagem da comissão (Ex: 15, 25, 50): ",
+            "Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.",
+            0,
+            100
+        )
         return data
 
     def show_course(self, course_data):
@@ -52,9 +45,9 @@ class CourseView(AbstractView):
         print()
 
     def read_id(self):
-        while True:
-            id = input("Digite o ID do curso: ")
-            if not id.isnumeric() or int(id) <= 0 or int(id) > 1000:
-                print("O ID precisa ser um inteiro maior que 0")
-            else:
-                return int(id)
+        return self.read_int_range(
+            "Digite o ID do curso: ",
+            "O ID precisa ser um inteiro entre 1 e 1000",
+            1,
+            1000
+        )
