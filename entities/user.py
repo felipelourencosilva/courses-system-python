@@ -15,6 +15,7 @@ class User:
             self.__cpf = cpf
         self.__description = ""
         self.__courses = []
+        self.__balance = 0.0
 
     @property
     def name(self) -> str:
@@ -69,6 +70,9 @@ class User:
     def courses(self) -> list:
         return self.__courses
 
-    def add_course(self, course: Course):
-        if isinstance(course, Course):
-            self.__courses.append(course)
+    @property
+    def balance(self) -> float:
+        return self.__balance
+
+    def add_course(self, course):
+        self.__courses.append(course)
