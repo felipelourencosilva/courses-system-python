@@ -23,6 +23,8 @@ class UserController:
 
     def edit_user(self):
         self.list_users()
+        if len(self.__users) == 0:
+            return
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
 
@@ -44,6 +46,8 @@ class UserController:
 
     def remove_user(self):
         self.list_users()
+        if len(self.__users) == 0:
+            return
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
 
