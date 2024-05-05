@@ -1,3 +1,6 @@
+import re
+
+
 class CourseView:
 
     def view_options(self):
@@ -17,25 +20,42 @@ class CourseView:
             return int(option)
 
     def get_add_course_data(self):
-        print("-------- DADOS CURSO --------")
-        name = input("Nome: ")
-        description = input("Descrição: ")
-        price = float(input("Preço: "))
-        commission_percentage = int(input("Porcentagem da comissão (Ex: 15, 25, 50): "))
-        cpf = int(input("CPF do produtor: "))
+        data = self.get_edit_course_data()
 
-        return {"name": name, "description": description, "price": price,
-                "commission_percentage": commission_percentage, "cpf": cpf}
+        cpf = input("CPF do Produtor: ")
+        while not cpf.isnumeric() or int(cpf) <= 0:
+            print("O CPF deve ser um inteiro maior que 0.")
+            cpf = input("CPF: ")
+        data["cpf"] = int(cpf)
+        return data
 
     def get_edit_course_data(self):
-        print("-------- DADOS CURSO ----------")
-        name = input("Nome: ")
-        description = input("Descrição: ")
-        price = float(input("Preço: "))
-        commission_percentage = int(input("Porcentagem da comissão (Ex: 15, 25, 50): "))
+        print("-------- DADOS CURSO --------")
+        data = {}
 
-        return {"name": name, "description": description, "price": price,
-                "commission_percentage": commission_percentage}
+        name = input("Nome: ")
+        while len(name) < 4:
+            print("Nome do curso deve ter pelo menos 4 letras.")
+            name = input("Nome: ")
+        data["name"] = name
+
+        data["description"] = input("Descrição: ")
+
+        price = input("Preço: ")
+        isDecimal = bool(re.search(r"\d*\.\d+", price))
+        while ((not price.isnumeric()) and (not isDecimal)):
+            print("Preço deve ser um número decimal separado por '.'.")
+            price = input("Preço: ")
+            isDecimal = bool(re.search(r"\d*\.\d+", price))
+        data["price"] = float(price)
+
+        commission_percentage = input("Porcentagem da comissão (Ex: 15, 25, 50): ")
+        while not commission_percentage.isnumeric() or int(commission_percentage) < 0 or int(commission_percentage) > 100:
+            print("Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
+            commission_percentage = input("Porcentagem da comissão (Ex: 15, 25, 50): ")
+        data["commission_percentage"] = commission_percentage
+
+        return data
 
     def show_course(self, course_data):
         print("Nome do curso: ", course_data["name"])
@@ -51,6 +71,14 @@ class CourseView:
                 print("O ID precisa ser um inteiro maior que 0")
                 continue
             return int(id)
+
+    def read_cpf(self):
+        while True:
+            cpf = input("Digite o CPF do usuário: ")
+            if not cpf.isnumeric() or int(cpf) <= 0:
+                print("O CPF precisa ser um inteiro maior que 0")
+                continue
+            return int(cpf)
 
     def show_message(self, msg):
         print(msg)

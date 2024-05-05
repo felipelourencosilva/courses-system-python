@@ -43,8 +43,8 @@ class UserView:
             email = input("Email: ")
 
         password = input("Senha: ")
-        while len(password) <= 4:
-            print("A senha deve ter pelo menos 5 caracteres.")
+        while len(password) < 4:
+            print("A senha deve ter pelo menos 4 caracteres.")
             password = input("Senha: ")
 
         return {"name": name, "surname": surname, "email": email,

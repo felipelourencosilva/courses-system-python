@@ -1,6 +1,3 @@
-from course import *
-
-
 class User:
     def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
         if isinstance(name, str):

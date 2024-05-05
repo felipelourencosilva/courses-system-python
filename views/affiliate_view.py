@@ -43,7 +43,7 @@ class AffiliateView:
             email = input("Email: ")
 
         password = input("Senha: ")
-        while len(password) <= 4:
+        while len(password) < 4:
             print("A senha deve ter pelo menos 4 caracteres.")
             password = input("Senha: ")
 

@@ -43,7 +43,7 @@ class ProducerView:
             email = input("Email: ")
 
         password = input("Senha: ")
-        while len(password) <= 4:
+        while len(password) < 4:
             print("A senha deve ter pelo menos 4 caracteres.")
             password = input("Senha: ")
 
@@ -59,7 +59,7 @@ class ProducerView:
 
     def read_cpf(self):
         while True:
-            cpf = input("Digite o CPF do usuário: ")
+            cpf = input("Digite o CPF do produtor: ")
             if not cpf.isnumeric() or int(cpf) <= 0:
                 print("O CPF precisa ser um inteiro maior que 0")
                 continue
