@@ -27,6 +27,8 @@ class CourseController:
 
     def edit_course(self):
         self.list_courses()
+        if len(self.__courses) == 0:
+            return
         id = self.__course_view.read_id()
 
         if id is not None and id in self.__courses:
@@ -49,6 +51,8 @@ class CourseController:
 
     def remove_course(self):
         self.list_courses()
+        if len(self.__courses) == 0:
+            return
         id = self.__course_view.read_id()
 
         if id is not None and id in self.__courses:
