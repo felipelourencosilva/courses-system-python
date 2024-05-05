@@ -10,3 +10,6 @@ class Video:
     def video_url(self, video_url):
         if isinstance(video_url, str):
             self.__video_url = video_url
+
+    def __str__(self):
+        return self.__video_url

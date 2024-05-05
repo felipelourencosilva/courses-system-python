@@ -7,6 +7,8 @@ class Module:
         if isinstance(id, int):
             self.__id = id
 
+        self.__lessons = []
+
     @property
     def title(self) -> str:
         return self.__title
@@ -25,8 +27,13 @@ class Module:
         if isinstance(description, str):
             self.__description = description
 
-    def add_lesson(self):
-        pass
+    @property
+    def lessons(self) -> list:
+        return self.__lessons
 
-    def remove_lesson(self):
-        pass
+    def add_lesson(self, lesson):
+        self.__lessons.append(lesson)
+
+    def remove_lesson(self, lesson):
+        if lesson in self.__lessons:
+            self.__lessons.remove(lesson)

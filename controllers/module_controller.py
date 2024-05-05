@@ -17,6 +17,26 @@ class ModuleController:
             id = random.randint(1, 1000)
         return id
 
+    def get_modules(self):
+        return self.__modules
+
+    def get_module(self, id):
+        if id in self.__modules:
+            return self.__modules[id]
+        else:
+            return None
+
+    def add_module_lesson(self, id: int, lesson: Lesson):
+        if id is not None and id in self.__modules and isinstance(lesson, Lesson):
+            module = self.get_module(id)
+            module.add_lesson(lesson)
+        else:
+            self.__module_view.show_message("Curso não encontrado ou id incorreto")
+
+    def remove_module_lesson(self, id: int, lesson: Lesson):
+        module = self.get_module(id)
+        module.remove_lesson(lesson)
+
     def add_module(self):
         course_id = self.__module_view.read_course_id()
         if course_id is not None and course_id in self.__course_controller.get_courses():
@@ -40,7 +60,7 @@ class ModuleController:
 
     def edit_module(self):
         if len(self.__modules) == 0:
-            self.__module_view.show_message("Nenhum modulo cadastrado")
+            self.__module_view.show_message("Nenhum módulo cadastrado")
             return
 
         module_id = self.__module_view.read_module_id()
@@ -62,7 +82,7 @@ class ModuleController:
                 self.__module_view.show_message("Não há módulos cadastrados nesse curso")
             else:
                 for module in course.modules:
-                    self.__module_view.show_module({"title": module.title, "description": course.description,
+                    self.__module_view.show_module({"title": module.title, "description": module.description,
                                                     "id": module.id})
         else:
             self.__module_view.show_message("Curso não encontrado")

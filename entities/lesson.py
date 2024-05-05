@@ -1,14 +1,16 @@
-from video import *
+from entities.video import *
 
 
 class Lesson:
-    def __init__(self, title: str, description: str, video: Video):
+    def __init__(self, title: str, description: str, video: Video, id: int):
         if isinstance(title, str):
             self.__title = title
         if isinstance(description, str):
             self.__description = description
         if isinstance(video, Video):
             self.__video = video
+        if isinstance(id, int):
+            self.__id = id
 
     @property
     def title(self) -> str:

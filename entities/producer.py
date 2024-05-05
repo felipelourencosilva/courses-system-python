@@ -5,6 +5,7 @@ class Producer(User):
     def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
         super().__init__(name, surname, email, password, cpf)
 
+        self.__course = []
     def get_paid(self, amount: float):
         if isinstance(amount, float):
             self.__balance += amount
@@ -15,5 +16,5 @@ class Producer(User):
             # just suppose the money is sent to a bank account
             self.__balance -= rescue_amount
 
-    def create_course(self):
-        pass
+    def add_course(self, course):
+        self.__course.append(course)
