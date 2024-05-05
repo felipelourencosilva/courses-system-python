@@ -11,6 +11,7 @@ class User:
         if isinstance(cpf, int):
             self.__cpf = cpf
         self.__description = ""
+        self.__courses = []
 
     @property
     def name(self) -> str:
@@ -60,6 +61,10 @@ class User:
     @property
     def cpf(self) -> int:
         return self.__cpf
+
+    @property
+    def courses(self) -> list:
+        return self.__courses
 
     def buy_course(self):
         pass

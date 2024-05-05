@@ -1,8 +1,8 @@
-from producer import *
+from entities.producer import *
 
 
 class Course:
-    def __init__(self, name: str, producer: Producer, description: str, price: float, commission_percentage: int):
+    def __init__(self, name: str, producer: Producer, description: str, price: float, commission_percentage: int, id: int):
         if isinstance(name, str):
             self.__name = name
         if isinstance(producer, Producer):
@@ -13,6 +13,8 @@ class Course:
             self.__price = price
         if isinstance(commission_percentage, int):
             self.__commission_percentage = commission_percentage
+        if isinstance(id, int):
+            self.__id = id
 
         self.__commission_price = (self.__commission_percentage/100) * self.__price
 

@@ -1,18 +1,18 @@
-from user import *
-from course import *
-from affiliate import *
+from entities.affiliate import *
+from entities.course import *
+import copy
 
 
 class Sale:
-    def __init__(self, user: User, course: Course, affiliate: None):
+    def __init__(self, user: User, course: Course, affiliate: Affiliate = None):
         if isinstance(user, User):
-            self.__user = user
+            self.__user = copy.deepcopy(user)
         if isinstance(course, Course):
-            self.__course = course
+            self.__course = copy.deepcopy(course)
 
         self.__affiliate = None
         if isinstance(affiliate, Affiliate):
-            self.__affiliate = affiliate
+            self.__affiliate = copy.deepcopy(affiliate)
 
     @property
     def user(self) -> User:
