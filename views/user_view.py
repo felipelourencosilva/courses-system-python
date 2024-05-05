@@ -2,12 +2,12 @@ class UserView:
 
     def view_options(self):
         print("-------- USUÁRIOS --------")
-        print("Escolha a opcao")
+        print("Escolha alguma opção:")
         print("1 - Adicionar Usuário")
         print("2 - Excluir Usuário")
         print("3 - Editar Usuário")
         print("4 - Listar Usuários")
-        print("0 - Retornar")
+        print("0 - Voltar")
 
         while True:
             option = input("Sua escolha: ")
@@ -19,10 +19,30 @@ class UserView:
     def get_add_user_data(self):
         print("-------- DADOS USUÁRIO --------")
         name = input("Nome: ")
+        while not name.isalpha():
+            print("Nome deve conter somente letras.")
+            name = input("Nome: ")
+
         surname = input("Sobrenome: ")
+        while not surname.isalpha():
+            print("Sobrenome deve conter somente letras.")
+            surname = input("Sobrenome: ")
+
         email = input("Email: ")
+        while "@" not in email:
+            print("Email deve conter '@'.")
+            email = input("Email: ")
+
         password = input("Senha: ")
-        cpf = int(input("CPF: "))
+        while len(password) <= 4:
+            print("A senha deve ter pelo menos 4 caracteres.")
+            password = input("Senha: ")
+
+        cpf = input("CPF: ")
+        while not cpf.isnumeric() or int(cpf) <= 0:
+            print("O CPF deve ser um inteiro maior que 0.")
+            cpf = input("CPF: ")
+        cpf = int(cpf)
 
         return {"name": name, "surname": surname, "email": email,
                 "password": password, "cpf": cpf}
@@ -30,9 +50,24 @@ class UserView:
     def get_edit_user_data(self):
         print("-------- DADOS USUÁRIO --------")
         name = input("Nome: ")
+        while not name.isalpha():
+            print("Nome deve conter somente letras.")
+            name = input("Nome: ")
+
         surname = input("Sobrenome: ")
+        while not surname.isalpha():
+            print("Sobrenome deve conter somente letras.")
+            surname = input("Sobrenome: ")
+
         email = input("Email: ")
-        password = input("Password: ")
+        while "@" not in email:
+            print("Email deve conter '@'.")
+            email = input("Email: ")
+
+        password = input("Senha: ")
+        while len(password) <= 4:
+            print("A senha deve ter pelo menos 4 caracteres.")
+            password = input("Senha: ")
 
         return {"name": name, "surname": surname, "email": email,
                 "password": password}
