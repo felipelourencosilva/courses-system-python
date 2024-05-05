@@ -1,6 +1,6 @@
 from views.user_view import *
 from entities.user import *
-
+from entities.course import *
 
 class UserController:
     def __init__(self, system_controller):
@@ -55,6 +55,23 @@ class UserController:
             self.__users.remove(user)
         else:
             self.__user_view.show_message("Usuário não encontrado")
+
+    def user_has_course(self, cpf: int, course: Course):
+        if isinstance(cpf, int) and isinstance(course, Course):
+            user = self.get_user_by_cpf(cpf)
+            return user.has_course(course)
+        return False
+
+    def user_has_enough_balance(self, cpf: int, course: Course):
+        if isinstance(cpf, int) and isinstance(course, Course):
+            user = self.get_user_by_cpf(cpf)
+            return user.balance >= course.price
+        return False
+
+    def user_add_course(self, cpf: int, course: Course):
+        if isinstance(cpf, int) and isinstance(course, Course):
+            user = self.get_user_by_cpf(cpf)
+            user.add_course(course)
 
     def previous_view(self):
         self.__system_controller.show_view()

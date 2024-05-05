@@ -73,3 +73,7 @@ class User:
 
     def add_course(self, course):
         self.__courses.append(course)
+        self.__balance -= course.price
+
+    def has_course(self, course):
+        return course in self.__courses

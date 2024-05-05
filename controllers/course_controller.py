@@ -57,7 +57,21 @@ class CourseController:
             self.__course_view.show_message("Curso não encontrado ou id incorreto")
 
     def buy_course(self):
-        pass
+        self.list_courses()
+        id = self.__course_view.read_id()
+        cpf = self.__course_view.read_cpf()
+
+        if id is not None and id in self.__courses:
+            course = self.__courses[id]
+            if self.__system_controller.user_controller.user_has_course(cpf, course):
+                self.__course_view.show_message("Você já possui esse curso")
+            if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
+                self.__course_view.show_message("Você não possui saldo suficiente")
+            else:
+                self.__system_controller.user_controller.user_add_course(cpf, course)
+
+        else:
+            self.__course_view.show_message("Curso não encontrado ou id incorreto")
 
     def previous_view(self):
         self.__system_controller.show_view()
