@@ -3,6 +3,7 @@ from controllers.user_controller import *
 from controllers.producer_controller import *
 from controllers.affiliate_controller import *
 from controllers.sale_controller import *
+from controllers.course_controller import *
 
 
 class SystemController:
@@ -12,6 +13,7 @@ class SystemController:
         self.__producer_controller = ProducerController(self)
         self.__affiliate_controller = AffiliateController(self)
         self.__sale_controller = SaleController(self)
+        self.__course_controller = CourseController(self)
         self.__system_view = SystemView()
 
     @property
@@ -48,12 +50,16 @@ class SystemController:
     def to_affiliate_view(self):
         self.__affiliate_controller.show_view()
 
+    def to_course_view(self):
+        self.__course_controller.show_view()
+
     def show_view(self):
         options = {
             1: self.to_user_view,
             2: self.to_producer_view,
             3: self.to_affiliate_view,
             4: self.to_sale_view,
+            5: self.to_course_view,
             0: self.exit
         }
 
