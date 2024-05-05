@@ -2,22 +2,22 @@ from video import *
 
 
 class Lesson:
-    def __init__(self, titulo: str, description: str, video: Video):
-        if isinstance(titulo, str):
-            self.__titulo = titulo
+    def __init__(self, title: str, description: str, video: Video):
+        if isinstance(title, str):
+            self.__title = title
         if isinstance(description, str):
             self.__description = description
         if isinstance(video, Video):
             self.__video = video
 
     @property
-    def titulo(self) -> str:
-        return self.__titulo
+    def title(self) -> str:
+        return self.__title
 
-    @titulo.setter
-    def titulo(self, titulo: str):
-        if isinstance(titulo, str):
-            self.__titulo = titulo
+    @title.setter
+    def title(self, title: str):
+        if isinstance(title, str):
+            self.__title = title
 
     @property
     def description(self) -> str:

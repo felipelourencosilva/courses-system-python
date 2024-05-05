@@ -3,7 +3,7 @@ from views.lesson_view import *
 
 class LessonController:
     def __init__(self, module_controller):
-        self.__lessons = []
+        self.__lessons = dict()
         self.__module_controller = module_controller
         self.__lesson_view = LessonView()
 

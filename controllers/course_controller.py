@@ -14,6 +14,26 @@ class CourseController:
     def get_producer(self, cpf: int):
         return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
 
+    def get_course(self, id):
+        if id in self.__courses:
+            return self.__courses[id]
+        else:
+            return None
+
+    def get_courses(self):
+        return self.__courses
+
+    def add_course_module(self, id: int, module: Module):
+        if id is not None and id in self.__courses and isinstance(module, Module):
+            course = self.get_course(id)
+            course.add_module(module)
+        else:
+            self.__course_view.show_message("Curso não encontrado ou id incorreto")
+
+    def remove_course_module(self, id: int, module: Module):
+        course = self.get_course(id)
+        course.remove_module(module)
+
     def generate_id(self):
         id = random.randint(1, 1000)
         while id in self.__courses:

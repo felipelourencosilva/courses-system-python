@@ -18,6 +18,8 @@ class Course:
         if isinstance(price, float) and isinstance(commission_percentage, int):
             self.__commission_price = (commission_percentage/100) * price
 
+        self.__modules = []
+
     @property
     def name(self) -> str:
         return self.__name
@@ -63,8 +65,13 @@ class Course:
     def commission_price(self) -> float:
         return self.__commission_price
 
-    def add_module(self):
-        pass
+    @property
+    def modules(self) -> list:
+        return self.__modules
 
-    def remove_module(self):
-        pass
+    def add_module(self, module):
+        self.__modules.append(module)
+
+    def remove_module(self, module):
+        if module in self.__modules:
+            self.__modules.remove(module)
