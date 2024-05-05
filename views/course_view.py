@@ -1,23 +1,21 @@
-import re
+from views.abstract_view import AbstractView
 
 
-class CourseView:
+class CourseView(AbstractView):
 
-    def view_options(self):
-        print("-------- CURSOS --------")
-        print("Escolha alguma opção:")
-        print("1 - Adicionar Curso")
-        print("2 - Editar Curso")
-        print("3 - Listar Cursos")
-        print("4 - Comprar Curso")
-        print("0 - Voltar")
+    def __init__(self):
+        pass
 
-        while True:
-            option = input("Sua escolha: ")
-            if not option.isnumeric() or int(option) not in range(0, 5):
-                print("Por favor, escolha um número dentre as opções.")
-                continue
-            return int(option)
+    def view_options(self) -> int:
+        options = {
+            1: "Adicionar Curso",
+            2: "Editar Curso",
+            3: "Listar Cursos",
+            4: "Comprar Curso",
+            5: "Ir para tela de Módulos",
+            0: "Voltar"
+        }
+        return super().view_options("CURSOS", options)
 
     def get_add_course_data(self):
         data = self.get_edit_course_data()
@@ -30,30 +28,19 @@ class CourseView:
         return data
 
     def get_edit_course_data(self):
-        print("-------- DADOS CURSO --------")
+        self.print_title("DADOS CURSO")
         data = {}
-
-        name = input("Nome: ")
-        while len(name) < 4 or name.strip():
-            print("Nome do curso deve ter pelo menos 4 letras.")
-            name = input("Nome: ")
-        data["name"] = name
-
+        data["name"] = self.read_with_n_chars("Nome: ", "Nome do curso deve ter pelo menos 4 letras.", 4)
         data["description"] = input("Descrição: ")
+        data["price"] = self.read_value("Preço: ", "Preço deve ser um número decimal separado por '.'.")
 
-        price = input("Preço: ")
-        isDecimal = bool(re.search(r"\d*\.\d+", price))
-        while ((not price.isnumeric()) and (not isDecimal)):
-            print("Preço deve ser um número decimal separado por '.'.")
-            price = input("Preço: ")
-            isDecimal = bool(re.search(r"\d*\.\d+", price))
-        data["price"] = float(price)
-
-        commission_percentage = input("Porcentagem da comissão (Ex: 15, 25, 50): ")
-        while not commission_percentage.isnumeric() or int(commission_percentage) < 0 or int(commission_percentage) > 100:
-            print("Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
-            commission_percentage = input("Porcentagem da comissão (Ex: 15, 25, 50): ")
-        data["commission_percentage"] = int(commission_percentage)
+        while True:
+            commission_percentage = self.read_int("Porcentagem da comissão (Ex: 15, 25, 50): ", "Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
+            if (commission_percentage < 0 or commission_percentage > 100):
+                print("Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
+            else:
+                data["commission_percentage"] = commission_percentage
+                break
 
         return data
 
@@ -69,16 +56,5 @@ class CourseView:
             id = input("Digite o ID do curso: ")
             if not id.isnumeric() or int(id) <= 0 or int(id) > 1000:
                 print("O ID precisa ser um inteiro maior que 0")
-                continue
-            return int(id)
-
-    def read_cpf(self):
-        while True:
-            cpf = input("Digite o CPF do usuário: ")
-            if not cpf.isnumeric() or int(cpf) <= 0:
-                print("O CPF precisa ser um inteiro maior que 0")
-                continue
-            return int(cpf)
-
-    def show_message(self, msg):
-        print(msg)
+            else:
+                return int(id)

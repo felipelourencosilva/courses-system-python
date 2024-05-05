@@ -64,7 +64,8 @@ class ProducerController:
             return
         producer_cpf = self.__producer_view.read_cpf()
         producer = self.get_producer_by_cpf(producer_cpf)
-        value = self.__producer_view.read_value()
+        value = self.__producer_view.read_value("Digite o valor que deseja adicionar: ",
+                                            "O valor precisa ser um número decimal maior que 0 (separado por '.')")
 
         if producer is not None:
             producer.add_balance(value)

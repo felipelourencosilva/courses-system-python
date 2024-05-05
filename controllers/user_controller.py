@@ -80,7 +80,7 @@ class UserController:
             return
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
-        value = self.__user_view.read_value()
+        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
 
         if user is not None:
             user.add_balance(value)

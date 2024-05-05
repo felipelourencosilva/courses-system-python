@@ -69,7 +69,7 @@ class AffiliateController:
             return
         producer_cpf = self.__affiliate_view.read_cpf()
         affiliate = self.get_affiliate_by_cpf(producer_cpf)
-        value = self.__affiliate_view.read_value()
+        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
 
         if affiliate is not None:
             affiliate.add_balance(value)

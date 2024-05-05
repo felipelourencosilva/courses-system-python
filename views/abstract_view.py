@@ -101,11 +101,10 @@ class AbstractView(ABC):
         data["cpf"] = self.read_cpf()
         return data
 
-    def read_value(self):
+    def read_value(self, default_msg: str, error_msg: str):
         while True:
-            value = self.read_float("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+            value = self.read_float(default_msg, error_msg)
             if value <= 0:
-                print("O valor precisa ser um número decimal maior que 0 (separado por '.')")
+                print(error_msg)
             else:
                 return value
-
