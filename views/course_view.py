@@ -53,7 +53,7 @@ class CourseView:
         while not commission_percentage.isnumeric() or int(commission_percentage) < 0 or int(commission_percentage) > 100:
             print("Porcentagem da comissão deve ser um número inteiro positivo entre 0 e 100.")
             commission_percentage = input("Porcentagem da comissão (Ex: 15, 25, 50): ")
-        data["commission_percentage"] = commission_percentage
+        data["commission_percentage"] = int(commission_percentage)
 
         return data
 

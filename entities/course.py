@@ -15,8 +15,8 @@ class Course:
             self.__commission_percentage = commission_percentage
         if isinstance(id, int):
             self.__id = id
-
-        self.__commission_price = (self.__commission_percentage/100) * self.__price
+        if isinstance(price, float) and isinstance(commission_percentage, int):
+            self.__commission_price = (commission_percentage/100) * price
 
     @property
     def name(self) -> str:
