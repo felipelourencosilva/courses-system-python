@@ -1,13 +1,13 @@
 class CourseView:
 
     def view_options(self):
-        print("-------- CURSOS ----------")
-        print("Escolha a opcao")
+        print("-------- CURSOS --------")
+        print("Escolha alguma opção:")
         print("1 - Adicionar Curso")
         print("2 - Editar Curso")
         print("3 - Listar Cursos")
         print("4 - Comprar Curso")
-        print("0 - Retornar")
+        print("0 - Voltar")
 
         while True:
             option = input("Sua escolha: ")
@@ -17,7 +17,7 @@ class CourseView:
             return int(option)
 
     def get_add_course_data(self):
-        print("-------- DADOS CURSO ----------")
+        print("-------- DADOS CURSO --------")
         name = input("Nome: ")
         description = input("Descrição: ")
         price = float(input("Preço: "))

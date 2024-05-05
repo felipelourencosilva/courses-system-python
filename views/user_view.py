@@ -1,7 +1,7 @@
 class UserView:
 
     def view_options(self):
-        print("-------- USUÁRIOS --------")
+        print("-------- USUÁRIO --------")
         print("Escolha alguma opção:")
         print("1 - Adicionar Usuário")
         print("2 - Excluir Usuário")
@@ -17,35 +17,13 @@ class UserView:
             return int(option)
 
     def get_add_user_data(self):
-        print("-------- DADOS USUÁRIO --------")
-        name = input("Nome: ")
-        while not name.isalpha():
-            print("Nome deve conter somente letras.")
-            name = input("Nome: ")
-
-        surname = input("Sobrenome: ")
-        while not surname.isalpha():
-            print("Sobrenome deve conter somente letras.")
-            surname = input("Sobrenome: ")
-
-        email = input("Email: ")
-        while "@" not in email:
-            print("Email deve conter '@'.")
-            email = input("Email: ")
-
-        password = input("Senha: ")
-        while len(password) <= 4:
-            print("A senha deve ter pelo menos 4 caracteres.")
-            password = input("Senha: ")
-
+        data = self.get_edit_user_data()
         cpf = input("CPF: ")
         while not cpf.isnumeric() or int(cpf) <= 0:
             print("O CPF deve ser um inteiro maior que 0.")
             cpf = input("CPF: ")
-        cpf = int(cpf)
-
-        return {"name": name, "surname": surname, "email": email,
-                "password": password, "cpf": cpf}
+        data["cpf"] = int(cpf)
+        return data
 
     def get_edit_user_data(self):
         print("-------- DADOS USUÁRIO --------")
@@ -66,7 +44,7 @@ class UserView:
 
         password = input("Senha: ")
         while len(password) <= 4:
-            print("A senha deve ter pelo menos 4 caracteres.")
+            print("A senha deve ter pelo menos 5 caracteres.")
             password = input("Senha: ")
 
         return {"name": name, "surname": surname, "email": email,

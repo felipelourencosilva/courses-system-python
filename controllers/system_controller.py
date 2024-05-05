@@ -58,8 +58,8 @@ class SystemController:
             1: self.to_user_view,
             2: self.to_producer_view,
             3: self.to_affiliate_view,
-            4: self.to_sale_view,
-            5: self.to_course_view,
+            4: self.to_course_view,
+            5: self.to_sale_view,
             0: self.exit
         }
 

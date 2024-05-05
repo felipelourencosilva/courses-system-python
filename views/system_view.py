@@ -6,8 +6,8 @@ class SystemView:
         print("1 - Ir para tela de Usuário")
         print("2 - Ir para tela de Produtor")
         print("3 - Ir para tela de Afiliado")
-        print("4 - Ir para tela de Relatórios")
-        print("5 - Ir para tela de Cursos")
+        print("4 - Ir para tela de Cursos")
+        print("5 - Ir para tela de Relatórios")
         print("0 - Sair")
 
         while True:
