@@ -1,3 +1,6 @@
+from course import *
+
+
 class User:
     def __init__(self, name: str, surname: str, email: str, password: str, cpf: int):
         if isinstance(name, str):
@@ -66,5 +69,6 @@ class User:
     def courses(self) -> list:
         return self.__courses
 
-    def buy_course(self):
-        pass
+    def add_course(self, course: Course):
+        if isinstance(course, Course):
+            self.__courses.append(course)
