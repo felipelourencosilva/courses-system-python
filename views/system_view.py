@@ -1,18 +1,18 @@
-class SystemView:
+from views.abstract_view import AbstractView
+
+
+class SystemView(AbstractView):
+
+    def __init__(self):
+        pass
 
     def view_options(self) -> int:
-        print("-------- SisCursos --------")
-        print("Escolha alguma opção:")
-        print("1 - Ir para tela de Usuário")
-        print("2 - Ir para tela de Produtor")
-        print("3 - Ir para tela de Afiliado")
-        print("4 - Ir para tela de Cursos")
-        print("5 - Ir para tela de Relatórios")
-        print("0 - Sair")
-
-        while True:
-            option = input("Sua escolha: ")
-            if not option.isnumeric() or int(option) not in range(0, 6):
-                print("Por favor, escolha um número dentre as opções.")
-                continue
-            return int(option)
+        options = {
+            1: "Ir para tela de Usuário",
+            2: "Ir para tela de Produtor",
+            3: "Ir para tela de Afiliado",
+            4: "Ir para tela de Cursos",
+            5: "Ir para tela de Relatórios",
+            0: "Voltar"
+        }
+        return super().view_options("SisCursos", options)

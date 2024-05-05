@@ -1,58 +1,26 @@
-import re
+from views.abstract_view import AbstractView
 
 
-class ProducerView:
+class ProducerView(AbstractView):
+
+    def __init__(self):
+        pass
 
     def view_options(self):
-        print("-------- PRODUTOR --------")
-        print("Escolha alguma opção:")
-        print("1 - Adicionar Produtor")
-        print("2 - Excluir Produtor")
-        print("3 - Editar Produtor")
-        print("4 - Listar Produtores")
-        print("0 - Voltar")
-
-        while True:
-            option = input("Sua escolha: ")
-            if not option.isnumeric() or int(option) not in range(0, 5):
-                print("Por favor, escolha um número dentre as opções.")
-                continue
-            return int(option)
+        options = {
+            1: "Adicionar Produtor",
+            2: "Excluir Produtor",
+            3: "Editar Produtor",
+            4: "Listar Produtores",
+            0: "Voltar"
+        }
+        return super().view_options("PRODUTOR", options)
 
     def get_add_producer_data(self):
-        data = self.get_edit_producer_data()
-        cpf = input("CPF: ")
-        while not cpf.isnumeric() or int(cpf) <= 0:
-            print("O CPF deve ser um inteiro maior que 0.")
-            cpf = input("CPF: ")
-        data["cpf"] = int(cpf)
-        return data
+        return super().read_basic_add_user_data("PRODUTOR")
 
     def get_edit_producer_data(self):
-        print("-------- DADOS PRODUTOR --------")
-        name = input("Nome: ")
-        while not (re.search("^[a-zA-Z ]*$", name) and name.strip()):
-            print("Nome deve conter somente letras.")
-            name = input("Nome: ")
-            valid = re.search("^[a-zA-Z ]*$", name) and name.strip()
-
-        surname = input("Sobrenome: ")
-        while not re.search("^[a-zA-Z ]*$", surname):
-            print("Sobrenome deve conter somente letras.")
-            surname = input("Sobrenome: ")
-
-        email = input("Email: ")
-        while "@" not in email:
-            print("Email deve conter '@'.")
-            email = input("Email: ")
-
-        password = input("Senha: ")
-        while len(password) < 4:
-            print("A senha deve ter pelo menos 4 caracteres.")
-            password = input("Senha: ")
-
-        return {"name": name, "surname": surname, "email": email,
-                "password": password}
+        return super().read_basic_edit_user_data("PRODUTOR")
 
     def show_producer(self, producer_data):
         print("Nome do Produtor: ", producer_data["name"])
@@ -61,22 +29,3 @@ class ProducerView:
         print("CPF do Produtor: ", producer_data["cpf"])
         print("Saldo do Produtor: ", producer_data["balance"])
         print()
-
-    def read_cpf(self):
-        while True:
-            cpf = input("Digite o CPF do produtor: ")
-            if not cpf.isnumeric() or int(cpf) <= 0:
-                print("O CPF precisa ser um inteiro maior que 0")
-                continue
-            return int(cpf)
-
-    def read_value(self):
-        while True:
-            value = input("Digite o valor que deseja adicionar: ")
-            if float(value) <= 0:
-                print("O valor precisa ser um inteiro maior que 0")
-                continue
-            return float(value)
-
-    def show_message(self, msg):
-        print(msg)

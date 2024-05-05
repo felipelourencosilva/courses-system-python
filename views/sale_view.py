@@ -1,22 +1,19 @@
-class SaleView:
+from views.abstract_view import AbstractView
+
+
+class SaleView(AbstractView):
+
+    def __init__(self):
+        pass
 
     def view_options(self) -> int:
-        print("-------- RELATÓRIOS --------")
-        print("Escolha alguma opção:")
-        print("1 - Gerar relatório completo")
-        print("2 - Mostrar Curso mais vendido")
-        print("3 - Mostrar Curso com maior lucro")
-        print("4 - Mostrar Usuário com mais cursos")
-        print("5 - Mostrar Produtor com mais vendas")
-        print("6 - Mostrar Afiliado com maior lucro")
-        print("0 - Voltar")
-
-        while True:
-            option = input("Sua escolha: ")
-            if not option.isnumeric() or int(option) not in range(0, 7):
-                print("Por favor, escolha um número dentre as opções.")
-                continue
-            return int(option)
-
-    def show_message(self, msg):
-        print(msg)
+        options = {
+            1: "Gerar relatório completo",
+            2: "Mostrar Curso mais vendido",
+            3: "Mostrar Curso com maior lucro",
+            4: "Mostrar Usuário com mais cursos",
+            5: "Mostrar Produtor com mais vendas",
+            6: "Mostrar Afiliado com maior lucro",
+            0: "Voltar"
+        }
+        return super().view_options("RELATÓRIOS", options)
