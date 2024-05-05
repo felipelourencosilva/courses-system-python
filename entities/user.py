@@ -77,3 +77,6 @@ class User:
 
     def has_course(self, course):
         return course in self.__courses
+
+    def add_balance(self, value):
+        self.__balance += value

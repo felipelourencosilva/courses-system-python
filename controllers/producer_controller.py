@@ -44,7 +44,7 @@ class ProducerController:
             for producer in self.__producers:
                 self.__producer_view.show_producer({"name": producer.name + " " + producer.surname,
                                                     "email": producer.email, "password": producer.password,
-                                                    "cpf": producer.cpf})
+                                                    "cpf": producer.cpf, "balance": producer.balance})
 
     def remove_producer(self):
         self.list_producer()
@@ -58,6 +58,19 @@ class ProducerController:
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 
+    def add_balance(self):
+        self.list_producer()
+        if len(self.__producers) == 0:
+            return
+        producer_cpf = self.__producer_view.read_cpf()
+        producer = self.get_producer_by_cpf(producer_cpf)
+        value = self.__producer_view.read_value()
+
+        if producer is not None:
+            producer.add_balance(value)
+        else:
+            self.__producer_view.show_message("Produtor não encontrado")
+
     def previous_view(self):
         self.__system_controller.show_view()
 
@@ -67,6 +80,7 @@ class ProducerController:
             2: self.remove_producer,
             3: self.edit_producer,
             4: self.list_producer,
+            5: self.add_balance,
             0: self.previous_view
         }
 

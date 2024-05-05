@@ -10,11 +10,12 @@ class UserView:
         print("2 - Excluir Usuário")
         print("3 - Editar Usuário")
         print("4 - Listar Usuários")
+        print("5 - Adicionar saldo ao Usuário")
         print("0 - Voltar")
 
         while True:
             option = input("Sua escolha: ")
-            if not option.isnumeric() or int(option) not in range(0, 5):
+            if not option.isnumeric() or int(option) not in range(0, 6):
                 print("Por favor, escolha um número dentre as opções.")
                 continue
             return int(option)
@@ -59,6 +60,7 @@ class UserView:
         print("Email do usuário: ", user_data["email"])
         print("Senha do usuário: ", user_data["password"])
         print("CPF do usuário: ", user_data["cpf"])
+        print("Saldo do usuário: ", user_data["balance"])
         print()
 
     def read_cpf(self):
@@ -68,6 +70,14 @@ class UserView:
                 print("O CPF precisa ser um inteiro maior que 0")
                 continue
             return int(cpf)
+
+    def read_value(self):
+        while True:
+            value = input("Digite o valor que deseja adicionar: ")
+            if float(value) <= 0:
+                print("O valor precisa ser um inteiro maior que 0")
+                continue
+            return float(value)
 
     def show_message(self, msg):
         print(msg)

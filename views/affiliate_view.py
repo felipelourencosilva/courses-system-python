@@ -59,6 +59,7 @@ class AffiliateView:
         print("Email do afiliado: ", affiliate_data["email"])
         print("Senha do afiliado: ", affiliate_data["password"])
         print("CPF do afiliado: ", affiliate_data["cpf"])
+        print("Saldo do afiliado: ", affiliate_data["balance"])
         print()
 
     def read_cpf(self):
@@ -68,6 +69,14 @@ class AffiliateView:
                 print("O CPF precisa ser um inteiro maior que 0")
                 continue
             return int(cpf)
+
+    def read_value(self):
+        while True:
+            value = input("Digite o valor que deseja adicionar: ")
+            if float(value) <= 0:
+                print("O valor precisa ser um inteiro maior que 0")
+                continue
+            return float(value)
 
     def show_message(self, msg):
         print(msg)

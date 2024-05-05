@@ -46,7 +46,8 @@ class AffiliateController:
                     "name": affiliate.name + " " + affiliate.surname,
                     "email": affiliate.email,
                     "password": affiliate.password,
-                    "cpf": affiliate.cpf
+                    "cpf": affiliate.cpf,
+                    "balance": affiliate.balance
                     }
                 )
 
@@ -62,6 +63,19 @@ class AffiliateController:
         else:
             self.__affiliate_view.show_message("Afiliado não encontrado")
 
+    def add_balance(self):
+        self.list_affiliates()
+        if len(self.__affiliates) == 0:
+            return
+        producer_cpf = self.__affiliate_view.read_cpf()
+        affiliate = self.get_affiliate_by_cpf(producer_cpf)
+        value = self.__affiliate_view.read_value()
+
+        if affiliate is not None:
+            affiliate.add_balance(value)
+        else:
+            self.__affiliate_view.show_message("Afiliado não encontrado")
+
     def previous_view(self):
         self.__system_controller.show_view()
 
@@ -71,6 +85,7 @@ class AffiliateController:
             2: self.remove_affiliate,
             3: self.edit_affiliate,
             4: self.list_affiliates,
+            5: self.add_balance,
             0: self.previous_view
         }
         while True:

@@ -42,7 +42,8 @@ class UserController:
             self.__user_view.show_message("Não há usuários cadastrados")
         else:
             for user in self.__users:
-                self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email, "password": user.password, "cpf": user.cpf})
+                self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email,
+                                            "password": user.password, "cpf": user.cpf, "balance": user.balance})
 
     def remove_user(self):
         self.list_users()
@@ -73,6 +74,19 @@ class UserController:
             user = self.get_user_by_cpf(cpf)
             user.add_course(course)
 
+    def add_balance(self):
+        self.list_users()
+        if len(self.__users) == 0:
+            return
+        user_cpf = self.__user_view.read_cpf()
+        user = self.get_user_by_cpf(user_cpf)
+        value = self.__user_view.read_value()
+
+        if user is not None:
+            user.add_balance(value)
+        else:
+            self.__user_view.show_message("Usuário não encontrado")
+
     def previous_view(self):
         self.__system_controller.show_view()
 
@@ -82,6 +96,7 @@ class UserController:
             2: self.remove_user,
             3: self.edit_user,
             4: self.list_users,
+            5: self.add_balance,
             0: self.previous_view
         }
 

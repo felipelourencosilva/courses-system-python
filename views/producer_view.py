@@ -54,11 +54,12 @@ class ProducerView:
         return {"name": name, "surname": surname, "email": email,
                 "password": password}
 
-    def show_producer(self, user_data):
-        print("Nome do usuário: ", user_data["name"])
-        print("Email do usuário: ", user_data["email"])
-        print("Senha do usuário: ", user_data["password"])
-        print("CPF do usuário: ", user_data["cpf"])
+    def show_producer(self, producer_data):
+        print("Nome do Produtor: ", producer_data["name"])
+        print("Email do Produtor: ", producer_data["email"])
+        print("Senha do Produtor: ", producer_data["password"])
+        print("CPF do Produtor: ", producer_data["cpf"])
+        print("Saldo do Produtor: ", producer_data["balance"])
         print()
 
     def read_cpf(self):
@@ -68,6 +69,14 @@ class ProducerView:
                 print("O CPF precisa ser um inteiro maior que 0")
                 continue
             return int(cpf)
+
+    def read_value(self):
+        while True:
+            value = input("Digite o valor que deseja adicionar: ")
+            if float(value) <= 0:
+                print("O valor precisa ser um inteiro maior que 0")
+                continue
+            return float(value)
 
     def show_message(self, msg):
         print(msg)
