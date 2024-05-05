@@ -1,7 +1,7 @@
 class AffiliateView:
 
     def view_options(self) -> int:
-        print("------- AFILIADO -------")
+        print("-------- AFILIADO --------")
         print("Escolha alguma opção:")
         print("1 - Adicionar Afiliado")
         print("2 - Excluir Afiliado")
@@ -17,7 +17,7 @@ class AffiliateView:
             return int(option)
 
     def get_add_affiliate_data(self):
-        print("-------- DADOS AFILIADO ----------")
+        print("-------- DADOS AFILIADO --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")
@@ -28,7 +28,7 @@ class AffiliateView:
                 "password": password, "cpf": cpf}
 
     def get_edit_affiliate_data(self):
-        print("-------- DADOS AFILIADO ----------")
+        print("-------- DADOS AFILIADO --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")

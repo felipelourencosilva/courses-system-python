@@ -17,7 +17,7 @@ class ProducerView:
             return int(option)
 
     def get_add_producer_data(self):
-        print("-------- DADOS PRODUTORES ----------")
+        print("-------- DADOS PRODUTORES --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")
@@ -28,7 +28,7 @@ class ProducerView:
                 "password": password, "cpf": cpf}
 
     def get_edit_producer_data(self):
-        print("-------- DADOS PRODUTORES ----------")
+        print("-------- DADOS PRODUTORES --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")

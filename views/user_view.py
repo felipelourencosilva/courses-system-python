@@ -1,7 +1,7 @@
 class UserView:
 
     def view_options(self):
-        print("-------- USUÁRIOS ----------")
+        print("-------- USUÁRIOS --------")
         print("Escolha a opcao")
         print("1 - Adicionar Usuário")
         print("2 - Excluir Usuário")
@@ -17,7 +17,7 @@ class UserView:
             return int(option)
 
     def get_add_user_data(self):
-        print("-------- DADOS USUÁRIO ----------")
+        print("-------- DADOS USUÁRIO --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")
@@ -28,7 +28,7 @@ class UserView:
                 "password": password, "cpf": cpf}
 
     def get_edit_user_data(self):
-        print("-------- DADOS USUÁRIO ----------")
+        print("-------- DADOS USUÁRIO --------")
         name = input("Nome: ")
         surname = input("Sobrenome: ")
         email = input("Email: ")

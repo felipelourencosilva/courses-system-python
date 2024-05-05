@@ -1,7 +1,7 @@
 class SaleView:
 
     def view_options(self) -> int:
-        print("------- ESTATÍSTICAS -------")
+        print("-------- RELATÓRIOS --------")
         print("Escolha alguma opção:")
         print("1 - Gerar relatório completo")
         print("2 - Mostrar Curso mais vendido")

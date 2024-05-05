@@ -1,7 +1,7 @@
 class ModuleView:
 
     def view_options(self) -> int:
-        print("------- MÓDULO -------")
+        print("-------- MÓDULO --------")
         print("Escolha alguma opção:")
         print("0 - Voltar")
 

@@ -1,12 +1,12 @@
 class SystemView:
 
     def view_options(self) -> int:
-        print("------- MENU -------")
+        print("-------- SisCursos --------")
         print("Escolha alguma opção:")
         print("1 - Ir para tela de Usuário")
         print("2 - Ir para tela de Produtor")
         print("3 - Ir para tela de Afiliado")
-        print("4 - Ir para tela de Estatísticas")
+        print("4 - Ir para tela de Relatórios")
         print("0 - Sair")
 
         while True:

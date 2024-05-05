@@ -1,7 +1,7 @@
 class LessonView:
 
     def view_options(self) -> int:
-        print("------- AULA -------")
+        print("-------- AULA --------")
         print("Escolha alguma opção:")
         print("0 - Voltar")
 
