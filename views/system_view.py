@@ -15,4 +15,4 @@ class SystemView(AbstractView):
             5: "Ir para tela de Relatórios",
             0: "Voltar"
         }
-        return super().view_options("SisCursos", options)
+        return super().view_options("Cursos", options)

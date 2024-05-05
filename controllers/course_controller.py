@@ -1,5 +1,6 @@
 from views.course_view import *
 from entities.course import *
+from controllers.module_controller import *
 import random
 
 
@@ -8,6 +9,7 @@ class CourseController:
         self.__courses = dict()
         self.__course_view = CourseView()
         self.__system_controller = system_controller
+        self.__module_controller = ModuleController(self)
 
     def get_producer(self, cpf: int):
         return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
@@ -79,6 +81,9 @@ class CourseController:
         else:
             self.__course_view.show_message("Curso não encontrado ou id incorreto")
 
+    def module_controller(self):
+        self.__module_controller.show_view()
+
     def previous_view(self):
         self.__system_controller.show_view()
 
@@ -88,6 +93,7 @@ class CourseController:
             2: self.edit_course,
             3: self.list_courses,
             4: self.buy_course,
+            5: self.module_controller,
             0: self.previous_view
         }
 
