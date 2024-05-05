@@ -19,6 +19,14 @@ class SystemController:
         return self.__user_controller
 
     @property
+    def producer_controller(self) -> ProducerController:
+        return self.__producer_controller
+
+    @property
+    def affiliate_controller(self) -> AffiliateController:
+        return self.__affiliate_controller
+
+    @property
     def sale_controller(self) -> SaleController:
         return self.__sale_controller
 
