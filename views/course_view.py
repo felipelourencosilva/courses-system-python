@@ -34,7 +34,7 @@ class CourseView:
         data = {}
 
         name = input("Nome: ")
-        while len(name) < 4:
+        while len(name) < 4 or name.strip():
             print("Nome do curso deve ter pelo menos 4 letras.")
             name = input("Nome: ")
         data["name"] = name

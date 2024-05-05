@@ -1,3 +1,6 @@
+import re
+
+
 class ProducerView:
 
     def view_options(self):
@@ -28,12 +31,13 @@ class ProducerView:
     def get_edit_producer_data(self):
         print("-------- DADOS PRODUTOR --------")
         name = input("Nome: ")
-        while not name.isalpha():
+        while not (re.search("^[a-zA-Z ]*$", name) and name.strip()):
             print("Nome deve conter somente letras.")
             name = input("Nome: ")
+            valid = re.search("^[a-zA-Z ]*$", name) and name.strip()
 
         surname = input("Sobrenome: ")
-        while not surname.isalpha():
+        while not re.search("^[a-zA-Z ]*$", surname):
             print("Sobrenome deve conter somente letras.")
             surname = input("Sobrenome: ")
 

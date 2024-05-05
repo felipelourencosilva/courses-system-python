@@ -1,3 +1,6 @@
+import re
+
+
 class AffiliateView:
 
     def view_options(self) -> int:
@@ -28,12 +31,13 @@ class AffiliateView:
     def get_edit_affiliate_data(self):
         print("-------- DADOS AFILIADO --------")
         name = input("Nome: ")
-        while not name.isalpha():
+        while not (re.search("^[a-zA-Z ]*$", name) and name.strip()):
             print("Nome deve conter somente letras.")
             name = input("Nome: ")
+            valid = re.search("^[a-zA-Z ]*$", name) and name.strip()
 
         surname = input("Sobrenome: ")
-        while not surname.isalpha():
+        while not re.search("^[a-zA-Z ]*$", surname):
             print("Sobrenome deve conter somente letras.")
             surname = input("Sobrenome: ")
 
