@@ -43,9 +43,9 @@ class CourseController:
         if len(self.__courses) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
         else:
-            for key, course in self.__courses:
-                self.__course_view.show_course({"name": course.name, "descriptin": course.email, "price": course.price,
-                                                "id": course.id})
+            for key, course in self.__courses.items():
+                self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
+                                                "id": key})
 
     def remove_course(self):
         self.list_courses()
