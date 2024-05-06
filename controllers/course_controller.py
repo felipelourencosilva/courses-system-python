@@ -77,7 +77,7 @@ class CourseController:
     def list_courses(self):
         for key, course in self.__courses.items():
             self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
-                                            "id": key})
+                                            "id": key, "producer": f"{course.producer.name} {course.producer.surname}"})
 
     def remove_course(self):
         self.list_courses()

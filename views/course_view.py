@@ -33,10 +33,11 @@ class CourseView(AbstractView):
         return data
 
     def show_course(self, course_data):
-        print("Nome do curso: ", course_data["name"])
-        print("Descrição do curso: ", course_data["description"])
-        print("Preço: ", course_data["price"])
-        print("Id: ", course_data["id"])
+        print("Nome do curso:", course_data["name"])
+        print("Descrição do curso:", course_data["description"])
+        print("Autor:", course_data["producer"])
+        print("Preço:", course_data["price"])
+        print("Id:", course_data["id"])
         print()
 
     def read_id(self):
