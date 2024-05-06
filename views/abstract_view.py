@@ -37,7 +37,7 @@ class AbstractView(ABC):
         while True:
             num = input(default_msg)
             if not num.isnumeric():
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return int(num)
 
@@ -45,7 +45,7 @@ class AbstractView(ABC):
         while True:
             num = self.read_int(default_msg, error_msg)
             if num < min or num > max:
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return num
 
@@ -53,7 +53,7 @@ class AbstractView(ABC):
         while True:
             num = input(default_msg)
             if not num.isnumeric() and not re.search(r"\d*\.\d+", num):
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return float(num)
 
@@ -61,7 +61,7 @@ class AbstractView(ABC):
         while True:
             str = input(default_msg)
             if not re.search("^[^0-9!@#$%&*]*$", str):
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return str
 
@@ -69,7 +69,7 @@ class AbstractView(ABC):
         while True:
             email = input(default_msg)
             if "@" not in email:
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return email
 
@@ -77,7 +77,7 @@ class AbstractView(ABC):
         while True:
             str = input(default_msg)
             if len(str) < n:
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return str
 
@@ -117,6 +117,6 @@ class AbstractView(ABC):
         while True:
             value = self.read_float(default_msg, error_msg)
             if value <= 0:
-                print(error_msg)
+                self.show_message(error_msg)
             else:
                 return value
