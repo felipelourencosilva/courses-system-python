@@ -20,15 +20,15 @@ class ProducerController:
 
     def add_producer(self):
         producer_data = self.__producer_view.get_edit_producer_data()
+
         while True:
             cpf = self.__producer_view.read_cpf()
-            for producer in self.__producers:
-                if producer.cpf == cpf:
-                    self.__producer_view.show_message("Este CPF já foi utilizado.")
-                    break
-            else: #nobreak
+            if self.__system_controller.user_controller.get_user_by_cpf(cpf) is not None:
+                self.__producer_view.show_message("Este CPF já foi utilizado.")
+            else:
                 producer_data["cpf"] = cpf
                 break
+
         producer = Producer(producer_data["name"], producer_data["surname"],
                             producer_data["email"], producer_data["password"], producer_data["cpf"])
         self.__producers.append(producer)

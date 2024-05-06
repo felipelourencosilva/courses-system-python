@@ -66,7 +66,7 @@ class LessonController:
         module = self.__module_controller.get_module(module_id)
 
         if module is not None:
-            if len(module.lesson) == 0:
+            if len(module.lessons) == 0:
                 self.__lesson_view.show_message("Não há Aulas cadastrados nesse módulo")
             else:
                 for lesson in module.lessons:

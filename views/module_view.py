@@ -31,7 +31,7 @@ class ModuleView(AbstractView):
         return data
 
     def show_module(self, module_data):
-        print("Título do módulo: ", module_data["name"])
+        print("Título do módulo: ", module_data["title"])
         print("Descrição do módulo: ", module_data["description"])
         print("Id: ", module_data["id"])
         print()

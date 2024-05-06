@@ -31,6 +31,10 @@ class Module:
     def lessons(self) -> list:
         return self.__lessons
 
+    @property
+    def id(self) -> int:
+        return self.__id
+
     def add_lesson(self, lesson):
         self.__lessons.append(lesson)
 

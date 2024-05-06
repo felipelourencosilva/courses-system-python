@@ -13,6 +13,15 @@ class UserController:
             for user in self.__users:
                 if user.cpf == cpf:
                     return user
+
+            producer = self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
+            if producer is not None:
+                return producer
+
+            affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(cpf)
+            if affiliate is not None:
+                return affiliate
+
         return None
 
     def get_users(self):
