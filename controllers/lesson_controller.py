@@ -46,7 +46,7 @@ class LessonController:
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
-
+        self.list_lessons()
         lesson_id = self.__lesson_view.read_lesson_id()
 
         if lesson_id is not None and lesson_id in self.__lessons:

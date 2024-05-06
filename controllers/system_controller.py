@@ -32,6 +32,10 @@ class SystemController:
     def sale_controller(self) -> SaleController:
         return self.__sale_controller
 
+    @property
+    def course_controller(self) -> CourseController:
+        return self.__course_controller
+
     def start(self):
         self.show_view()
 

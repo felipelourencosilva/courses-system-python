@@ -36,9 +36,8 @@ class SaleController:
         self.show_affiliate_with_most_sales()
         self.show_affiliate_with_most_profit()
 
-    def add_sale(self, sale: Sale):
-        if isinstance(sale, Sale):
-            self.__sales.append(sale)
+    def add_sale(self, user, course, affiliate = None):
+        self.__sales.append(Sale(user, course, affiliate))
 
     def show_most_sold_course(self):
         counter = {}
@@ -57,7 +56,7 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda até o momento."
         else:
-            str += best[0].name + ", com um total de " + best[1] + " vendas."
+            str += f"{best[0].name}, com um total de {best[1]} venda(s)."
         self.__sale_view.show_message(str)
 
     def show_course_with_most_profit(self):
@@ -77,7 +76,7 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda até o momento."
         else:
-            str += best[0].name + ", com um lucro total de $" + best[1] + "."
+            str += f"{best[0].name}, com um lucro total de ${best[1]}."
         self.__sale_view.show_message(str)
 
     def show_user_with_most_courses(self):
@@ -97,7 +96,7 @@ class SaleController:
         if best[0] is None:
             str += "Nenhum usuário comprou nenhum curso até o momento."
         else:
-            str += best[0].name + ", com um total de " + best[1] + " cursos."
+            str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} curso(s)."
         self.__sale_view.show_message(str)
 
     def show_producer_with_most_sales(self):
@@ -117,16 +116,15 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda até o momento."
         else:
-            str += best[0].name + ", com um total de " + best[1] + " vendas."
+            str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} venda(s)."
         self.__sale_view.show_message(str)
 
     def show_producer_with_most_profit(self):
         counter = {}
         for sale in self.__sales:
-            if sale.producer is not None:
-                if sale.course.producer not in counter:
-                    counter[sale.course.producer] = 1
-                counter[sale.course.producer] += 1
+            if sale.course.producer not in counter:
+                counter[sale.course.producer] = 0
+            counter[sale.course.producer] += sale.course.price - sale.course.commission_price
 
         best = [None, 0]
         for key in counter:
@@ -138,15 +136,16 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda até o momento."
         else:
-            str += best[0].name + ", com um total de $" + best[1] + " em vendas."
+            str += f"{best[0].name} {best[0].surname}, com um lucro total de ${best[1]}."
         self.__sale_view.show_message(str)
 
     def show_affiliate_with_most_sales(self):
         counter = {}
         for sale in self.__sales:
-            if sale.course.producer not in counter:
-                counter[sale.course.affiliate] = 0
-            counter[sale.course.affiliate] += 1
+            if sale.affiliate is not None:
+                if sale.affiliate not in counter:
+                    counter[sale.affiliate] = 0
+                counter[sale.affiliate] += 1
 
         best = [None, 0]
         for key in counter:
@@ -158,16 +157,16 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda comissionada até o momento."
         else:
-            str += best[0].name + ", com um total de " + best[1] + " vendas."
+            str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} venda(s)."
         self.__sale_view.show_message(str)
 
     def show_affiliate_with_most_profit(self):
         counter = {}
         for sale in self.__sales:
             if sale.affiliate is not None:
-                if sale.course.affiliate not in counter:
-                    counter[sale.course.affiliate] = 1
-                counter[sale.course.affiliate] += 1
+                if sale.affiliate not in counter:
+                    counter[sale.affiliate] = 0
+                counter[sale.affiliate] += sale.course.commission_price
 
         best = [None, 0]
         for key in counter:
@@ -179,5 +178,5 @@ class SaleController:
         if best[0] is None:
             str += "Não houve nenhuma venda comissionada até o momento."
         else:
-            str += best[0].name + ", com um total de $" + best[1] + " em comissões."
+            str += f"{best[0].name} {best[0].surname}, com um total de ${best[1]} em comissões."
         self.__sale_view.show_message(str)

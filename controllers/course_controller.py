@@ -112,6 +112,18 @@ class CourseController:
             else:
                 break
 
+        affiliate = None
+        if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
+            while True:
+                affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
+                if affiliate_cpf == 0:
+                    break
+                if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
+                    self.__course_view.show_message("Este afiliado não existe.")
+                else:
+                    affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
+                    break
+
         course = self.__courses[id]
         if self.__system_controller.user_controller.user_has_course(cpf, course):
             self.__course_view.show_message("Você já possui esse curso")
@@ -119,6 +131,11 @@ class CourseController:
             self.__course_view.show_message("Você não possui saldo suficiente")
         else:
             self.__system_controller.user_controller.user_add_course(cpf, course)
+            self.__system_controller.producer_controller.pay_producer(course)
+            self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
+            user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
+            self.__system_controller.sale_controller.add_sale(user, course, affiliate)
+
 
 
     def module_controller(self):

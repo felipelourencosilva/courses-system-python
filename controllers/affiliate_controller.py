@@ -8,6 +8,9 @@ class AffiliateController:
         self.__affiliate_view = AffiliateView()
         self.__system_controller = system_controller
 
+    def get_affiliates(self):
+        return self.__affiliates
+
     def get_affiliate_by_cpf(self, cpf: int):
         if isinstance(cpf, int):
             for affiliate in self.__affiliates:
@@ -84,6 +87,10 @@ class AffiliateController:
             affiliate.add_balance(value)
         else:
             self.__affiliate_view.show_message("Afiliado não encontrado")
+
+    def pay_affiliate(self, course, affiliate):
+        if affiliate is not None:
+            affiliate.add_balance(course.commission_price)
 
     def previous_view(self):
         self.__system_controller.show_view()

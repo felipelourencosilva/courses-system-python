@@ -52,8 +52,10 @@ class UserController:
             self.__user_view.show_message("Não há usuários cadastrados")
         else:
             for user in self.__users:
+                course_names = [c.name for c in user.courses]
                 self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email,
-                                            "password": user.password, "cpf": user.cpf, "balance": user.balance})
+                                            "password": user.password, "cpf": user.cpf, "balance": user.balance,
+                                            "courses": course_names})
 
     def remove_user(self):
         self.list_users()

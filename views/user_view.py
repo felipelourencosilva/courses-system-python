@@ -26,4 +26,9 @@ class UserView(AbstractView):
         print("Senha do usuário: ", user_data["password"])
         print("CPF do usuário: ", user_data["cpf"])
         print("Saldo do usuário: ", user_data["balance"])
+        print("Cursos do usuário: ", end="")
+        if len(user_data["courses"]) == 0:
+            print("Nenhum")
+        else:
+            print(*user_data["courses"], sep = ", ")
         print()
