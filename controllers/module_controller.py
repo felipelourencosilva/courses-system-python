@@ -38,6 +38,7 @@ class ModuleController:
         module.remove_lesson(lesson)
 
     def add_module(self):
+        self.__course_controller.list_courses()
         if len(self.__course_controller.get_courses()) == 0:
             self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema.")
             return
@@ -54,6 +55,7 @@ class ModuleController:
             self.__module_view.show_message("Curso não encontrado ou id incorreto")
 
     def remove_module(self):
+        self.__course_controller.list_courses()
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
@@ -66,6 +68,7 @@ class ModuleController:
             self.__module_view.show_message("Módulo não encontrado ou id incorreto")
 
     def edit_module(self):
+        self.__course_controller.list_courses()
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
@@ -84,6 +87,8 @@ class ModuleController:
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
+
+        self.__course_controller.list_courses()
         course_id = self.__module_view.read_course_id()
         course = self.__course_controller.get_course(course_id)
 
