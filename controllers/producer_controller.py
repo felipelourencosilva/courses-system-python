@@ -8,6 +8,9 @@ class ProducerController:
         self.__producer_view = ProducerView()
         self.__system_controller = system_controller
 
+    def producer_count(self):
+        return len(self.__producers)
+
     def get_producer_by_cpf(self, cpf: int):
         if isinstance(cpf, int):
             for producer in self.__producers:
@@ -16,7 +19,16 @@ class ProducerController:
         return None
 
     def add_producer(self):
-        producer_data = self.__producer_view.get_add_producer_data()
+        producer_data = self.__producer_view.get_edit_producer_data()
+        while True:
+            cpf = self.__producer_view.read_cpf()
+            for producer in self.__producers:
+                if producer.cpf == cpf:
+                    self.__producer_view.show_message("Este CPF já foi utilizado.")
+                    break
+            else: #nobreak
+                producer_data["cpf"] = cpf
+                break
         producer = Producer(producer_data["name"], producer_data["surname"],
                             producer_data["email"], producer_data["password"], producer_data["cpf"])
         self.__producers.append(producer)

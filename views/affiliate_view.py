@@ -15,9 +15,6 @@ class AffiliateView(AbstractView):
         }
         return super().view_options("AFILIADO", options)
 
-    def get_add_affiliate_data(self):
-        return super().read_basic_add_user_data("AFILIADO")
-
     def get_edit_affiliate_data(self):
         return super().read_basic_edit_user_data("AFILIADO")
 

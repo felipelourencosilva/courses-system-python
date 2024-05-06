@@ -16,6 +16,9 @@ class LessonController:
         return id
 
     def add_lesson(self):
+        if len(self.__module_controller.get_modules()) == 0:
+            self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema.")
+            return
         module_id = self.__lesson_view.read_module_id()
         if module_id is not None and module_id in self.__module_controller.get_modules():
             lesson_data = self.__lesson_view.get_lesson_data()
@@ -28,6 +31,9 @@ class LessonController:
             self.__lesson_view.show_message("Módulo não encontrado ou id incorreto")
 
     def remove_lesson(self):
+        if len(self.__lessons) == 0:
+            self.__lesson_view.show_message("Não há aulas cadastradas")
+            return
         lesson_id = self.__lesson_view.read_lesson_id()
         if lesson_id is not None and lesson_id in self.__lessons:
             lesson = self.__lessons[lesson_id]
@@ -38,7 +44,7 @@ class LessonController:
 
     def edit_lesson(self):
         if len(self.__lessons) == 0:
-            self.__lesson_view.show_message("Nenhuma aula cadastrado")
+            self.__lesson_view.show_message("Não há aulas cadastradas")
             return
 
         lesson_id = self.__lesson_view.read_lesson_id()
@@ -53,6 +59,9 @@ class LessonController:
             self.__lesson_view.show_message("Aula não encontrada ou id incorreto")
 
     def list_lessons(self):
+        if len(self.__lessons) == 0:
+            self.__lesson_view.show_message("Não há aulas cadastradas")
+            return
         module_id = self.__lesson_view.read_module_id()
         module = self.__module_controller.get_module(module_id)
 

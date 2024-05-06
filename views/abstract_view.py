@@ -88,6 +88,7 @@ class AbstractView(ABC):
                 self.show_message(error_msg)
             else:
                 return cpf
+
     def print_title(self, title: str):
         print(f"-------- {title} --------")
 
@@ -106,11 +107,6 @@ class AbstractView(ABC):
         data["email"] = self.read_email("Email: ", "Email deve conter '@'.")
         data["password"] = self.read_with_n_chars("Senha: ", "A senha deve ter pelo menos 4 caracteres.", 4)
 
-        return data
-
-    def read_basic_add_user_data(self, title: str):
-        data = self.read_basic_edit_user_data(title)
-        data["cpf"] = self.read_cpf()
         return data
 
     def read_value(self, default_msg: str, error_msg: str):

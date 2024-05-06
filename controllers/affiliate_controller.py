@@ -16,7 +16,16 @@ class AffiliateController:
         return None
 
     def add_affiliate(self):
-        affiliate_data = self.__affiliate_view.get_add_affiliate_data()
+        affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+        while True:
+            cpf = self.__affiliate_view.read_cpf()
+            for affiliate in self.__affiliates:
+                if affiliate.cpf == cpf:
+                    self.__affiliate_view.show_message("Este CPF já foi utilizado.")
+                    break
+            else: #nobreak
+                affiliate_data["cpf"] = cpf
+                break
         affiliate = Affiliate(affiliate_data["name"], affiliate_data["surname"],
                               affiliate_data["email"], affiliate_data["password"], affiliate_data["cpf"])
         self.__affiliates.append(affiliate)

@@ -41,6 +41,9 @@ class CourseController:
         return id
 
     def add_course(self):
+        if self.__system_controller.producer_controller.producer_count() == 0:
+            self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
+            return
         course_data = self.__course_view.get_add_course_data()
         id = self.generate_id()
         course = Course(course_data["name"], self.get_producer(course_data["cpf"]),

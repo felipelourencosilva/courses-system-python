@@ -17,9 +17,6 @@ class UserView(AbstractView):
         }
         return super().view_options("USUÁRIO", options)
 
-    def get_add_user_data(self):
-        return super().read_basic_add_user_data("USUÁRIO")
-
     def get_edit_user_data(self):
         return super().read_basic_edit_user_data("USUÁRIO")
 
