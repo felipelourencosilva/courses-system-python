@@ -15,15 +15,16 @@ class UserController:
                     return user
         return None
 
+    def get_users(self):
+        return self.__users
+
     def add_user(self):
         user_data = self.__user_view.get_edit_user_data()
         while True:
             cpf = self.__user_view.read_cpf()
-            for user in self.__users:
-                if user.cpf == cpf:
-                    self.__user_view.show_message("Este CPF já foi utilizado.")
-                    break
-            else: #nobreak
+            if self.get_user_by_cpf(cpf) is not None:
+                self.__user_view.show_message("Este CPF já foi utilizado.")
+            else:
                 user_data["cpf"] = cpf
                 break
         user = User(user_data["name"], user_data["surname"],

@@ -41,10 +41,18 @@ class CourseController:
         return id
 
     def add_course(self):
-        if self.__system_controller.producer_controller.producer_count() == 0:
+        if len(self.__system_controller.producer_controller.get_producers()) == 0:
             self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
             return
-        course_data = self.__course_view.get_add_course_data()
+        course_data = self.__course_view.get_edit_course_data()
+        while True:
+            cpf = self.__course_view.read_cpf("CPF do Produtor: ")
+            if self.get_producer(cpf) is None:
+                self.__course_view.show_message("Este produtor não existe.")
+            else:
+                course_data["cpf"] = cpf
+                break
+
         id = self.generate_id()
         course = Course(course_data["name"], self.get_producer(course_data["cpf"]),
                         course_data["description"], course_data["price"], course_data["commission_percentage"], id)
@@ -67,12 +75,9 @@ class CourseController:
             self.__course_view.show_message("Curso não encontrado ou id incorreto")
 
     def list_courses(self):
-        if len(self.__courses) == 0:
-            self.__course_view.show_message("Não há cursos cadastrados")
-        else:
-            for key, course in self.__courses.items():
-                self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
-                                                "id": key})
+        for key, course in self.__courses.items():
+            self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
+                                            "id": key})
 
     def remove_course(self):
         self.list_courses()
@@ -86,23 +91,35 @@ class CourseController:
             self.__course_view.show_message("Curso não encontrado ou id incorreto")
 
     def buy_course(self):
-        self.list_courses()
-        if len(self.__courses) == 0:
+        if len(self.__system_controller.user_controller.get_users()) == 0:
+            self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema.")
             return
-        id = self.__course_view.read_id()
-        cpf = self.__course_view.read_cpf("CPF do Usuário: ")
-
-        if id is not None and id in self.__courses:
-            course = self.__courses[id]
-            if self.__system_controller.user_controller.user_has_course(cpf, course):
-                self.__course_view.show_message("Você já possui esse curso")
-            if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
-                self.__course_view.show_message("Você não possui saldo suficiente")
+        if len(self.__courses) == 0:
+            self.__course_view.show_message("Não há cursos cadastrados.")
+            return
+        self.list_courses()
+        while True:
+            id = self.__course_view.read_id()
+            if id not in self.__courses:
+                self.__course_view.show_message("Curso não encontrado.")
             else:
-                self.__system_controller.user_controller.user_add_course(cpf, course)
+                break
 
+        while True:
+            cpf = self.__course_view.read_cpf("CPF do Usuário: ")
+            if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
+                self.__course_view.show_message("Este usuário não existe.")
+            else:
+                break
+
+        course = self.__courses[id]
+        if self.__system_controller.user_controller.user_has_course(cpf, course):
+            self.__course_view.show_message("Você já possui esse curso")
+        if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
+            self.__course_view.show_message("Você não possui saldo suficiente")
         else:
-            self.__course_view.show_message("Curso não encontrado ou id incorreto")
+            self.__system_controller.user_controller.user_add_course(cpf, course)
+
 
     def module_controller(self):
         self.__module_controller.show_view()

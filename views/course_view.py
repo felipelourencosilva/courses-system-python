@@ -17,11 +17,6 @@ class CourseView(AbstractView):
         }
         return super().view_options("CURSOS", options)
 
-    def get_add_course_data(self):
-        data = self.get_edit_course_data()
-        data["cpf"] = self.read_cpf("CPF do Produtor: ")
-        return data
-
     def get_edit_course_data(self):
         self.print_title("DADOS CURSO")
         data = {}

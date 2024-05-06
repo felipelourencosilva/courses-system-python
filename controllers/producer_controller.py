@@ -8,8 +8,8 @@ class ProducerController:
         self.__producer_view = ProducerView()
         self.__system_controller = system_controller
 
-    def producer_count(self):
-        return len(self.__producers)
+    def get_producers(self):
+        return self.__producers
 
     def get_producer_by_cpf(self, cpf: int):
         if isinstance(cpf, int):
