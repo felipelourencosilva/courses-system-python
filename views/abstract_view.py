@@ -27,7 +27,11 @@ class AbstractView(ABC):
             return option
 
     def show_message(self, msg: str):
+        print()
+        print("********** IMPORTANTE: **********")
         print(msg)
+        print("*********************************")
+        print()
 
     def read_int(self, default_msg: str, error_msg: str):
         while True:
