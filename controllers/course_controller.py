@@ -105,6 +105,10 @@ class CourseController:
             else:
                 break
 
+        self.__system_controller.user_controller.list_users()
+        self.__system_controller.producer_controller.list_producer()
+        self.__system_controller.affiliate_controller.list_affiliates()
+
         while True:
             cpf = self.__course_view.read_cpf("CPF do Usuário: ")
             if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
@@ -113,16 +117,15 @@ class CourseController:
                 break
 
         affiliate = None
-        if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
-            while True:
-                affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
-                if affiliate_cpf == 0:
-                    break
-                if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
-                    self.__course_view.show_message("Este afiliado não existe.")
-                else:
-                    affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
-                    break
+        while True:
+            affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
+            if affiliate_cpf == 0:
+                break
+            if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
+                self.__course_view.show_message("Este afiliado não existe.")
+            else:
+                affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
+                break
 
         course = self.__courses[id]
         if self.__system_controller.user_controller.user_has_course(cpf, course):

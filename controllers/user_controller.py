@@ -25,7 +25,10 @@ class UserController:
         return None
 
     def get_users(self):
-        return self.__users
+        return (self.__users
+                + self.__system_controller.producer_controller.get_producers()
+                + self.__system_controller.affiliate_controller.get_affiliates()
+        )
 
     def add_user(self):
         user_data = self.__user_view.get_edit_user_data()
@@ -97,6 +100,8 @@ class UserController:
 
     def add_balance(self):
         self.list_users()
+        self.__system_controller.producer_controller.list_producer()
+        self.__system_controller.affiliate_controller.list_affiliates()
         if len(self.__users) == 0:
             return
         user_cpf = self.__user_view.read_cpf()
