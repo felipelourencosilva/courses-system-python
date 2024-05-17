@@ -12,6 +12,7 @@ class LessonView(AbstractView):
             2: "Remover Aula",
             3: "Editar Aula",
             4: "Listar Aulas",
+            5: "Ir para tela de Comentários",
             0: "Voltar"
         }
         return super().view_options("AULAS", options)

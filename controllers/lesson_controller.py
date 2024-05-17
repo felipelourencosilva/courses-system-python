@@ -10,7 +10,7 @@ class LessonController:
         self.__lessons = dict()
         self.__module_controller = module_controller
         self.__lesson_view = LessonView()
-        self.__lesson_controller = CommentController(self, system_controller)
+        self.__comment_controller = CommentController(self, system_controller)
 
     def generate_id(self):
         id = random.randint(1, 1000)
@@ -104,12 +104,16 @@ class LessonController:
     def previous_view(self):
         self.__module_controller.show_view()
 
+    def comment_controller(self):
+        self.__comment_controller.show_view()
+
     def show_view(self):
         options = {
             1: self.add_lesson,
             2: self.remove_lesson,
             3: self.edit_lesson,
             4: self.list_lessons,
+            5: self.comment_controller,
             0: self.previous_view
         }
 

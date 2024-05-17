@@ -21,7 +21,7 @@ class CommentController:
             self.__comment_view.show_message("Não é possível adicionar um comentário: Não existem aulas cadastradas.")
             return
         lesson_id = self.__comment_view.read_lesson_id()
-        user_cpf = self.__comment_view.read_user_cpf()
+        user_cpf = self.__comment_view.read_cpf()
 
         if (lesson_id is not None and user_cpf is not None and lesson_id in self.__lesson_controller.get_lessons() and
             user_cpf in self.__system_controller.user_controller.get_users()):
@@ -49,11 +49,11 @@ class CommentController:
             self.__comments.pop(comment)
             self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
         else:
-            self.__lesson_view.show_message("Comentário não encontrada ou id incorreto")
+            self.__comment_view.show_message("Comentário não encontrada ou id incorreto")
 
     def edit_comment(self):
         if len(self.__comments) == 0:
-            self.__comment_view.show_message("Não há comentários cadastradas")
+            self.__comment_view.show_message("Não há comentários cadastrados")
             return
         self.list_comments()
         comment_id = self.__comment_view.read_comment_id()
