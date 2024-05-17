@@ -102,6 +102,7 @@ class LessonController:
             self.__lesson_view.show_message("Curso não encontrado")
 
     def previous_view(self):
+        print("\033[H\033[J", end="")
         self.__module_controller.show_view()
 
     def comment_controller(self):

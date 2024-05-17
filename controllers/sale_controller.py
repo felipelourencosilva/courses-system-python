@@ -9,6 +9,7 @@ class SaleController:
         self.__system_controller = system_controller
 
     def previous_view(self):
+        print("\033[H\033[J", end="")
         self.__system_controller.show_view()
 
     def show_view(self):

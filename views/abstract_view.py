@@ -1,20 +1,36 @@
 from abc import ABC, abstractmethod
 import re
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class AbstractView(ABC):
+    messages = []
 
     @abstractmethod
     def __init__(self):
         pass
 
     def view_options(self, title: str, options: dict):
-        self.print_title(title)
+        if len(self.messages) == 0:
+            pass
+        else:
+            self.messages.remove(self.messages[0])
+
+        tableView = Table(title=title, box=box.ROUNDED, border_style="#6D7280", title_style="#54cdc1 bold italic frame")
+        tableView.add_column(justify="center", style="#54cdc1")
+        tableView.add_column("Escolha uma opção:", justify="left", style="#54cdc1 bold")
+
         for k, v in sorted(options.items()):
             if (k != 0):
-                print(f"{k} - {v}")
+                tableView.add_row(str(k), str(v))
         if 0 in options:
-            print(f"0 - {options[0]}")
+            tableView.add_row("0", options[0], style="#FF6961")
+
+        print()
+        console.print(tableView)
 
         while True:
             option = self.read_int(
@@ -22,16 +38,22 @@ class AbstractView(ABC):
                 "Por favor, escolha um número dentre as opções."
             )
             if option not in options:
-                print("Por favor, escolha um número dentre as opções.")
+                self.show_message("Por favor, escolha um número dentre as opções.")
                 continue
             return option
 
     def show_message(self, msg: str):
+        print("\033[H\033[J", end="")
+
+        table = Table(box=box.ROUNDED, border_style="#FF6961")
+        table.add_column("Importante", justify="center", style="#FF6961")
+        table.add_row(msg)
+
         print()
-        print("********** IMPORTANTE: **********")
-        print(msg)
-        print("*********************************")
+        console.print(table)
         print()
+
+        self.messages.append(msg)
 
     def read_int(self, default_msg: str, error_msg: str):
         while True:

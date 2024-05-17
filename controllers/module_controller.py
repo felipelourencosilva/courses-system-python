@@ -106,6 +106,7 @@ class ModuleController:
         self.__lesson_controller.show_view()
 
     def previous_view(self):
+        print("\033[H\033[J", end="")
         self.__course_controller.show_view()
 
     def show_view(self):

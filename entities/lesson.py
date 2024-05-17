@@ -46,6 +46,10 @@ class Lesson:
     def comments(self) -> list:
         return self.__comments
 
+    @property
+    def id(self) -> int:
+        return self.__id
+
     def add_comment(self, comment: Comment):
         if isinstance(comment, Comment):
             self.__comments.append(comment)
