@@ -9,7 +9,7 @@ class CourseController:
         self.__courses = dict()
         self.__course_view = CourseView()
         self.__system_controller = system_controller
-        self.__module_controller = ModuleController(self)
+        self.__module_controller = ModuleController(self, system_controller)
 
     def get_producer(self, cpf: int):
         return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
@@ -134,7 +134,7 @@ class CourseController:
             self.__course_view.show_message("Você não possui saldo suficiente")
         else:
             self.__system_controller.user_controller.user_add_course(cpf, course)
-            self.__system_controller.producer_controller.pay_producer(course)
+            self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)
             self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
             user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
             self.__system_controller.sale_controller.add_sale(user, course, affiliate)

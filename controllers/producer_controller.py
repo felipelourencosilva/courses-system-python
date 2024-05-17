@@ -84,8 +84,11 @@ class ProducerController:
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 
-    def pay_producer(self, course):
-        course.producer.add_balance(course.price - course.commission_price)
+    def pay_producer(self, course, hasAffiliate):
+        balance = course.price
+        if hasAffiliate:
+            balance -= course.commission_price
+        course.producer.add_balance(balance)
 
     def previous_view(self):
         self.__system_controller.show_view()
