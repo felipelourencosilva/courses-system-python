@@ -32,7 +32,10 @@ class CourseController:
 
     def remove_course_module(self, id: int, module: Module):
         course = self.get_course(id)
-        course.remove_module(module)
+        if course is not None:
+            course.remove_module(module)
+        else:
+            self.__course_view.show_message("Módulo não encontrado.")
 
     def generate_id(self):
         id = random.randint(1, 1000)

@@ -55,10 +55,10 @@ class ModuleController:
             self.__module_view.show_message("Curso não encontrado ou id incorreto")
 
     def remove_module(self):
-        self.__course_controller.list_courses()
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
+        self.list_modules()
         module_id = self.__module_view.read_module_id()
         if module_id is not None and module_id in self.__modules:
             module = self.__modules[module_id]
@@ -68,11 +68,10 @@ class ModuleController:
             self.__module_view.show_message("Módulo não encontrado ou id incorreto")
 
     def edit_module(self):
-        self.__course_controller.list_courses()
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
-
+        self.list_modules()
         module_id = self.__module_view.read_module_id()
 
         if module_id is not None and module_id in self.__modules:
@@ -81,7 +80,7 @@ class ModuleController:
             module.title = module_data["title"]
             module.description = module_data["description"]
         else:
-            self.__module_view.show_message("Modulo não encontrado ou id incorreto")
+            self.__module_view.show_message("Módulo não encontrado ou id incorreto")
 
     def list_modules(self):
         if len(self.__modules) == 0:

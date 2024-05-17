@@ -42,6 +42,7 @@ class LessonController:
             self.__lesson_view.show_message("Aula não existe ou id incorreto")
 
     def add_lesson(self):
+        self.__module_controller.list_modules()
         if len(self.__module_controller.get_modules()) == 0:
             self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema.")
             return
@@ -88,6 +89,7 @@ class LessonController:
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
+        self.__module_controller.list_modules()
         module_id = self.__lesson_view.read_module_id()
         module = self.__module_controller.get_module(module_id)
 

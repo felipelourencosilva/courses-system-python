@@ -20,8 +20,10 @@ class CommentController:
         if len(self.__lesson_controller.get_lessons()) == 0:
             self.__comment_view.show_message("Não é possível adicionar um comentário: Não existem aulas cadastradas.")
             return
+        self.__lesson_controller.list_lessons()
         lesson_id = self.__comment_view.read_lesson_id()
-        user_cpf = self.__comment_view.read_cpf()
+        self.__system_controller.user_controller.list_users()
+        user_cpf = self.__comment_view.read_cpf("CPF do autor: ")
 
         if (lesson_id is not None and user_cpf is not None and lesson_id in self.__lesson_controller.get_lessons() and
             user_cpf in self.__system_controller.user_controller.get_users()):
