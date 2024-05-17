@@ -1,4 +1,5 @@
 from entities.video import *
+from entities.comment import *
 
 
 class Lesson:
@@ -11,6 +12,8 @@ class Lesson:
             self.__video = video
         if isinstance(id, int):
             self.__id = id
+
+        self.__comments = []
 
     @property
     def title(self) -> str:
@@ -39,8 +42,14 @@ class Lesson:
         if isinstance(video, Video):
             self.__video = video
 
-    def add_comment(self):
-        pass
+    @property
+    def comments(self) -> list:
+        return self.__comments
 
-    def remove_comment(self):
-        pass
+    def add_comment(self, comment: Comment):
+        if isinstance(comment, Comment):
+            self.__comments.append(comment)
+
+    def remove_comment(self, comment: Comment):
+        if comment in self.__comments:
+            self.__comments.remove(comment)

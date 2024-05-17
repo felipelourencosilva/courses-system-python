@@ -1,19 +1,45 @@
 from views.lesson_view import *
 from entities.lesson import *
+from entities.comment import *
+from controllers.comment_controller import *
 import random
 
 
 class LessonController:
-    def __init__(self, module_controller):
+    def __init__(self, module_controller, system_controller):
         self.__lessons = dict()
         self.__module_controller = module_controller
         self.__lesson_view = LessonView()
+        self.__lesson_controller = CommentController(self, system_controller)
 
     def generate_id(self):
         id = random.randint(1, 1000)
         while id in self.__lessons:
             id = random.randint(1, 1000)
         return id
+
+    def get_lessons(self):
+        return self.__lessons
+
+    def get_lesson(self, id: int):
+        if id in self.__lessons:
+            return self.__lessons[id]
+        else:
+            return None
+
+    def add_lesson_comment(self, id: int, comment: Comment):
+        if id is not None and id in self.__lessons and isinstance(comment, Comment):
+            lesson = self.get_lesson(id)
+            lesson.add_comment(comment)
+        else:
+            self.__lesson_view.show_message("Aula não existe ou id incorreto")
+
+    def remove_lesson_comment(self, id: int, comment: Comment):
+        if id is not None and id in self.__lessons and isinstance(comment, Comment):
+            lesson = self.get_lesson(id)
+            lesson.remove_comment(comment)
+        else:
+            self.__lesson_view.show_message("Aula não existe ou id incorreto")
 
     def add_lesson(self):
         if len(self.__module_controller.get_modules()) == 0:

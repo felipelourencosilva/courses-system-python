@@ -5,11 +5,11 @@ import random
 
 
 class ModuleController:
-    def __init__(self, course_controller):
+    def __init__(self, course_controller, system_controller):
         self.__modules = dict()
         self.__course_controller = course_controller
         self.__module_view = ModuleView()
-        self.__lesson_controller = LessonController(self)
+        self.__lesson_controller = LessonController(self, system_controller)
 
     def generate_id(self):
         id = random.randint(1, 1000)
