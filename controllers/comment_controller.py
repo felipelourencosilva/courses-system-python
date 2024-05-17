@@ -84,7 +84,6 @@ class CommentController:
             self.__comment_view.show_message("Aula não encontrada")
 
     def previous_view(self):
-        print("\033[H\033[J", end="")
         self.__lesson_controller.show_view()
 
     def show_view(self):

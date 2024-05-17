@@ -7,18 +7,12 @@ console = Console()
 
 
 class AbstractView(ABC):
-    messages = []
 
     @abstractmethod
     def __init__(self):
         pass
 
     def view_options(self, title: str, options: dict):
-        if len(self.messages) == 0:
-            pass
-        else:
-            self.messages.remove(self.messages[0])
-
         tableView = Table(title=title, box=box.ROUNDED, border_style="#6D7280", title_style="#54cdc1 bold italic frame")
         tableView.add_column(justify="center", style="#54cdc1")
         tableView.add_column("Escolha uma opção:", justify="left", style="#54cdc1 bold")
@@ -43,8 +37,6 @@ class AbstractView(ABC):
             return option
 
     def show_message(self, msg: str):
-        print("\033[H\033[J", end="")
-
         table = Table(box=box.ROUNDED, border_style="#FF6961")
         table.add_column("Importante", justify="center", style="#FF6961")
         table.add_row(msg)
@@ -52,8 +44,6 @@ class AbstractView(ABC):
         print()
         console.print(table)
         print()
-
-        self.messages.append(msg)
 
     def read_int(self, default_msg: str, error_msg: str):
         while True:

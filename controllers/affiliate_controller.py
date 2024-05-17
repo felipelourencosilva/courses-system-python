@@ -91,7 +91,6 @@ class AffiliateController:
             affiliate.add_balance(course.commission_price)
 
     def previous_view(self):
-        print("\033[H\033[J", end="")
         self.__system_controller.show_view()
 
     def show_view(self):
