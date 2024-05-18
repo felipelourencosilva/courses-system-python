@@ -106,7 +106,7 @@ class AbstractView(ABC):
                 return cpf
 
     def print_title(self, title: str):
-        print(f"-------- {title} --------")
+        console.print("\n             " + title, style="#54cdc1")
 
     def read_basic_edit_user_data(self, title: str):
         data = {}
@@ -114,7 +114,7 @@ class AbstractView(ABC):
         while True:
             name = self.read_letters_string("Nome: ", "Nome deve conter somente letras.")
             if not name.strip():
-                print("Nome deve conter somente letras.")
+                self.show_message("Nome deve conter somente letras.")
             else:
                 data["name"] = name
                 break
