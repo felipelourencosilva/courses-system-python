@@ -1,4 +1,8 @@
 from views.abstract_view import AbstractView
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class AffiliateView(AbstractView):
@@ -19,9 +23,14 @@ class AffiliateView(AbstractView):
         return super().read_basic_edit_user_data("AFILIADO")
 
     def show_affiliate(self, affiliate_data):
-        print("Nome do afiliado: ", affiliate_data["name"])
-        print("Email do afiliado: ", affiliate_data["email"])
-        print("Senha do afiliado: ", affiliate_data["password"])
-        print("CPF do afiliado: ", affiliate_data["cpf"])
-        print("Saldo do afiliado: ", affiliate_data["balance"])
+        showAffiliateTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showAffiliateTable.add_column(justify="left", style="#54cdc1")
+        showAffiliateTable.add_column("Informações", justify="left", style="bold italic")
+        showAffiliateTable.add_row("Nome do afiliado: ", str(affiliate_data["name"]))
+        showAffiliateTable.add_row("Email do afiliado: ", str(affiliate_data["email"]))
+        showAffiliateTable.add_row("Senha do afiliado: ", str(affiliate_data["password"]))
+        showAffiliateTable.add_row("CPF do afiliado: ", str(affiliate_data["cpf"]))
+        showAffiliateTable.add_row("Saldo do afiliado: ", str(affiliate_data["balance"]))
+
+        console.print(showAffiliateTable)
         print()

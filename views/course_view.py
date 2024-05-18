@@ -1,4 +1,8 @@
 from views.abstract_view import AbstractView
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class CourseView(AbstractView):
@@ -33,11 +37,16 @@ class CourseView(AbstractView):
         return data
 
     def show_course(self, course_data):
-        print("Nome do curso:", course_data["name"])
-        print("Descrição do curso:", course_data["description"])
-        print("Autor:", course_data["producer"])
-        print("Preço:", course_data["price"])
-        print("Id:", course_data["id"])
+        showCourseTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showCourseTable.add_column(justify="left", style="#54cdc1")
+        showCourseTable.add_column("Informações", justify="left", style="bold italic")
+        showCourseTable.add_row("Nome do curso:", str(course_data["name"]))
+        showCourseTable.add_row("Descrição do curso:", str(course_data["description"]))
+        showCourseTable.add_row("Autor:", str(course_data["producer"]))
+        showCourseTable.add_row("Preço:", str(course_data["price"]))
+        showCourseTable.add_row("Id:", str(course_data["id"]))
+
+        console.print(showCourseTable)
         print()
 
     def read_id(self):

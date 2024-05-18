@@ -1,5 +1,8 @@
 from views.abstract_view import AbstractView
-
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 class UserView(AbstractView):
 
@@ -21,14 +24,18 @@ class UserView(AbstractView):
         return super().read_basic_edit_user_data("USUÁRIO")
 
     def show_user(self, user_data):
-        print("Nome do usuário: ", user_data["name"])
-        print("Email do usuário: ", user_data["email"])
-        print("Senha do usuário: ", user_data["password"])
-        print("CPF do usuário: ", user_data["cpf"])
-        print("Saldo do usuário: ", user_data["balance"])
-        print("Cursos do usuário: ", end="")
+        showUserTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showUserTable.add_column(justify="left", style="#54cdc1")
+        showUserTable.add_column("Informações", justify="left", style="bold italic")
+        showUserTable.add_row("Nome do usuário", str(user_data["name"]))
+        showUserTable.add_row("Email do usuário", str(user_data["email"]))
+        showUserTable.add_row("Senha do usuário", str(user_data["password"]))
+        showUserTable.add_row("CPF do usuário", str(user_data["cpf"]))
+        showUserTable.add_row("Saldo do usuário", str(user_data["balance"]))
         if len(user_data["courses"]) == 0:
-            print("Nenhum")
+            showUserTable.add_row("Cursos do usuário", "Nenhum")
         else:
-            print(*user_data["courses"], sep = ", ")
+            showUserTable.add_row("Cursos do usuário", ", ".join(user_data["courses"]))
+
+        console.print(showUserTable)
         print()
