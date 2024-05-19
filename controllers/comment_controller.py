@@ -23,10 +23,11 @@ class CommentController:
         self.__lesson_controller.list_lessons()
         lesson_id = self.__comment_view.read_lesson_id()
         self.__system_controller.user_controller.list_users()
+        self.__system_controller.producer_controller.list_producer()
+        self.__system_controller.affiliate_controller.list_affiliates()
         user_cpf = self.__comment_view.read_cpf("CPF do autor: ")
 
-        if (lesson_id is not None and user_cpf is not None and lesson_id in self.__lesson_controller.get_lessons() and
-            user_cpf in self.__system_controller.user_controller.get_users()):
+        if lesson_id is not None and user_cpf is not None and lesson_id in self.__lesson_controller.get_lessons():
             comment_data = self.__comment_view.get_comment_data()
             comment_id = self.generate_id()
 
@@ -36,7 +37,7 @@ class CommentController:
                 self.__lesson_controller.add_lesson_comment(lesson_id, comment)
                 self.__comments[comment_id] = comment
             else:
-                self.__comment_view.show_message("Este comentário não existe")
+                self.__comment_view.show_message("Este usuário não existe")
         else:
             self.__comment_view.show_message("Este comentário não existe")
 
