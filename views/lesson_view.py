@@ -1,5 +1,7 @@
 from views.abstract_view import AbstractView
 from rich.console import Console
+from rich import box
+from rich.table import Table
 console = Console()
 
 class LessonView(AbstractView):
@@ -26,11 +28,15 @@ class LessonView(AbstractView):
         return data
 
     def show_lesson(self, lesson_data):
-        print("Título da aula:", lesson_data["title"])
-        print("Descrição da aula:", lesson_data["description"])
-        print("Id:", lesson_data["id"])
+        showLessonTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showLessonTable.add_column("Aula", justify="left", style="#54cdc1")
+        showLessonTable.add_column("Informações", justify="left", style="bold italic")
+        showLessonTable.add_row("Título da aula", str(lesson_data["title"]))
+        showLessonTable.add_row("Descrição da aula", str(lesson_data["description"]))
+        showLessonTable.add_row("Id", str(lesson_data["id"]))
         video_url = lesson_data["video_url"]
-        console.print("Url do vídeo", style="link " + str(video_url) + " #")
+        showLessonTable.add_row("Url do vídeo", str(video_url), style="link " + str(video_url) + " #1260CC")
+        console.print(showLessonTable)
         print()
 
     def read_lesson_id(self):

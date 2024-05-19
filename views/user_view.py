@@ -25,7 +25,7 @@ class UserView(AbstractView):
 
     def show_user(self, user_data):
         showUserTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showUserTable.add_column(justify="left", style="#54cdc1")
+        showUserTable.add_column("Usuário", justify="left", style="#54cdc1")
         showUserTable.add_column("Informações", justify="left", style="bold italic")
         showUserTable.add_row("Nome do usuário", str(user_data["name"]))
         showUserTable.add_row("Email do usuário", str(user_data["email"]))

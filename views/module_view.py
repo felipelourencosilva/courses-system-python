@@ -1,4 +1,8 @@
 from views.abstract_view import AbstractView
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class ModuleView(AbstractView):
@@ -31,9 +35,13 @@ class ModuleView(AbstractView):
         return data
 
     def show_module(self, module_data):
-        print("Título do módulo: ", module_data["title"])
-        print("Descrição do módulo: ", module_data["description"])
-        print("Id: ", module_data["id"])
+        showModuleTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showModuleTable.add_column("Módulo",justify="left", style="#54cdc1")
+        showModuleTable.add_column("Informações", justify="left", style="bold italic")
+        showModuleTable.add_row("Título do módulo", str(module_data["title"]))
+        showModuleTable.add_row("Descrição do módulo", str(module_data["description"]))
+        showModuleTable.add_row("Id", str(module_data["id"]))
+        console.print(showModuleTable)
         print()
 
     def read_course_id(self):

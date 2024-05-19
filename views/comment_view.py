@@ -1,4 +1,8 @@
 from views.abstract_view import AbstractView
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class CommentView(AbstractView):
@@ -22,7 +26,9 @@ class CommentView(AbstractView):
         return data
 
     def show_comment(self, comment_data):
-        print("Comentário: ", comment_data["description"])
+        showCommentTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showCommentTable.add_column("Comentário", justify="center", style="#54cdc1")
+        showCommentTable.add_row("Nome do afiliado: ", str(comment_data["description"]))
         print()
 
     def read_lesson_id(self):

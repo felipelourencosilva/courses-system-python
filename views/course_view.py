@@ -38,7 +38,7 @@ class CourseView(AbstractView):
 
     def show_course(self, course_data):
         showCourseTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showCourseTable.add_column(justify="left", style="#54cdc1")
+        showCourseTable.add_column("Curso", justify="left", style="#54cdc1")
         showCourseTable.add_column("Informações", justify="left", style="bold italic")
         showCourseTable.add_row("Nome do curso:", str(course_data["name"]))
         showCourseTable.add_row("Descrição do curso:", str(course_data["description"]))

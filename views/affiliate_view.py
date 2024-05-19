@@ -24,7 +24,7 @@ class AffiliateView(AbstractView):
 
     def show_affiliate(self, affiliate_data):
         showAffiliateTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showAffiliateTable.add_column(justify="left", style="#54cdc1")
+        showAffiliateTable.add_column("Afiliado", justify="left", style="#54cdc1")
         showAffiliateTable.add_column("Informações", justify="left", style="bold italic")
         showAffiliateTable.add_row("Nome do afiliado: ", str(affiliate_data["name"]))
         showAffiliateTable.add_row("Email do afiliado: ", str(affiliate_data["email"]))

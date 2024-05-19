@@ -1,4 +1,8 @@
 from views.abstract_view import AbstractView
+from rich.console import Console
+from rich import box
+from rich.table import Table
+console = Console()
 
 
 class ProducerView(AbstractView):
@@ -20,9 +24,14 @@ class ProducerView(AbstractView):
         return super().read_basic_edit_user_data("PRODUTOR")
 
     def show_producer(self, producer_data):
-        print("Nome do Produtor: ", producer_data["name"])
-        print("Email do Produtor: ", producer_data["email"])
-        print("Senha do Produtor: ", producer_data["password"])
-        print("CPF do Produtor: ", producer_data["cpf"])
-        print("Saldo do Produtor: ", producer_data["balance"])
+        showProducerTable = Table(box=box.ROUNDED, border_style="#6D7280")
+        showProducerTable.add_column("Produtor", justify="left", style="#54cdc1")
+        showProducerTable.add_column("Informações", justify="left", style="bold italic")
+        showProducerTable.add_row("Nome do Produtor", str(producer_data["name"]))
+        showProducerTable.add_row("Email do Produtor", str(producer_data["email"]))
+        showProducerTable.add_row("Senha do Produtor", str(producer_data["password"]))
+        showProducerTable.add_row("CPF do Produtor", str(producer_data["cpf"]))
+        showProducerTable.add_row("Saldo do Produtor", str(producer_data["balance"]))
+        console.print(showProducerTable)
+
         print()
