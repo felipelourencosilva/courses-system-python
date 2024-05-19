@@ -30,8 +30,8 @@ class CourseController:
         else:
             self.__course_view.show_message("Este curso não existe")
 
-    def remove_course_module(self, id: int, module: Module):
-        course = self.get_course(id)
+    def remove_course_module(self, course_id: int, module: Module):
+        course = self.get_course(course_id)
         if course is not None:
             course.remove_module(module)
         else:

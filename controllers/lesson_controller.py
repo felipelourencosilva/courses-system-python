@@ -102,7 +102,7 @@ class LessonController:
                     self.__lesson_view.show_lesson({"title": lesson.title, "description": lesson.description,
                                                     "id": lesson.id, "video_url": lesson.video})
         else:
-            self.__lesson_view.show_message("Este curso não existe")
+            self.__lesson_view.show_message("Este módulo não existe")
 
     def previous_view(self):
         self.__module_controller.show_view()
