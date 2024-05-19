@@ -48,7 +48,7 @@ class CommentController:
         lesson_id = self.__comment_view.read_lesson_id()
         if comment_id is not None and comment_id in self.__comments:
             comment = self.__comments[comment_id]
-            self.__comments.pop(comment)
+            self.__comments.pop(comment_id)
             self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
         else:
             self.__comment_view.show_message("Este comentário não existe")

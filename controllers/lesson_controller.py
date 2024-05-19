@@ -42,10 +42,10 @@ class LessonController:
             self.__lesson_view.show_message("Esta aula não existe")
 
     def add_lesson(self):
-        self.__module_controller.list_modules()
         if len(self.__module_controller.get_modules()) == 0:
             self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema")
             return
+        self.__module_controller.list_modules()
         module_id = self.__lesson_view.read_module_id()
         if module_id is not None and module_id in self.__module_controller.get_modules():
             lesson_data = self.__lesson_view.get_lesson_data()

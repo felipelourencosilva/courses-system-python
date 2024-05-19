@@ -48,6 +48,7 @@ class CourseController:
             self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
             return
         course_data = self.__course_view.get_edit_course_data()
+        self.__system_controller.producer_controller.list_producer()
         while True:
             cpf = self.__course_view.read_cpf("CPF do Produtor: ")
             if self.get_producer(cpf) is None:
@@ -62,10 +63,10 @@ class CourseController:
         self.__courses[id] = course
 
     def edit_course(self):
-        self.list_courses()
         if len(self.__courses) == 0:
+            self.__course_view.show_message("Não há cursos cadastrados")
             return
-
+        self.list_courses()
         id = self.__course_view.read_id()
         if id not in self.__courses:
             self.__course_view.show_message("Este curso não existe")
@@ -82,14 +83,18 @@ class CourseController:
             self.__course_view.show_message("Este curso não existe")
 
     def list_courses(self):
+        if len(self.__courses) == 0:
+            self.__course_view.show_message("Não há cursos cadastrados")
+            return
         for key, course in self.__courses.items():
             self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
                                             "id": key, "producer": f"{course.producer.name} {course.producer.surname}"})
 
     def remove_course(self):
-        self.list_courses()
         if len(self.__courses) == 0:
+            self.__course_view.show_message("Não há cursos cadastrados")
             return
+        self.list_courses()
         id = self.__course_view.read_id()
 
         if id is not None and id in self.__courses:
@@ -99,18 +104,16 @@ class CourseController:
 
     def buy_course(self):
         if len(self.__system_controller.user_controller.get_users()) == 0:
-            self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema.")
+            self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
             return
         if len(self.__courses) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
         self.list_courses()
-        while True:
-            id = self.__course_view.read_id()
-            if id not in self.__courses:
-                self.__course_view.show_message("Este curso não existe")
-            else:
-                break
+        id = self.__course_view.read_id()
+        if id not in self.__courses:
+            self.__course_view.show_message("Este curso não existe")
+            return
 
         self.__system_controller.user_controller.list_users()
         self.__system_controller.producer_controller.list_producer()
@@ -123,6 +126,8 @@ class CourseController:
             else:
                 break
 
+        if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
+            self.__system_controller.affiliate_controller.list_affiliates()
         affiliate = None
         while True:
             affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")

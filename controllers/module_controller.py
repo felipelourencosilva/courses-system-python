@@ -38,11 +38,10 @@ class ModuleController:
         module.remove_lesson(lesson)
 
     def add_module(self):
-        self.__course_controller.list_courses()
         if len(self.__course_controller.get_courses()) == 0:
             self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema")
             return
-
+        self.__course_controller.list_courses()
         course_id = self.__module_view.read_course_id()
         if course_id is not None and course_id in self.__course_controller.get_courses():
             module_data = self.__module_view.get_add_module_data()
@@ -58,11 +57,12 @@ class ModuleController:
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
-        self.list_modules()
+        if self.list_modules() == -1:
+            return
         module_id = self.__module_view.read_module_id()
         if module_id is not None and module_id in self.__modules:
             module = self.__modules[module_id]
-            self.__modules.pop(module)
+            self.__modules.pop(module_id)
             self.__course_controller.remove_course_module(module_id, module)
         else:
             self.__module_view.show_message("Este módulo não existe")
@@ -71,7 +71,9 @@ class ModuleController:
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
-        self.list_modules()
+        if self.list_modules() == -1:
+            return
+
         module_id = self.__module_view.read_module_id()
 
         if module_id is not None and module_id in self.__modules:
@@ -91,15 +93,17 @@ class ModuleController:
         course_id = self.__module_view.read_course_id()
         course = self.__course_controller.get_course(course_id)
 
-        if course is not None:
-            if len(course.modules) == 0:
-                self.__module_view.show_message("Não há módulos cadastrados nesse curso")
-            else:
-                for module in course.modules:
-                    self.__module_view.show_module({"title": module.title, "description": module.description,
-                                                    "id": module.id})
-        else:
+        if course is None:
             self.__module_view.show_message("Este curso não existe")
+            return -1
+
+        if len(course.modules) == 0:
+            self.__module_view.show_message("Não há módulos cadastrados nesse curso")
+        else:
+            for module in course.modules:
+                self.__module_view.show_module({"title": module.title, "description": module.description,
+                                                "id": module.id})
+
 
     def lesson_controller(self):
         self.__lesson_controller.show_view()

@@ -99,19 +99,28 @@ class UserController:
             user.add_course(course)
 
     def add_balance(self):
-        self.list_users()
-        self.__system_controller.producer_controller.list_producer()
-        self.__system_controller.affiliate_controller.list_affiliates()
-        if len(self.__users) == 0:
+        if (
+            len(self.__users) == 0
+            and len(self.__system_controller.producer_controller.get_producers()) == 0
+            and len(self.__system_controller.affiliate_controller.get_affiliates()) == 0
+        ):
+            self.__user_view.show_message("Não é possível adicionar saldo sem usuários no sistema")
             return
+
+        if len(self.__users):
+            self.list_users()
+        if len(self.__system_controller.producer_controller.get_producers()):
+            self.__system_controller.producer_controller.list_producer()
+        if len(self.__system_controller.affiliate_controller.get_affiliates()):
+            self.__system_controller.affiliate_controller.list_affiliates()
+
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
-        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
-
-        if user is not None:
-            user.add_balance(value)
-        else:
+        if user is None:
             self.__user_view.show_message("Usuário não encontrado")
+            return
+        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+        user.add_balance(value)
 
     def previous_view(self):
         self.__system_controller.show_view()
