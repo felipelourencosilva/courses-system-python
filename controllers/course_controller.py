@@ -44,7 +44,6 @@ class CourseController:
         return id
 
     def add_course(self):
-        self.__system_controller.producer_controller.list_producer()
         if len(self.__system_controller.producer_controller.get_producers()) == 0:
             self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
             return
