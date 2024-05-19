@@ -36,6 +36,7 @@ class CommentController:
                 comment = Comment(user, comment_data["comment"], comment_id)
                 self.__lesson_controller.add_lesson_comment(lesson_id, comment)
                 self.__comments[comment_id] = comment
+                self.__comment_view.show_success_message("Comentário adicionado com sucesso")
             else:
                 self.__comment_view.show_message("Este usuário não existe")
         else:
@@ -51,6 +52,7 @@ class CommentController:
             comment = self.__comments[comment_id]
             self.__comments.pop(comment_id)
             self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
+            self.__comment_view.show_success_message("Comentário removido com sucesso")
         else:
             self.__comment_view.show_message("Este comentário não existe")
 
@@ -65,6 +67,7 @@ class CommentController:
             comment_data = self.__comment_view.get_comment_data()
             comment = self.__comments[comment_id]
             comment.comment = comment_data["comment"]
+            self.__comment_view.show_success_message("Comentário editado com sucesso")
         else:
             self.__comment_view.show_message("Este comentário não existe")
 

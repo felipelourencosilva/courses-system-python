@@ -31,6 +31,7 @@ class LessonController:
         if id is not None and id in self.__lessons and isinstance(comment, Comment):
             lesson = self.get_lesson(id)
             lesson.add_comment(comment)
+            self.__lesson_view.show_success_message("Comentário adicionado com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 
@@ -38,6 +39,7 @@ class LessonController:
         if id is not None and id in self.__lessons and isinstance(comment, Comment):
             lesson = self.get_lesson(id)
             lesson.remove_comment(comment)
+            self.__lesson_view.show_success_message("Comentário removido com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 
@@ -54,6 +56,7 @@ class LessonController:
             lesson = Lesson(lesson_data["title"], lesson_data["description"], Video(lesson_data["video_url"]), lesson_id)
             self.__module_controller.add_module_lesson(module_id, lesson)
             self.__lessons[lesson_id] = lesson
+            self.__lesson_view.show_success_message("Aula adicionada com sucesso")
         else:
             self.__lesson_view.show_message("Este módulo não existe")
 
@@ -67,6 +70,7 @@ class LessonController:
             lesson = self.__lessons[lesson_id]
             self.__lessons.pop(lesson_id)
             self.__module_controller.remove_module_lesson(lesson_id, lesson)
+            self.__lesson_view.show_success_message("Aula removida com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 
@@ -83,6 +87,7 @@ class LessonController:
             lesson.title = lesson_data["title"]
             lesson.description = lesson_data["description"]
             lesson.video = Video(lesson_data["video_url"])
+            self.__lesson_view.show_success_message("Aula editada com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 

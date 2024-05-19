@@ -30,6 +30,7 @@ class AffiliateController:
         affiliate = Affiliate(affiliate_data["name"], affiliate_data["surname"],
                               affiliate_data["email"], affiliate_data["password"], affiliate_data["cpf"])
         self.__affiliates.append(affiliate)
+        self.__affiliate_view.show_success_message("Afiliado cadastrado com sucesso")
 
     def edit_affiliate(self):
         self.list_affiliates()
@@ -44,6 +45,7 @@ class AffiliateController:
             affiliate.surname = affiliate_data["surname"]
             affiliate.email = affiliate_data["email"]
             affiliate.password = affiliate_data["password"]
+            self.__affiliate_view.show_success_message("Afiliado editado com sucesso")
         else:
             self.__affiliate_view.show_message("Afiliado não encontrado")
 
@@ -70,6 +72,7 @@ class AffiliateController:
 
         if affiliate is not None:
             self.__affiliates.remove(affiliate)
+            self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
         else:
             self.__affiliate_view.show_message("Afiliado não encontrado")
 
@@ -83,6 +86,7 @@ class AffiliateController:
 
         if affiliate is not None:
             affiliate.add_balance(value)
+            self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
         else:
             self.__affiliate_view.show_message("Afiliado não encontrado")
 

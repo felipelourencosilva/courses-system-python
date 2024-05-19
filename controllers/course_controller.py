@@ -27,6 +27,7 @@ class CourseController:
         if id is not None and id in self.__courses and isinstance(module, Module):
             course = self.get_course(id)
             course.add_module(module)
+            self.__course_view.show_success_message("Módulo adicionado com sucesso")
         else:
             self.__course_view.show_message("Este curso não existe")
 
@@ -34,6 +35,7 @@ class CourseController:
         course = self.get_course(course_id)
         if course is not None:
             course.remove_module(module)
+            self.__course_view.show_success_message("Módulo removido com sucesso")
         else:
             self.__course_view.show_message("Módulo não encontrado")
 
@@ -61,6 +63,7 @@ class CourseController:
         course = Course(course_data["name"], self.get_producer(course_data["cpf"]),
                         course_data["description"], course_data["price"], course_data["commission_percentage"], id)
         self.__courses[id] = course
+        self.__course_view.show_success_message("Curso adicionado com sucesso")
 
     def edit_course(self):
         if len(self.__courses) == 0:
@@ -79,6 +82,7 @@ class CourseController:
             course.description = course_data["description"]
             course.price = course_data["price"]
             course.commission_percentage = course_data["commission_percentage"]
+            self.__course_view.show_success_message("Curso editado com sucesso")
         else:
             self.__course_view.show_message("Este curso não existe")
 
@@ -99,6 +103,7 @@ class CourseController:
 
         if id is not None and id in self.__courses:
             self.__courses.pop(id)
+            self.__course_view.show_success_message("Curso removido com sucesso")
         else:
             self.__course_view.show_message("Este curso não existe")
 
@@ -150,6 +155,7 @@ class CourseController:
             self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
             user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
             self.__system_controller.sale_controller.add_sale(user, course, affiliate)
+            self.__course_view.show_success_message("Curso adquirido com sucesso")
 
 
 

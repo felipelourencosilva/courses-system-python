@@ -45,6 +45,15 @@ class AbstractView(ABC):
         console.print(table)
         print()
 
+    def show_success_message(self, msg: str):
+        table = Table(box=box.ROUNDED, border_style="#4FBF26")
+        table.add_column("Sucesso", justify="center", style="#4FBF26")
+        table.add_row(msg)
+
+        print()
+        console.print(table)
+        print()
+
     def read_int(self, default_msg: str, error_msg: str):
         while True:
             num = input(default_msg)

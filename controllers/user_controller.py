@@ -42,6 +42,7 @@ class UserController:
         user = User(user_data["name"], user_data["surname"],
                     user_data["email"], user_data["password"], user_data["cpf"])
         self.__users.append(user)
+        self.__user_view.show_success_message("Usuário cadastrado com sucesso")
 
     def edit_user(self):
         self.list_users()
@@ -56,6 +57,7 @@ class UserController:
             user.surname = user_data["surname"]
             user.email = user_data["email"]
             user.password = user_data["password"]
+            self.__user_view.show_success_message("Usuário editado com sucesso")
         else:
             self.__user_view.show_message("Usuário não encontrado")
 
@@ -78,6 +80,7 @@ class UserController:
 
         if user is not None:
             self.__users.remove(user)
+            self.__user_view.show_success_message("Usuário removido com sucesso")
         else:
             self.__user_view.show_message("Usuário não encontrado")
 
@@ -121,6 +124,7 @@ class UserController:
             return
         value = self.__user_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
         user.add_balance(value)
+        self.__user_view.show_success_message("Saldo adicionado com sucesso")
 
     def previous_view(self):
         self.__system_controller.show_view()

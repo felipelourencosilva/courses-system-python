@@ -40,6 +40,7 @@ class SystemController:
         self.show_view()
 
     def exit(self):
+        self.__system_view.show_easter_egg()
         exit(0)
 
     def to_user_view(self):

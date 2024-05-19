@@ -32,6 +32,7 @@ class ProducerController:
         producer = Producer(producer_data["name"], producer_data["surname"],
                             producer_data["email"], producer_data["password"], producer_data["cpf"])
         self.__producers.append(producer)
+        self.__producer_view.show_success_message("Produtor cadastrado com sucesso")
 
     def edit_producer(self):
         self.list_producer()
@@ -46,6 +47,7 @@ class ProducerController:
             producer.surname = producer_data["surname"]
             producer.email = producer_data["email"]
             producer.password = producer_data["password"]
+            self.__producer_view.show_success_message("Produtor editado com sucesso")
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 
@@ -67,6 +69,7 @@ class ProducerController:
 
         if producer is not None:
             self.__producers.remove(producer)
+            self.__producer_view.show_success_message("Produtor removida com sucesso")
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 
@@ -81,6 +84,7 @@ class ProducerController:
 
         if producer is not None:
             producer.add_balance(value)
+            self.__producer_view.show_success_message("Saldo adicionado com sucesso")
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 

@@ -50,6 +50,7 @@ class ModuleController:
             module = Module(module_data["title"], module_data["description"], id)
             self.__course_controller.add_course_module(course_id, module)
             self.__modules[id] = module
+            self.__module_view.show_success_message("Módulo adicionado com sucesso")
         else:
             self.__module_view.show_message("Este curso não existe")
 
@@ -65,6 +66,7 @@ class ModuleController:
             module = self.__modules[module_id]
             self.__modules.pop(module_id)
             self.__course_controller.remove_course_module(course_id, module)
+            self.__module_view.show_success_message("Módulo removido com sucesso")
         else:
             self.__module_view.show_message("Este módulo não existe")
 
@@ -82,6 +84,7 @@ class ModuleController:
             module = self.__modules[module_id]
             module.title = module_data["title"]
             module.description = module_data["description"]
+            self.__module_view.show_success_message("Módulo editado com sucesso")
         else:
             self.__module_view.show_message("Este módulo não existe")
 
