@@ -69,7 +69,7 @@ class ProducerController:
 
         if producer is not None:
             self.__producers.remove(producer)
-            self.__producer_view.show_success_message("Produtor removida com sucesso")
+            self.__producer_view.show_success_message("Produtor removido com sucesso")
         else:
             self.__producer_view.show_message("Produtor não encontrado")
 

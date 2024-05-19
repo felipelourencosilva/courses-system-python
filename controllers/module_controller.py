@@ -43,7 +43,7 @@ class ModuleController:
             return
         self.__course_controller.list_courses()
         course_id = self.__module_view.read_course_id()
-        if course_id is not None and course_id in self.__course_controller.get_courses():
+        if course_id in self.__course_controller.get_courses():
             module_data = self.__module_view.get_add_module_data()
             id = self.generate_id()
 

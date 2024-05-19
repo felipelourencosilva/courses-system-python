@@ -30,6 +30,9 @@ class UserController:
                 + self.__system_controller.affiliate_controller.get_affiliates()
         )
 
+    def get_proper_users(self):
+        return self.__users
+
     def add_user(self):
         user_data = self.__user_view.get_edit_user_data()
         while True:

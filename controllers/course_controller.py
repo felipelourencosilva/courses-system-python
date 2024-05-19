@@ -24,20 +24,12 @@ class CourseController:
         return self.__courses
 
     def add_course_module(self, id: int, module: Module):
-        if id is not None and id in self.__courses and isinstance(module, Module):
-            course = self.get_course(id)
-            course.add_module(module)
-            self.__course_view.show_success_message("Módulo adicionado com sucesso")
-        else:
-            self.__course_view.show_message("Este curso não existe")
+        course = self.get_course(id)
+        course.add_module(module)
 
     def remove_course_module(self, course_id: int, module: Module):
         course = self.get_course(course_id)
-        if course is not None:
-            course.remove_module(module)
-            self.__course_view.show_success_message("Módulo removido com sucesso")
-        else:
-            self.__course_view.show_message("Módulo não encontrado")
+        course.remove_module(module)
 
     def generate_id(self):
         id = random.randint(1, 1000)
@@ -120,9 +112,12 @@ class CourseController:
             self.__course_view.show_message("Este curso não existe")
             return
 
-        self.__system_controller.user_controller.list_users()
-        self.__system_controller.producer_controller.list_producer()
-        self.__system_controller.affiliate_controller.list_affiliates()
+        if len(self.__system_controller.user_controller.get_proper_users()):
+            self.__system_controller.user_controller.list_users()
+        if len(self.__system_controller.producer_controller.get_producers()):
+            self.__system_controller.producer_controller.list_producer()
+        if len(self.__system_controller.affiliate_controller.get_affiliates()):
+            self.__system_controller.affiliate_controller.list_affiliates()
 
         while True:
             cpf = self.__course_view.read_cpf("CPF do Usuário: ")
