@@ -31,7 +31,7 @@ class ModuleController:
             module = self.get_module(id)
             module.add_lesson(lesson)
         else:
-            self.__module_view.show_message("Curso não encontrado ou id incorreto")
+            self.__module_view.show_message("Este curso não existe")
 
     def remove_module_lesson(self, id: int, lesson: Lesson):
         module = self.get_module(id)
@@ -40,7 +40,7 @@ class ModuleController:
     def add_module(self):
         self.__course_controller.list_courses()
         if len(self.__course_controller.get_courses()) == 0:
-            self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema.")
+            self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema")
             return
 
         course_id = self.__module_view.read_course_id()
@@ -52,7 +52,7 @@ class ModuleController:
             self.__course_controller.add_course_module(course_id, module)
             self.__modules[id] = module
         else:
-            self.__module_view.show_message("Curso não encontrado ou id incorreto")
+            self.__module_view.show_message("Este curso não existe")
 
     def remove_module(self):
         if len(self.__modules) == 0:
@@ -65,7 +65,7 @@ class ModuleController:
             self.__modules.pop(module)
             self.__course_controller.remove_course_module(module_id, module)
         else:
-            self.__module_view.show_message("Módulo não encontrado ou id incorreto")
+            self.__module_view.show_message("Este módulo não existe")
 
     def edit_module(self):
         if len(self.__modules) == 0:
@@ -80,7 +80,7 @@ class ModuleController:
             module.title = module_data["title"]
             module.description = module_data["description"]
         else:
-            self.__module_view.show_message("Módulo não encontrado ou id incorreto")
+            self.__module_view.show_message("Este módulo não existe")
 
     def list_modules(self):
         if len(self.__modules) == 0:
@@ -99,7 +99,7 @@ class ModuleController:
                     self.__module_view.show_module({"title": module.title, "description": module.description,
                                                     "id": module.id})
         else:
-            self.__module_view.show_message("Curso não encontrado")
+            self.__module_view.show_message("Este curso não existe")
 
     def lesson_controller(self):
         self.__lesson_controller.show_view()

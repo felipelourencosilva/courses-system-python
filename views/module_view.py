@@ -46,7 +46,7 @@ class ModuleView(AbstractView):
 
     def read_module_id(self):
         return self.read_int_range(
-            "Digite o ID do modulo: ",
+            "Digite o ID do módulo: ",
             "O ID precisa ser um inteiro entre 1 e 1000",
             1,
             1000

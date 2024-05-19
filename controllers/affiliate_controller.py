@@ -23,7 +23,7 @@ class AffiliateController:
         while True:
             cpf = self.__affiliate_view.read_cpf()
             if self.__system_controller.user_controller.get_user_by_cpf(cpf) is not None:
-                self.__affiliate_view.show_message("Este CPF já foi utilizado.")
+                self.__affiliate_view.show_message("Este CPF já foi utilizado")
             else:
                 affiliate_data["cpf"] = cpf
                 break

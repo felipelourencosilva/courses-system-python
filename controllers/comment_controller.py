@@ -18,7 +18,7 @@ class CommentController:
 
     def add_comment(self):
         if len(self.__lesson_controller.get_lessons()) == 0:
-            self.__comment_view.show_message("Não é possível adicionar um comentário: Não existem aulas cadastradas.")
+            self.__comment_view.show_message("Não é possível adicionar um Comentário sem uma Aula no sistema")
             return
         self.__lesson_controller.list_lessons()
         lesson_id = self.__comment_view.read_lesson_id()
@@ -36,9 +36,9 @@ class CommentController:
                 self.__lesson_controller.add_lesson_comment(lesson_id, comment)
                 self.__comments[comment_id] = comment
             else:
-                self.__comment_view.show_message("Comentário não existe ou id incorreto")
+                self.__comment_view.show_message("Este comentário não existe")
         else:
-            self.__comment_view.show_message("Comentário não existe ou id incorreto")
+            self.__comment_view.show_message("Este comentário não existe")
 
     def remove_comment(self):
         if len(self.__comments) == 0:
@@ -51,7 +51,7 @@ class CommentController:
             self.__comments.pop(comment)
             self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
         else:
-            self.__comment_view.show_message("Comentário não encontrada ou id incorreto")
+            self.__comment_view.show_message("Este comentário não existe")
 
     def edit_comment(self):
         if len(self.__comments) == 0:
@@ -65,7 +65,7 @@ class CommentController:
             comment = self.__comments[comment_id]
             comment.comment = comment_data["comment"]
         else:
-            self.__comment_view.show_message("Comentário não existe ou id incorreto")
+            self.__comment_view.show_message("Este comentário não existe")
 
     def list_comments(self):
         if len(self.__comments) == 0:

@@ -32,19 +32,19 @@ class LessonController:
             lesson = self.get_lesson(id)
             lesson.add_comment(comment)
         else:
-            self.__lesson_view.show_message("Aula não existe ou id incorreto")
+            self.__lesson_view.show_message("Esta aula não existe")
 
     def remove_lesson_comment(self, id: int, comment: Comment):
         if id is not None and id in self.__lessons and isinstance(comment, Comment):
             lesson = self.get_lesson(id)
             lesson.remove_comment(comment)
         else:
-            self.__lesson_view.show_message("Aula não existe ou id incorreto")
+            self.__lesson_view.show_message("Esta aula não existe")
 
     def add_lesson(self):
         self.__module_controller.list_modules()
         if len(self.__module_controller.get_modules()) == 0:
-            self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema.")
+            self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema")
             return
         module_id = self.__lesson_view.read_module_id()
         if module_id is not None and module_id in self.__module_controller.get_modules():
@@ -55,19 +55,20 @@ class LessonController:
             self.__module_controller.add_module_lesson(module_id, lesson)
             self.__lessons[lesson_id] = lesson
         else:
-            self.__lesson_view.show_message("Módulo não encontrado ou id incorreto")
+            self.__lesson_view.show_message("Este módulo não existe")
 
     def remove_lesson(self):
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
+        self.list_lessons()
         lesson_id = self.__lesson_view.read_lesson_id()
         if lesson_id is not None and lesson_id in self.__lessons:
             lesson = self.__lessons[lesson_id]
-            self.__lessons.pop(lesson)
+            self.__lessons.pop(lesson_id)
             self.__module_controller.remove_module_lesson(lesson_id, lesson)
         else:
-            self.__lesson_view.show_message("Aula não encontrada ou id incorreto")
+            self.__lesson_view.show_message("Esta aula não existe")
 
     def edit_lesson(self):
         if len(self.__lessons) == 0:
@@ -83,7 +84,7 @@ class LessonController:
             lesson.description = lesson_data["description"]
             lesson.video = Video(lesson_data["video_url"])
         else:
-            self.__lesson_view.show_message("Aula não encontrada ou id incorreto")
+            self.__lesson_view.show_message("Esta aula não existe")
 
     def list_lessons(self):
         if len(self.__lessons) == 0:
@@ -95,13 +96,13 @@ class LessonController:
 
         if module is not None:
             if len(module.lessons) == 0:
-                self.__lesson_view.show_message("Não há Aulas cadastrados nesse módulo")
+                self.__lesson_view.show_message("Não há aulas cadastradas nesse módulo")
             else:
                 for lesson in module.lessons:
                     self.__lesson_view.show_lesson({"title": lesson.title, "description": lesson.description,
                                                     "id": lesson.id, "video_url": lesson.video})
         else:
-            self.__lesson_view.show_message("Curso não encontrado")
+            self.__lesson_view.show_message("Este curso não existe")
 
     def previous_view(self):
         self.__module_controller.show_view()

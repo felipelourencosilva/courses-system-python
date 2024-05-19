@@ -28,14 +28,14 @@ class CourseController:
             course = self.get_course(id)
             course.add_module(module)
         else:
-            self.__course_view.show_message("Curso não encontrado ou id incorreto")
+            self.__course_view.show_message("Este curso não existe")
 
     def remove_course_module(self, id: int, module: Module):
         course = self.get_course(id)
         if course is not None:
             course.remove_module(module)
         else:
-            self.__course_view.show_message("Módulo não encontrado.")
+            self.__course_view.show_message("Módulo não encontrado")
 
     def generate_id(self):
         id = random.randint(1, 1000)
@@ -51,7 +51,7 @@ class CourseController:
         while True:
             cpf = self.__course_view.read_cpf("CPF do Produtor: ")
             if self.get_producer(cpf) is None:
-                self.__course_view.show_message("Este produtor não existe.")
+                self.__course_view.show_message("Este produtor não existe")
             else:
                 course_data["cpf"] = cpf
                 break
@@ -65,7 +65,11 @@ class CourseController:
         self.list_courses()
         if len(self.__courses) == 0:
             return
+
         id = self.__course_view.read_id()
+        if id not in self.__courses:
+            self.__course_view.show_message("Este curso não existe")
+            return
 
         if id is not None and id in self.__courses:
             course_data = self.__course_view.get_edit_course_data()
@@ -75,7 +79,7 @@ class CourseController:
             course.price = course_data["price"]
             course.commission_percentage = course_data["commission_percentage"]
         else:
-            self.__course_view.show_message("Curso não encontrado ou id incorreto")
+            self.__course_view.show_message("Este curso não existe")
 
     def list_courses(self):
         for key, course in self.__courses.items():
@@ -91,20 +95,20 @@ class CourseController:
         if id is not None and id in self.__courses:
             self.__courses.pop(id)
         else:
-            self.__course_view.show_message("Curso não encontrado ou id incorreto")
+            self.__course_view.show_message("Este curso não existe")
 
     def buy_course(self):
         if len(self.__system_controller.user_controller.get_users()) == 0:
             self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema.")
             return
         if len(self.__courses) == 0:
-            self.__course_view.show_message("Não há cursos cadastrados.")
+            self.__course_view.show_message("Não há cursos cadastrados")
             return
         self.list_courses()
         while True:
             id = self.__course_view.read_id()
             if id not in self.__courses:
-                self.__course_view.show_message("Curso não encontrado.")
+                self.__course_view.show_message("Este curso não existe")
             else:
                 break
 
@@ -115,7 +119,7 @@ class CourseController:
         while True:
             cpf = self.__course_view.read_cpf("CPF do Usuário: ")
             if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
-                self.__course_view.show_message("Este usuário não existe.")
+                self.__course_view.show_message("Este usuário não existe")
             else:
                 break
 
@@ -125,7 +129,7 @@ class CourseController:
             if affiliate_cpf == 0:
                 break
             if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
-                self.__course_view.show_message("Este afiliado não existe.")
+                self.__course_view.show_message("Este afiliado não existe")
             else:
                 affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
                 break
