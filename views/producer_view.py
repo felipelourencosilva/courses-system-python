@@ -18,7 +18,7 @@ class ProducerView(AbstractView):
             4: "Listar Produtores",
             0: "Voltar"
         }
-        return super().view_options("PRODUTOR", options)
+        return super().view_options("PRODUTORES", options)
 
     def get_edit_producer_data(self):
         return super().read_basic_edit_user_data("PRODUTOR")

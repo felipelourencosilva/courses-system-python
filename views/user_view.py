@@ -18,7 +18,7 @@ class UserView(AbstractView):
             5: "Adicionar saldo ao Usuário",
             0: "Voltar"
         }
-        return super().view_options("USUÁRIO", options)
+        return super().view_options("USUÁRIOS", options)
 
     def get_edit_user_data(self):
         return super().read_basic_edit_user_data("USUÁRIO")
