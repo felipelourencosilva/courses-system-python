@@ -23,5 +23,9 @@ class Comment:
         if isinstance(comment, str):
             self.__comment = comment
 
+    @property
+    def id(self) -> int:
+        return self.__id
+
     def __str__(self):
-        return self.__author + ": " + self.__comment
+        return str(self.__author.name) + " " + str(self.__author.surname) + ": " + str(self.__comment)

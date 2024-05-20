@@ -27,8 +27,10 @@ class CommentView(AbstractView):
 
     def show_comment(self, comment_data):
         showCommentTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showCommentTable.add_column("Comentário", justify="center", style="#54cdc1")
-        showCommentTable.add_row("Nome do afiliado: ", str(comment_data["comment"]))
+        showCommentTable.add_column("Comentário", justify="center", style="#54cdc1 bold")
+        showCommentTable.add_row(str(comment_data["comment"]))
+        showCommentTable.add_row("Id: " + str(comment_data["id"]))
+        console.print(showCommentTable)
         print()
 
     def read_lesson_id(self):
