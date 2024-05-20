@@ -18,7 +18,7 @@ class CommentView(AbstractView):
             4: "Listar Comentários",
             0: "Voltar"
         }
-        return super().view_options("COMENTARIOS", options)
+        return super().view_options("COMENTÁRIOS", options)
 
     def get_comment_data(self):
         data = dict()

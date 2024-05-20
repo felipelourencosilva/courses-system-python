@@ -31,7 +31,6 @@ class LessonController:
         if id is not None and id in self.__lessons and isinstance(comment, Comment):
             lesson = self.get_lesson(id)
             lesson.add_comment(comment)
-            self.__lesson_view.show_success_message("Comentário adicionado com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 
@@ -39,7 +38,6 @@ class LessonController:
         if id is not None and id in self.__lessons and isinstance(comment, Comment):
             lesson = self.get_lesson(id)
             lesson.remove_comment(comment)
-            self.__lesson_view.show_success_message("Comentário removido com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
 
