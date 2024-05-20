@@ -18,7 +18,7 @@ class CommentView(AbstractView):
             4: "Listar Comentários",
             0: "Voltar"
         }
-        return super().view_options("COMENTARIO", options)
+        return super().view_options("COMENTARIOS", options)
 
     def get_comment_data(self):
         data = dict()
@@ -28,7 +28,7 @@ class CommentView(AbstractView):
     def show_comment(self, comment_data):
         showCommentTable = Table(box=box.ROUNDED, border_style="#6D7280")
         showCommentTable.add_column("Comentário", justify="center", style="#54cdc1")
-        showCommentTable.add_row("Nome do afiliado: ", str(comment_data["description"]))
+        showCommentTable.add_row("Nome do afiliado: ", str(comment_data["comment"]))
         print()
 
     def read_lesson_id(self):

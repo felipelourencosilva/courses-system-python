@@ -46,6 +46,7 @@ class CommentController:
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
+        self.list_comments()
         comment_id = self.__comment_view.read_comment_id()
         lesson_id = self.__comment_view.read_lesson_id()
         if comment_id is not None and comment_id in self.__comments:
