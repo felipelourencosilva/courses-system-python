@@ -103,6 +103,7 @@ class ModuleController:
 
         if len(course.modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados nesse curso")
+            return -1
         else:
             for module in course.modules:
                 self.__module_view.show_module({"title": module.title, "description": module.description,

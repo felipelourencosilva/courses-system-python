@@ -64,12 +64,14 @@ class LessonController:
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
-        self.list_lessons()
+        module_id = self.list_lessons()
+        if module_id == -1:
+            return
+
         lesson_id = self.__lesson_view.read_lesson_id()
-        if lesson_id is not None and lesson_id in self.__lessons:
-            lesson = self.__lessons[lesson_id]
-            self.__lessons.pop(lesson_id)
-            self.__module_controller.remove_module_lesson(lesson_id, lesson)
+        if lesson_id in self.__lessons:
+            lesson = self.__lessons.pop(lesson_id)
+            self.__module_controller.remove_module_lesson(module_id, lesson)
             self.__lesson_view.show_success_message("Aula removida com sucesso")
         else:
             self.__lesson_view.show_message("Esta aula não existe")
@@ -106,8 +108,10 @@ class LessonController:
                 for lesson in module.lessons:
                     self.__lesson_view.show_lesson({"title": lesson.title, "description": lesson.description,
                                                     "id": lesson.id, "video_url": lesson.video})
+                return module_id
         else:
             self.__lesson_view.show_message("Este módulo não existe")
+            return -1
 
     def previous_view(self):
         self.__module_controller.show_view()
