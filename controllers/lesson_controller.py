@@ -75,6 +75,9 @@ class LessonController:
 
         lesson_id = self.__lesson_view.read_lesson_id()
         if lesson_id in self.__lessons:
+            if self.__lessons[lesson_id] not in self.__module_controller.get_module(module_id).lessons:
+                self.__lesson_view.show_message("Esta aula não pertence a este módulo")
+                return
             lesson = self.__lessons.pop(lesson_id)
             self.__module_controller.remove_module_lesson(module_id, lesson)
             self.__lesson_view.show_success_message("Aula removida com sucesso")

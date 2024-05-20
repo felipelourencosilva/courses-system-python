@@ -63,6 +63,9 @@ class ModuleController:
             return
         module_id = self.__module_view.read_module_id()
         if module_id in self.__modules:
+            if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
+                self.__module_view.show_message("Este módulo não pertence a este curso")
+                return
             module = self.__modules[module_id]
             self.__modules.pop(module_id)
             self.__course_controller.remove_course_module(course_id, module)
@@ -74,12 +77,16 @@ class ModuleController:
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
-        if self.list_modules() == -1:
+        course_id = self.list_modules()
+        if course_id == -1:
             return
 
         module_id = self.__module_view.read_module_id()
 
-        if module_id is not None and module_id in self.__modules:
+        if module_id in self.__modules:
+            if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
+                self.__module_view.show_message("Este módulo não pertence a este curso")
+                return
             module_data = self.__module_view.get_edit_module_data()
             module = self.__modules[module_id]
             module.title = module_data["title"]
