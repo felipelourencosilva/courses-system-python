@@ -47,8 +47,13 @@ class LessonController:
         if len(self.__module_controller.get_modules()) == 0:
             self.__lesson_view.show_message("Não é possível adicionar uma Aula sem um Módulo no sistema")
             return
-        self.__module_controller.list_modules()
+        course_id = self.__module_controller.list_modules()
+        if course_id == -1:
+            return
         module_id = self.__lesson_view.read_module_id()
+        if module_id == -1:
+            return
+
         if module_id is not None and module_id in self.__module_controller.get_modules():
             lesson_data = self.__lesson_view.get_lesson_data()
             lesson_id = self.generate_id()
@@ -80,10 +85,14 @@ class LessonController:
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
-        self.list_lessons()
+        course_id = self.list_lessons()
+        if course_id == -1:
+            return
         lesson_id = self.__lesson_view.read_lesson_id()
+        if lesson_id == -1:
+            return
 
-        if lesson_id is not None and lesson_id in self.__lessons:
+        if lesson_id in self.__lessons:
             lesson_data = self.__lesson_view.get_lesson_data()
             lesson = self.__lessons[lesson_id]
             lesson.title = lesson_data["title"]
@@ -97,8 +106,12 @@ class LessonController:
         if len(self.__lessons) == 0:
             self.__lesson_view.show_message("Não há aulas cadastradas")
             return
-        self.__module_controller.list_modules()
+        course_id = self.__module_controller.list_modules()
+        if course_id == -1:
+            return -1
         module_id = self.__lesson_view.read_module_id()
+        if module_id == -1:
+            return -1
         module = self.__module_controller.get_module(module_id)
 
         if module is not None:

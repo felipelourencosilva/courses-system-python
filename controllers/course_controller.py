@@ -126,6 +126,14 @@ class CourseController:
             else:
                 break
 
+        course = self.__courses[id]
+        if self.__system_controller.user_controller.user_has_course(cpf, course):
+            self.__course_view.show_message("Você já possui esse curso")
+            return
+        if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
+            self.__course_view.show_message("Você não possui saldo suficiente")
+            return
+
         if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
             self.__system_controller.affiliate_controller.list_affiliates()
         affiliate = None
@@ -139,20 +147,12 @@ class CourseController:
                 affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
                 break
 
-        course = self.__courses[id]
-        if self.__system_controller.user_controller.user_has_course(cpf, course):
-            self.__course_view.show_message("Você já possui esse curso")
-        if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
-            self.__course_view.show_message("Você não possui saldo suficiente")
-        else:
-            self.__system_controller.user_controller.user_add_course(cpf, course)
-            self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)
-            self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
-            user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
-            self.__system_controller.sale_controller.add_sale(user, course, affiliate)
-            self.__course_view.show_success_message("Curso adquirido com sucesso")
-
-
+        self.__system_controller.user_controller.user_add_course(cpf, course)
+        self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)
+        self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
+        user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
+        self.__system_controller.sale_controller.add_sale(user, course, affiliate)
+        self.__course_view.show_success_message("Curso adquirido com sucesso")
 
     def module_controller(self):
         self.__module_controller.show_view()
