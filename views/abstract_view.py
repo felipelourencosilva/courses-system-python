@@ -5,6 +5,7 @@ from rich import box
 from rich.table import Table
 console = Console()
 import PySimpleGUI as sg
+from exceptions import NegativeMoneyException, IncorrectEmailException
 
 
 class AbstractView(ABC):
@@ -94,10 +95,13 @@ class AbstractView(ABC):
     def read_email(self,  default_msg: str, error_msg: str):
         while True:
             email = input(default_msg)
-            if "@" not in email:
-                self.show_message(error_msg)
-            else:
+            try:
+                if "@" not in email or ".com":
+                    raise IncorrectEmailException()
                 return email
+            except IncorrectEmailException:
+                self.show_message(error_msg)
+
 
     def read_with_n_chars(self, default_msg: str, error_msg: str, n: int):
         while True:
@@ -142,10 +146,12 @@ class AbstractView(ABC):
     def read_value(self, default_msg: str, error_msg: str):
         while True:
             value = self.read_float(default_msg, error_msg)
-            if value <= 0:
-                self.show_message(error_msg)
-            else:
+            try:
+                if value <= 0:
+                    raise NegativeMoneyException()
                 return value
+            except NegativeMoneyException:
+                self.show_message(error_msg)
 
     def init_components(self, title, options):
         #sg.theme_previewer()
