@@ -12,10 +12,12 @@ class CourseController:
         self.__system_controller = system_controller
         self.__module_controller = ModuleController(self, system_controller)
 
+    '''
     def __new__(cls):
         if CourseController.__instance is None:
             CourseController.__instance = object.__new__(cls)
         return CourseController.__instance
+    '''
 
     def get_producer(self, cpf: int):
         return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)

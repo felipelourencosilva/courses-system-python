@@ -12,11 +12,12 @@ class CommentController:
         self.__system_controller = system_controller
         self.__comment_view = CommentView()
 
+    '''
     def __new__(cls):
         if CommentController.__instance is None:
             CommentController.__instance = object.__new__(cls)
         return CommentController.__instance
-
+    '''
     def generate_id(self):
         id = random.randint(1, 1000)
         while id in self.__comments:

@@ -13,11 +13,12 @@ class LessonController:
         self.__lesson_view = LessonView()
         self.__comment_controller = CommentController(self, system_controller)
 
+    '''
     def __new__(cls):
         if LessonController.__instance is None:
             LessonController.__instance = object.__new__(cls)
         return LessonController.__instance
-
+    '''
     def generate_id(self):
         id = random.randint(1, 1000)
         while id in self.__lessons:
