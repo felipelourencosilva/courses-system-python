@@ -1,4 +1,5 @@
 from controllers.system_controller import SystemController
 
 if __name__ == "__main__":
-    SystemController().start()
+    sc1 = SystemController()
+    sc1.start()

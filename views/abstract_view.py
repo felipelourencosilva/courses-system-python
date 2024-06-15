@@ -5,7 +5,7 @@ from rich import box
 from rich.table import Table
 console = Console()
 import PySimpleGUI as sg
-from exceptions import NegativeMoneyException, IncorrectEmailException
+from exceptions import NegativeMoneyException, WrongInputException
 
 
 class AbstractView(ABC):
@@ -13,6 +13,7 @@ class AbstractView(ABC):
     @abstractmethod
     def __init__(self):
         self.__window = None
+        self.__user_window = None
         self.init_components()
 
     def view_options(self, title: str, options: dict):
@@ -25,7 +26,7 @@ class AbstractView(ABC):
                 opcao = i
                 break
 
-        if values['0'] or button in (None, 'Cancelar'):
+        if button in (None, 'Cancelar'):
             opcao = 0
 
         self.close()
@@ -96,10 +97,10 @@ class AbstractView(ABC):
         while True:
             email = input(default_msg)
             try:
-                if "@" not in email or ".com":
-                    raise IncorrectEmailException()
+                if "@" not in email or ".com" in email:
+                    raise WrongInputException
                 return email
-            except IncorrectEmailException:
+            except WrongInputException:
                 self.show_message(error_msg)
 
 
@@ -127,28 +128,34 @@ class AbstractView(ABC):
         console.print("\n             " + title, style="#54cdc1")
 
     def read_basic_edit_user_data(self, title: str):
-        data = {}
-        self.print_title(title)
-        while True:
-            name = self.read_letters_string("Nome: ", "Nome deve conter somente letras.")
-            if not name.strip():
-                self.show_message("Nome deve conter somente letras.")
-            else:
-                data["name"] = name
-                break
+        sg.ChangeLookAndFeel('DarkTeal4')
+        layout = [
+            [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
+            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
+            [sg.Text('Sobrenome:', size=(15, 1)), sg.InputText('', key='surname')],
+            [sg.Text('Email:', size=(15, 1)), sg.InputText('', key='email')],
+            [sg.Text('CPF:', size=(15, 1)), sg.InputText('', key='cpf')],
+            [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        self.__window = sg.Window('Dados usuário').Layout(layout)
 
-        data["surname"] = self.read_letters_string("Sobrenome: ", "Sobrenome deve conter somente letras.")
-        data["email"] = self.read_email("Email: ", "Email deve conter '@'.")
-        data["password"] = self.read_with_n_chars("Senha: ", "A senha deve ter pelo menos 4 caracteres.", 4)
+        button, values = self.open()
+        name = values['name']
+        surname = values['surname']
+        email = values['email']
+        cpf = values['cpf']
+        password = values['password']
 
-        return data
+        self.close()
+        return {"name": name, "surname": surname, "cpf": int(cpf), "email": email, "password": password}
 
     def read_value(self, default_msg: str, error_msg: str):
         while True:
             value = self.read_float(default_msg, error_msg)
             try:
                 if value <= 0:
-                    raise NegativeMoneyException()
+                    raise NegativeMoneyException
                 return value
             except NegativeMoneyException:
                 self.show_message(error_msg)
@@ -165,9 +172,12 @@ class AbstractView(ABC):
             if k != 0:
                 layout.append([sg.Radio(value,"RD1", key=str(k))])
 
-        layout.append([sg.Radio(options[0], "RD1", key='0')])
-        layout.append([sg.Button('Confirmar'), sg.Cancel('Cancelar')])
+        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
         self.__window = sg.Window('Sistema de livros').Layout(layout)
 
     def close(self):
         self.__window.Close()
+
+    def open(self):
+        button, values = self.__window.Read()
+        return button, values

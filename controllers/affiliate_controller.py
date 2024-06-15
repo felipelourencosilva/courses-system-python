@@ -28,13 +28,13 @@ class AffiliateController:
 
     def add_affiliate(self):
         affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
-        while True:
+        '''while True:
             cpf = self.__affiliate_view.read_cpf()
             if self.__system_controller.user_controller.get_user_by_cpf(cpf) is not None:
                 self.__affiliate_view.show_message("Este CPF já foi utilizado")
             else:
                 affiliate_data["cpf"] = cpf
-                break
+                break'''
         affiliate = Affiliate(affiliate_data["name"], affiliate_data["surname"],
                               affiliate_data["email"], affiliate_data["password"], affiliate_data["cpf"])
         self.__affiliates.append(affiliate)
