@@ -3,10 +3,16 @@ from entities.user import *
 from entities.course import *
 
 class UserController:
+    __instance = None
     def __init__(self, system_controller):
         self.__users = []
         self.__user_view = UserView()
         self.__system_controller = system_controller
+
+    def __new__(cls):
+        if UserController.__instance is None:
+            UserController.__instance = object.__new__(cls)
+        return UserController.__instance
 
     def get_user_by_cpf(self, cpf: int):
         if isinstance(cpf, int):

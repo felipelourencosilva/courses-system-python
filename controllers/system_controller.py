@@ -7,6 +7,7 @@ from controllers.course_controller import *
 
 
 class SystemController:
+    __instance = None
 
     def __init__(self):
         self.__user_controller = UserController(self)
@@ -15,6 +16,11 @@ class SystemController:
         self.__sale_controller = SaleController(self)
         self.__course_controller = CourseController(self)
         self.__system_view = SystemView()
+
+    def __new__(cls):
+        if SystemController.__instance is None:
+            SystemController.__instance = object.__new__(cls)
+        return SystemController.__instance
 
     @property
     def user_controller(self) -> UserController:

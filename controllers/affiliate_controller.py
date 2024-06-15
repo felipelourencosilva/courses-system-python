@@ -3,10 +3,16 @@ from entities.affiliate import *
 
 
 class AffiliateController:
+    __instance = None
     def __init__(self, system_controller):
         self.__affiliates = []
         self.__affiliate_view = AffiliateView()
         self.__system_controller = system_controller
+
+    def __new__(cls):
+        if AffiliateController.__instance is None:
+            AffiliateController.__instance = object.__new__(cls)
+        return AffiliateController.__instance
 
     def get_affiliates(self):
         return self.__affiliates

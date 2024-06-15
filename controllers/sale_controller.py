@@ -3,10 +3,16 @@ from entities.sale import *
 
 
 class SaleController:
+    __instance = None
     def __init__(self, system_controller):
         self.__sales = []
         self.__sale_view = SaleView()
         self.__system_controller = system_controller
+
+    def __new__(cls):
+        if SaleController.__instance is None:
+            SaleController.__instance = object.__new__(cls)
+        return SaleController.__instance
 
     def previous_view(self):
         self.__system_controller.show_view()

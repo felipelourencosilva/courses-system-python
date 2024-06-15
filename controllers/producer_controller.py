@@ -3,10 +3,16 @@ from entities.producer import *
 
 
 class ProducerController:
+    __instance = None
     def __init__(self, system_controller):
         self.__producers = []
         self.__producer_view = ProducerView()
         self.__system_controller = system_controller
+
+    def __new__(cls):
+        if ProducerController.__instance is None:
+            ProducerController.__instance = object.__new__(cls)
+        return ProducerController.__instance
 
     def get_producers(self):
         return self.__producers

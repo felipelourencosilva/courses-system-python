@@ -4,11 +4,18 @@ import random
 
 
 class CommentController:
+    __instance = None
+
     def __init__(self, lesson_controller, system_controller):
         self.__comments = dict()
         self.__lesson_controller = lesson_controller
         self.__system_controller = system_controller
         self.__comment_view = CommentView()
+
+    def __new__(cls):
+        if CommentController.__instance is None:
+            CommentController.__instance = object.__new__(cls)
+        return CommentController.__instance
 
     def generate_id(self):
         id = random.randint(1, 1000)
