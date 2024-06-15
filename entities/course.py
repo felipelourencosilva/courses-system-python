@@ -75,3 +75,9 @@ class Course:
     def remove_module(self, module):
         if module in self.__modules:
             self.__modules.remove(module)
+
+    def __eq__(self, other):
+        return self.__id == other.__id
+
+    def __hash__(self):
+        return hash(self.__id)
