@@ -4,27 +4,32 @@ from rich.console import Console
 from rich import box
 from rich.table import Table
 console = Console()
+import PySimpleGUI as sg
 
 
 class AbstractView(ABC):
 
     @abstractmethod
     def __init__(self):
-        pass
+        self.__window = None
+        self.init_components()
 
     def view_options(self, title: str, options: dict):
-        tableView = Table(title=title, box=box.ROUNDED, border_style="#6D7280", title_style="#54cdc1 bold italic frame")
-        tableView.add_column(justify="center", style="#54cdc1")
-        tableView.add_column("Escolha uma opção:", justify="left", style="#54cdc1 bold")
+        self.init_components(title, options)
+        button, values = self.__window.Read()
+        opcao = 0
 
-        for k, v in sorted(options.items()):
-            if (k != 0):
-                tableView.add_row(str(k), str(v))
-        if 0 in options:
-            tableView.add_row("0", options[0], style="#FF6961")
+        for i in range(1, len(options)):
+            if values[str(i)]:
+                opcao = i
+                break
 
-        print()
-        console.print(tableView)
+        if values['0'] or button in (None, 'Cancelar'):
+            opcao = 0
+
+        self.close()
+
+        return opcao
 
         while True:
             option = self.read_int(
@@ -141,3 +146,22 @@ class AbstractView(ABC):
                 self.show_message(error_msg)
             else:
                 return value
+
+    def init_components(self, title, options):
+        #sg.theme_previewer()
+        sg.ChangeLookAndFeel('LightGray1')
+        layout = [
+            [sg.Text(title, font=("Helvica",25))],
+            [sg.Text('Escolha sua opção', font=("Helvica",15))]
+        ]
+
+        for k, value in sorted(options.items()):
+            if k != 0:
+                layout.append([sg.Radio(value,"RD1", key=str(k))])
+
+        layout.append([sg.Radio(options[0], "RD1", key='0')])
+        layout.append([sg.Button('Confirmar'), sg.Cancel('Cancelar')])
+        self.__window = sg.Window('Sistema de livros').Layout(layout)
+
+    def close(self):
+        self.__window.Close()
