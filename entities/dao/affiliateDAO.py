@@ -4,4 +4,4 @@ from entities.affiliate import Affiliate
 
 class AffiliateDAO(AbstractDAO):
     def __init__(self):
-        super().__init__("affiliates.pkl")
+        super().__init__("pkl/affiliates.pkl")

@@ -36,4 +36,4 @@ class AbstractDAO(ABC):
             pass
 
     def get_all(self):
-        return self.__cache.values()
+        return self.__cache

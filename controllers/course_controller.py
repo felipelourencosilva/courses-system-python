@@ -1,13 +1,14 @@
 from views.course_view import *
 from entities.course import *
 from controllers.module_controller import *
+from entities.dao.courseDAO import CourseDAO
 import random
 
 
 class CourseController:
     __instance = None
     def __init__(self, system_controller):
-        self.__courses = dict()
+        self.__dao = CourseDAO()
         self.__course_view = CourseView()
         self.__system_controller = system_controller
         self.__module_controller = ModuleController(self, system_controller)
@@ -23,25 +24,27 @@ class CourseController:
         return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
 
     def get_course(self, id):
-        if id in self.__courses:
-            return self.__courses[id]
-        else:
-            return None
+        try:
+            return self.__dao.get_all()[id]
+        except:
+            pass
 
     def get_courses(self):
-        return self.__courses
+        return self.__dao.get_all()
 
     def add_course_module(self, id: int, module: Module):
         course = self.get_course(id)
         course.add_module(module)
+        self.__dao.add(course.id, course)
 
     def remove_course_module(self, course_id: int, module: Module):
         course = self.get_course(course_id)
         course.remove_module(module)
+        self.__dao.add(course.id, course)
 
     def generate_id(self):
         id = random.randint(1, 1000)
-        while id in self.__courses:
+        while id in self.get_courses():
             id = random.randint(1, 1000)
         return id
 
@@ -51,6 +54,10 @@ class CourseController:
             return
         course_data = self.__course_view.get_edit_course_data()
         self.__system_controller.producer_controller.list_producer()
+
+        cpf = self.__course_view.read_cpf()
+        course_data["cpf"] = cpf
+        '''
         while True:
             cpf = self.__course_view.read_cpf("CPF do Produtor: ")
             if self.get_producer(cpf) is None:
@@ -58,44 +65,53 @@ class CourseController:
             else:
                 course_data["cpf"] = cpf
                 break
+        '''
 
         id = self.generate_id()
         course = Course(course_data["name"], self.get_producer(course_data["cpf"]),
                         course_data["description"], course_data["price"], course_data["commission_percentage"], id)
-        self.__courses[id] = course
+        self.__dao.add(id, course)
         self.__course_view.show_success_message("Curso adicionado com sucesso")
 
     def edit_course(self):
-        if len(self.__courses) == 0:
+        if len(self.get_courses()) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
         self.list_courses()
         id = self.__course_view.read_id()
-        if id not in self.__courses:
+        if id not in self.get_courses():
             self.__course_view.show_message("Este curso não existe")
             return
 
-        if id is not None and id in self.__courses:
+        if id is not None and id in self.get_courses():
             course_data = self.__course_view.get_edit_course_data()
-            course = self.__courses[id]
+            course = self.get_courses()[id]
             course.name = course_data["name"]
             course.description = course_data["description"]
             course.price = course_data["price"]
             course.commission_percentage = course_data["commission_percentage"]
+            self.__dao.add(course.id, course)
             self.__course_view.show_success_message("Curso editado com sucesso")
         else:
             self.__course_view.show_message("Este curso não existe")
 
     def list_courses(self):
-        if len(self.__courses) == 0:
+        if len(self.get_courses()) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
-        for key, course in self.__courses.items():
-            self.__course_view.show_course({"name": course.name, "description": course.description, "price": course.price,
-                                            "id": key, "producer": f"{course.producer.name} {course.producer.surname}"})
+        courses_data = []
+        for key, course in self.get_courses().items():
+            courses_data.append({
+                "name": course.name,
+                "description": course.description,
+                "price": course.price,
+                "id": key,
+                "producer": f"{course.producer.name} {course.producer.surname}"
+            })
+        self.__course_view.show_courses(courses_data)
 
     def remove_course(self):
-        if len(self.__courses) == 0:
+        if len(self.get_courses()) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
         self.list_courses()
@@ -103,6 +119,7 @@ class CourseController:
 
         if id is not None and id in self.__courses:
             self.__courses.pop(id)
+            self.__dao.remove(id)
             self.__course_view.show_success_message("Curso removido com sucesso")
         else:
             self.__course_view.show_message("Este curso não existe")
@@ -111,12 +128,12 @@ class CourseController:
         if len(self.__system_controller.user_controller.get_users()) == 0:
             self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
             return
-        if len(self.__courses) == 0:
+        if len(self.get_courses()) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
         self.list_courses()
         id = self.__course_view.read_id()
-        if id not in self.__courses:
+        if id not in self.get_courses():
             self.__course_view.show_message("Este curso não existe")
             return
 
@@ -134,7 +151,7 @@ class CourseController:
             else:
                 break
 
-        course = self.__courses[id]
+        course = self.get_courses()[id]
         if self.__system_controller.user_controller.user_has_course(cpf, course):
             self.__course_view.show_message("Você já possui esse curso")
             return

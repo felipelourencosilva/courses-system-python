@@ -1,4 +1,5 @@
 from views.abstract_view import AbstractView
+import PySimpleGUI as sg
 from rich.console import Console
 from rich import box
 from rich.table import Table
@@ -22,6 +23,22 @@ class CourseView(AbstractView):
         return super().view_options("CURSOS", options)
 
     def get_edit_course_data(self):
+        sg.ChangeLookAndFeel('LightGray1')
+        layout = [
+            [sg.Text(f'DADOS CURSO', font=("Helvica", 25))],
+            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Text('Preço:', size=(15, 1)), sg.InputText('', key='price')],
+            [sg.Text('Comissão:', size=(15, 1)), sg.InputText('', key='commission_percentage')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        user_data_window = sg.Window('Dados Curso').Layout(layout)
+        button, values = self.open(user_data_window)
+        values["price"] = float(values["price"])
+
+        user_data_window.Close()
+        return values
+        '''
         self.print_title("DADOS CURSO")
         data = {}
         data["name"] = self.read_with_n_chars("Nome: ", "Nome do curso deve ter pelo menos 4 letras.", 4)
@@ -35,19 +52,27 @@ class CourseView(AbstractView):
             100
         )
         return data
+        '''
 
-    def show_course(self, course_data):
-        showCourseTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showCourseTable.add_column("Curso", justify="left", style="#54cdc1")
-        showCourseTable.add_column("Informações", justify="left", style="bold italic")
-        showCourseTable.add_row("Nome do curso:", str(course_data["name"]))
-        showCourseTable.add_row("Descrição do curso:", str(course_data["description"]))
-        showCourseTable.add_row("Autor:", str(course_data["producer"]))
-        showCourseTable.add_row("Preço:", str(course_data["price"]))
-        showCourseTable.add_row("Id:", str(course_data["id"]))
+    def show_courses(self, courses_data):
+        layout = [
+            [sg.Text(f'Cursos: ', font=("Helvica", 25))],
+        ]
 
-        console.print(showCourseTable)
-        print()
+        for course in courses_data:
+            layout.extend(
+                [[sg.Text(f'Nome: {course["name"]}', size=(60, 1))],
+                 [sg.Text(f'Descrição: {course["description"]}', size=(60, 1))],
+                 [sg.Text(f'Preço: {course["price"]}', size=(60, 1))],
+                 [sg.Text(f'ID: {course["id"]}', size=(60, 1))],
+                 [sg.Text(f'Produtor: {course["producer"]}', size=(60, 1))],
+                 [sg.Text('----------------------------------------', size=(60, 1))]]
+            )
+
+        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
+        show_courses_window = sg.Window('Cursos').Layout(layout)
+        button, values = self.open(show_courses_window)
+        show_courses_window.Close()
 
     def read_id(self):
         return self.read_int_range(
