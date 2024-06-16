@@ -33,16 +33,6 @@ class AbstractView(ABC):
 
         return opcao
 
-        while True:
-            option = self.read_int(
-                "Sua escolha: ",
-                "Por favor, escolha um número dentre as opções."
-            )
-            if option not in options:
-                self.show_message("Por favor, escolha um número dentre as opções.")
-                continue
-            return option
-
     def show_message(self, msg: str):
         table = Table(box=box.ROUNDED, border_style="#FF6961")
         table.add_column("Importante", justify="center", style="#FF6961")
@@ -113,22 +103,24 @@ class AbstractView(ABC):
                 return str
 
     def read_cpf(self, default_msg: str = None, error_msg: str = None):
-        if default_msg is None:
-            default_msg = "CPF: "
-        if error_msg is None:
-            error_msg = "O CPF deve ser um inteiro maior que 0."
-        while True:
-            cpf = self.read_int(default_msg, error_msg)
-            if (cpf <= 0):
-                self.show_message(error_msg)
-            else:
-                return cpf
+        sg.ChangeLookAndFeel('LightGray1')
+        layout = [
+            [sg.Text(f'{default_msg}', font=("Helvica", 25))],
+            [sg.Text('CPF:', size=(15, 1)), sg.InputText('', key='cpf')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        self.__window = sg.Window('Dados usuário').Layout(layout)
+
+        button, values = self.open()
+        cpf = values['cpf']
+        self.close()
+        return int(cpf)
 
     def print_title(self, title: str):
         console.print("\n             " + title, style="#54cdc1")
 
     def read_basic_edit_user_data(self, title: str):
-        sg.ChangeLookAndFeel('DarkTeal4')
+        sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
             [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],

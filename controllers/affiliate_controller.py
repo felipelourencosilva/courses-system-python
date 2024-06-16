@@ -75,7 +75,7 @@ class AffiliateController:
         self.list_affiliates()
         if len(self.__affiliates) == 0:
             return
-        affiliate_cpf = self.__affiliate_view.read_cpf()
+        affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja remover")
         affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
 
         if affiliate is not None:

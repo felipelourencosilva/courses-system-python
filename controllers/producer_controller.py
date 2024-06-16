@@ -71,7 +71,7 @@ class ProducerController:
         self.list_producer()
         if len(self.__producers) == 0:
             return
-        producer_cpf = self.__producer_view.read_cpf()
+        producer_cpf = self.__producer_view.read_cpf("Digite o CPF do produtor que deseja remover")
         producer = self.get_producer_by_cpf(producer_cpf)
 
         if producer is not None:
