@@ -3,6 +3,7 @@ from rich.console import Console
 from rich import box
 from rich.table import Table
 console = Console()
+import PySimpleGUI as sg
 
 
 class ModuleView(AbstractView):
@@ -22,27 +23,39 @@ class ModuleView(AbstractView):
         return super().view_options("MÓDULOS", options)
 
     def get_add_module_data(self):
-        data = dict()
-        data["title"] = self.read_with_n_chars("Título: ", "Título do módulo deve ter pelo menos 4 letras.", 4)
-        data["description"] = input("Descrição: ")
-        return data
+        layout = [
+            [sg.Text(f'Criar módulo', font=("Helvica", 25))],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar módulo').Layout(layout)
 
-    def get_edit_module_data(self):
-        self.print_title("DADOS MÓDULO")
-        data = dict()
-        data["title"] = self.read_with_n_chars("Título: ", "Título do módulo deve ter pelo menos 4 letras.", 4)
-        data["description"] = input("Descrição: ")
-        return data
+        button, values = self.open(edit_module_window)
+        title = values['title']
+        description = values['description']
 
-    def show_module(self, module_data):
-        showModuleTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showModuleTable.add_column("Módulo",justify="left", style="#54cdc1")
-        showModuleTable.add_column("Informações", justify="left", style="bold italic")
-        showModuleTable.add_row("Título do módulo", str(module_data["title"]))
-        showModuleTable.add_row("Descrição do módulo", str(module_data["description"]))
-        showModuleTable.add_row("Id", str(module_data["id"]))
-        console.print(showModuleTable)
-        print()
+        edit_module_window.Close()
+        return {"title": title, "description": description}
+
+    def show_modules(self, modules):
+        layout = [
+            [sg.Text(f'Módulos: ', font=("Helvica", 25))],
+        ]
+
+        for module in modules:
+            layout.extend(
+                [[sg.Text(f'Título: {module["title"]}', size=(60, 1))],
+                 [sg.Text(f'Descrição: {module["email"]}', size=(60, 1))],
+                 [sg.Text('----------------------------------------', size=(60, 1))]]
+            )
+
+        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
+        show_users_window = sg.Window('Usuarios').Layout(layout)
+
+        button, values = self.open(show_users_window)
+
+        show_users_window.Close()
 
     def read_course_id(self):
         return self.read_int_range(
@@ -59,3 +72,7 @@ class ModuleView(AbstractView):
             1,
             1000
         )
+
+    def open(self, window):
+        button, values = window.Read()
+        return button, values

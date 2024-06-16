@@ -56,12 +56,21 @@ class AbstractView(ABC):
         success_message_window.Close()
 
     def read_int(self, default_msg: str, error_msg: str):
-        while True:
-            num = input(default_msg)
-            if not num.isnumeric():
-                self.show_message(error_msg)
-            else:
-                return int(num)
+        layout = [
+            [sg.Text(f'{default_msg}', font=("Helvica", 25))],
+            [sg.InputText('', key='int')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        read_int_window = sg.Window('Dados usuário').Layout(layout)
+
+        button, values = self.open(read_int_window)
+        num = values['int']
+
+        read_int_window.Close()
+        if not num.isnumeric():
+            self.show_message(error_msg)
+        else:
+            return int(num)
 
     def read_int_range(self, default_msg: str, error_msg: str, min: int, max: int):
         while True:

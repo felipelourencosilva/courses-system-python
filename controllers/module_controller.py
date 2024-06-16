@@ -95,7 +95,7 @@ class ModuleController:
             if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
                 self.__module_view.show_message("Este módulo não pertence a este curso")
                 return
-            module_data = self.__module_view.get_edit_module_data()
+            module_data = self.__module_view.get_add_module_data()
             module = self.__modules[module_id]
             module.title = module_data["title"]
             module.description = module_data["description"]
@@ -120,9 +120,11 @@ class ModuleController:
             self.__module_view.show_message("Não há módulos cadastrados nesse curso")
             return -1
         else:
+            modules_info = []
             for module in course.modules:
-                self.__module_view.show_module({"title": module.title, "description": module.description,
+                modules_info.append({"title": module.title, "description": module.description,
                                                 "id": module.id})
+            self.__module_view.show_modules(modules_info)
         return course_id
 
 
