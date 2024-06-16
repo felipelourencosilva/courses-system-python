@@ -12,13 +12,11 @@ class AbstractView(ABC):
 
     @abstractmethod
     def __init__(self):
-        self.__window = None
-        self.__user_window = None
         self.init_components()
 
     def view_options(self, title: str, options: dict):
-        self.init_components(title, options)
-        button, values = self.__window.Read()
+        window = self.init_components(title, options)
+        button, values = window.Read()
         opcao = 0
 
         for i in range(1, len(options)):
@@ -29,27 +27,33 @@ class AbstractView(ABC):
         if button in (None, 'Cancelar'):
             opcao = 0
 
-        self.close()
+        window.Close()
 
         return opcao
 
     def show_message(self, msg: str):
-        table = Table(box=box.ROUNDED, border_style="#FF6961")
-        table.add_column("Importante", justify="center", style="#FF6961")
-        table.add_row(msg)
+        layout = [
+            [sg.Text('Importante:', font=("Helvica", 25))],
+            [sg.Text(msg, size=(40, 1))],
+            [sg.Button('Ok')]
+        ]
+        message_window = sg.Window('Mensagem').Layout(layout)
 
-        print()
-        console.print(table)
-        print()
+        button, values = self.open(message_window)
+
+        message_window.Close()
 
     def show_success_message(self, msg: str):
-        table = Table(box=box.ROUNDED, border_style="#4FBF26")
-        table.add_column("Sucesso", justify="center", style="#4FBF26")
-        table.add_row(msg)
+        layout = [
+            [sg.Text('Sucesso:', font=("Helvica", 25))],
+            [sg.Text(msg, size=(40, 1))],
+            [sg.Button('Ok')]
+        ]
+        success_message_window = sg.Window('Mensagem').Layout(layout)
 
-        print()
-        console.print(table)
-        print()
+        button, values = self.open(success_message_window)
+
+        success_message_window.Close()
 
     def read_int(self, default_msg: str, error_msg: str):
         while True:
@@ -109,15 +113,12 @@ class AbstractView(ABC):
             [sg.Text('CPF:', size=(15, 1)), sg.InputText('', key='cpf')],
             [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
         ]
-        self.__window = sg.Window('Dados usuário').Layout(layout)
+        cpf_window = sg.Window('Dados usuário').Layout(layout)
 
-        button, values = self.open()
+        button, values = self.open(cpf_window)
         cpf = values['cpf']
-        self.close()
+        cpf_window.Close()
         return int(cpf)
-
-    def print_title(self, title: str):
-        console.print("\n             " + title, style="#54cdc1")
 
     def read_basic_edit_user_data(self, title: str):
         sg.ChangeLookAndFeel('LightGray1')
@@ -130,17 +131,17 @@ class AbstractView(ABC):
             [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
-        self.__window = sg.Window('Dados usuário').Layout(layout)
+        user_data_window = sg.Window('Dados usuário').Layout(layout)
 
-        button, values = self.open()
+        button, values = self.open(user_data_window)
         name = values['name']
         surname = values['surname']
         email = values['email']
         cpf = values['cpf']
         password = values['password']
 
-        self.close()
-        return {"name": name, "surname": surname, "cpf": int(cpf), "email": email, "password": password}
+        user_data_window.Close()
+        return {"name": name, "surname": surname, "cpf": cpf, "email": email, "password": password}
 
     def read_value(self, default_msg: str, error_msg: str):
         while True:
@@ -165,11 +166,8 @@ class AbstractView(ABC):
                 layout.append([sg.Radio(value,"RD1", key=str(k))])
 
         layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
-        self.__window = sg.Window('Sistema de livros').Layout(layout)
+        return sg.Window('Sistema de cursos').Layout(layout)
 
-    def close(self):
-        self.__window.Close()
-
-    def open(self):
-        button, values = self.__window.Read()
+    def open(self, window):
+        button, values = window.Read()
         return button, values
