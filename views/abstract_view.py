@@ -141,7 +141,7 @@ class AbstractView(ABC):
         password = values['password']
 
         user_data_window.Close()
-        return {"name": name, "surname": surname, "cpf": cpf, "email": email, "password": password}
+        return {"name": name, "surname": surname, "cpf": int(cpf), "email": email, "password": password}
 
     def read_value(self, default_msg: str, error_msg: str):
         while True:

@@ -43,13 +43,13 @@ class UserController:
 
     def add_user(self):
         user_data = self.__user_view.get_edit_user_data()
-        while True:
+        '''while True:
             cpf = self.__user_view.read_cpf()
             if self.get_user_by_cpf(cpf) is not None:
                 self.__user_view.show_message("Este CPF já foi utilizado.")
             else:
                 user_data["cpf"] = cpf
-                break
+                break'''
 
         user = User(user_data["name"], user_data["surname"],
                     user_data["email"], user_data["password"], user_data["cpf"])
@@ -77,11 +77,14 @@ class UserController:
         if len(self.__users) == 0:
             self.__user_view.show_message("Não há usuários cadastrados")
         else:
+            users_info = []
             for user in self.__users:
                 course_names = [c.name for c in user.courses]
-                self.__user_view.show_user({"name": user.name + " " + user.surname, "email": user.email,
-                                            "password": user.password, "cpf": user.cpf, "balance": user.balance,
-                                            "courses": course_names})
+                users_info.append({"name": user.name + " " + user.surname, "email": user.email,
+                                    "password": user.password, "cpf": user.cpf, "balance": user.balance,
+                                    "courses": course_names})
+
+            self.__user_view.show_users(users_info)
 
     def remove_user(self):
         self.list_users()

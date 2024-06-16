@@ -1,9 +1,5 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
-
+import PySimpleGUI as sg
 
 class AffiliateView(AbstractView):
 
@@ -22,15 +18,27 @@ class AffiliateView(AbstractView):
     def get_edit_affiliate_data(self):
         return super().read_basic_edit_user_data("AFILIADO")
 
-    def show_affiliate(self, affiliate_data):
-        showAffiliateTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showAffiliateTable.add_column("Afiliado", justify="left", style="#54cdc1")
-        showAffiliateTable.add_column("Informações", justify="left", style="bold italic")
-        showAffiliateTable.add_row("Nome do afiliado: ", str(affiliate_data["name"]))
-        showAffiliateTable.add_row("Email do afiliado: ", str(affiliate_data["email"]))
-        showAffiliateTable.add_row("Senha do afiliado: ", str(affiliate_data["password"]))
-        showAffiliateTable.add_row("CPF do afiliado: ", str(affiliate_data["cpf"]))
-        showAffiliateTable.add_row("Saldo do afiliado: ", str(affiliate_data["balance"]))
+    def show_affiliates(self, affiliates):
+        layout = [
+            [sg.Text(f'Afiliados: ', font=("Helvica", 25))],
+        ]
 
-        console.print(showAffiliateTable)
-        print()
+        for affiliate in affiliates:
+            layout.extend(
+                [[sg.Text(f'Nome: {affiliate["name"]}', size=(60, 1))],
+                 [sg.Text(f'Email: {affiliate["email"]}', size=(60, 1))],
+                 [sg.Text(f'CPF: {affiliate["cpf"]}', size=(60, 1))],
+                 [sg.Text(f'Senha: {affiliate["password"]}', size=(60, 1))],
+                 [sg.Text(f'Saldo: {affiliate["balance"]}', size=(60, 1))],
+                 [sg.Text('----------------------------------------', size=(60, 1))]]
+            )
+
+        layout.append([sg.Cancel('Voltar')])
+        show_affiliates_window = sg.Window('Afiliados').Layout(layout)
+        button, values = self.open(show_affiliates_window)
+
+        show_affiliates_window.Close()
+
+    def open(self, window):
+        button, values = window.Read()
+        return button, values

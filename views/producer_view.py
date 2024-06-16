@@ -1,8 +1,5 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
+import PySimpleGUI as sg
 
 
 class ProducerView(AbstractView):
@@ -23,15 +20,27 @@ class ProducerView(AbstractView):
     def get_edit_producer_data(self):
         return super().read_basic_edit_user_data("PRODUTOR")
 
-    def show_producer(self, producer_data):
-        showProducerTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showProducerTable.add_column("Produtor", justify="left", style="#54cdc1")
-        showProducerTable.add_column("Informações", justify="left", style="bold italic")
-        showProducerTable.add_row("Nome do Produtor", str(producer_data["name"]))
-        showProducerTable.add_row("Email do Produtor", str(producer_data["email"]))
-        showProducerTable.add_row("Senha do Produtor", str(producer_data["password"]))
-        showProducerTable.add_row("CPF do Produtor", str(producer_data["cpf"]))
-        showProducerTable.add_row("Saldo do Produtor", str(producer_data["balance"]))
-        console.print(showProducerTable)
+    def show_producers(self, producers):
+        layout = [
+            [sg.Text(f'Produtores: ', font=("Helvica", 25))],
+        ]
 
-        print()
+        for producer in producers:
+            layout.extend(
+                [[sg.Text(f'Nome: {producer["name"]}', size=(60, 1))],
+                 [sg.Text(f'Email: {producer["email"]}', size=(60, 1))],
+                 [sg.Text(f'CPF: {producer["cpf"]}', size=(60, 1))],
+                 [sg.Text(f'Senha: {producer["password"]}', size=(60, 1))],
+                 [sg.Text(f'Saldo: {producer["balance"]}', size=(60, 1))],
+                 [sg.Text('----------------------------------------', size=(60, 1))]]
+            )
+
+        layout.append([sg.Cancel('Voltar')])
+        show_producers_window = sg.Window('Produtores').Layout(layout)
+        button, values = self.open(show_producers_window)
+
+        show_producers_window.Close()
+
+    def open(self, window):
+        button, values = window.Read()
+        return button, values

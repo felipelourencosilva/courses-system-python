@@ -62,10 +62,12 @@ class ProducerController:
         if len(self.__producers) == 0:
             self.__producer_view.show_message("Não há produtores cadastrados")
         else:
+            producers_info = []
             for producer in self.__producers:
-                self.__producer_view.show_producer({"name": producer.name + " " + producer.surname,
-                                                    "email": producer.email, "password": producer.password,
-                                                    "cpf": producer.cpf, "balance": producer.balance})
+                producers_info.append({"name": producer.name + " " + producer.surname, "email": producer.email,
+                                    "password": producer.password, "cpf": producer.cpf, "balance": producer.balance})
+
+            self.__producer_view.show_producers(producers_info)
 
     def remove_producer(self):
         self.list_producer()

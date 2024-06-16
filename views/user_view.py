@@ -1,8 +1,6 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
+import PySimpleGUI as sg
+
 
 class UserView(AbstractView):
 
@@ -23,19 +21,34 @@ class UserView(AbstractView):
     def get_edit_user_data(self):
         return super().read_basic_edit_user_data("USUÁRIO")
 
-    def show_user(self, user_data):
-        showUserTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showUserTable.add_column("Usuário", justify="left", style="#54cdc1")
-        showUserTable.add_column("Informações", justify="left", style="bold italic")
-        showUserTable.add_row("Nome do usuário", str(user_data["name"]))
-        showUserTable.add_row("Email do usuário", str(user_data["email"]))
-        showUserTable.add_row("Senha do usuário", str(user_data["password"]))
-        showUserTable.add_row("CPF do usuário", str(user_data["cpf"]))
-        showUserTable.add_row("Saldo do usuário", str(user_data["balance"]))
-        if len(user_data["courses"]) == 0:
-            showUserTable.add_row("Cursos do usuário", "Nenhum")
-        else:
-            showUserTable.add_row("Cursos do usuário", ", ".join(user_data["courses"]))
+    def show_users(self, users_data):
+        layout = [
+            [sg.Text(f'Usuários: ', font=("Helvica", 25))],
+        ]
 
-        console.print(showUserTable)
-        print()
+        for user in users_data:
+            layout.extend(
+                [[sg.Text(f'Nome: {user["name"]}', size=(60, 1))],
+                 [sg.Text(f'Email: {user["email"]}', size=(60, 1))],
+                 [sg.Text(f'CPF: {user["cpf"]}', size=(60, 1))],
+                 [sg.Text(f'Senha: {user["password"]}', size=(60, 1))],
+                 [sg.Text(f'Saldo: {user["balance"]}', size=(60, 1))],]
+            )
+
+            if len(user["courses"]) == 0:
+                layout.append([sg.Text(f'Cursos do usuário: Nenhum', size=(60, 1))])
+            else:
+                layout.append([sg.Text(f'Cursos do usuário: ' + " ".join(user["courses"]))])
+
+            layout.append([sg.Text('----------------------------------------', size=(60, 1))])
+
+        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
+        show_users_window = sg.Window('Usuarios').Layout(layout)
+
+        button, values = self.open(show_users_window)
+
+        show_users_window.Close()
+
+    def open(self, window):
+        button, values = window.Read()
+        return button, values

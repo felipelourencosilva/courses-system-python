@@ -61,15 +61,12 @@ class AffiliateController:
         if len(self.__affiliates) == 0:
             self.__affiliate_view.show_message("Não há afiliados cadastrados")
         else:
-            for affiliate in self.__affiliates:
-                self.__affiliate_view.show_affiliate({
-                    "name": affiliate.name + " " + affiliate.surname,
-                    "email": affiliate.email,
-                    "password": affiliate.password,
-                    "cpf": affiliate.cpf,
-                    "balance": affiliate.balance
-                    }
-                )
+            affiliates_info = []
+            for affiliates in self.__affiliates:
+                affiliates_info.append({"name": affiliates.name + " " + affiliates.surname, "email": affiliates.email,
+                                        "password": affiliates.password, "cpf": affiliates.cpf, "balance": affiliates.balance})
+
+            self.__affiliate_view.show_affiliates(affiliates_info)
 
     def remove_affiliate(self):
         self.list_affiliates()
