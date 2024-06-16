@@ -59,7 +59,7 @@ class UserController:
         self.list_users()
         if len(self.__users) == 0:
             return
-        user_cpf = self.__user_view.read_cpf()
+        user_cpf = self.__user_view.read_cpf("Digite o CPF do usuário que deseja atualizar")
         user = self.get_user_by_cpf(user_cpf)
 
         if user is not None:
