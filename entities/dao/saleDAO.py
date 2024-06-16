@@ -1,6 +1,6 @@
-from entities.dao.abstractDAO import *
+from entities.dao.abstractDAO import AbstractDAO
 
 
 class SaleDAO(AbstractDAO):
     def __init__(self):
-        pass
+        super().__init__("sales.pkl")

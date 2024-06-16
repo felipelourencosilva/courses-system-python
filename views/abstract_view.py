@@ -146,7 +146,7 @@ class AbstractView(ABC):
         while True:
             value = self.read_float(default_msg, error_msg)
             try:
-                if value <= 0:
+                if value <= 0:\
                     raise NegativeMoneyException
                 return value
             except NegativeMoneyException:
