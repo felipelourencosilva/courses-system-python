@@ -7,11 +7,14 @@ import random
 
 class LessonController:
     __instance = None
+
     def __init__(self, module_controller, system_controller):
         self.__lessons = dict()
         self.__module_controller = module_controller
         self.__lesson_view = LessonView()
-        self.__comment_controller = CommentController(self, system_controller)
+        self.__comment_controller = system_controller.get_state_of_controller("comment_controller")
+        if self.__comment_controller is None:
+            self.__comment_controller = CommentController(self, system_controller)
 
     '''
     def __new__(cls):
@@ -19,6 +22,10 @@ class LessonController:
             LessonController.__instance = object.__new__(cls)
         return LessonController.__instance
     '''
+    @property
+    def comment_controller(self):
+        return self.__comment_controller
+
     def generate_id(self):
         id = random.randint(1, 1000)
         while id in self.__lessons:
@@ -137,7 +144,7 @@ class LessonController:
     def previous_view(self):
         self.__module_controller.show_view()
 
-    def comment_controller(self):
+    def to_comment_view(self):
         self.__comment_controller.show_view()
 
     def show_view(self):
@@ -146,7 +153,7 @@ class LessonController:
             2: self.remove_lesson,
             3: self.edit_lesson,
             4: self.list_lessons,
-            5: self.comment_controller,
+            5: self.to_comment_view,
             0: self.previous_view
         }
 

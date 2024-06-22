@@ -59,15 +59,17 @@ class CourseView(AbstractView):
             [sg.Text(f'Cursos: ', font=("Helvica", 25))],
         ]
 
+
+
         for course in courses_data:
-            layout.extend(
-                [[sg.Text(f'Nome: {course["name"]}', size=(60, 1))],
-                 [sg.Text(f'Descrição: {course["description"]}', size=(60, 1))],
-                 [sg.Text(f'Preço: {course["price"]}', size=(60, 1))],
-                 [sg.Text(f'ID: {course["id"]}', size=(60, 1))],
-                 [sg.Text(f'Produtor: {course["producer"]}', size=(60, 1))],
-                 [sg.Text('----------------------------------------', size=(60, 1))]]
-            )
+            layout.extend([
+                [sg.Text(f'Nome: {course["name"]}', size=(60, 1))],
+                [sg.Text(f'Descrição: {course["description"]}', size=(60, 1))],
+                [sg.Text(f'Preço: {course["price"]}', size=(60, 1))],
+                [sg.Text(f'ID: {course["id"]}', size=(60, 1))],
+                [sg.Text(f'Produtor: {course["producer"]}', size=(60, 1))],
+                [sg.Text('----------------------------------------', size=(60, 1))]
+            ])
 
         layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
         show_courses_window = sg.Window('Cursos').Layout(layout)

@@ -4,18 +4,20 @@ from controllers.producer_controller import *
 from controllers.affiliate_controller import *
 from controllers.sale_controller import *
 from controllers.course_controller import *
+from entities.dao.systemDAO import SystemDAO
 
 
 class SystemController:
     __instance = None
 
     def __init__(self):
-        self.__user_controller = UserController(self)
-        self.__producer_controller = ProducerController(self)
-        self.__affiliate_controller = AffiliateController(self)
-        self.__sale_controller = SaleController(self)
-        self.__course_controller = CourseController(self)
+        self.__system_dao = SystemDAO()
+        self.__program_state = self.__system_dao.get("program_state")
+        if self.__program_state is None:
+            self.__program_state = dict()
+        self.__init_controllers()
         self.__system_view = SystemView()
+
 
     '''
     def __new__(cls):
@@ -44,11 +46,53 @@ class SystemController:
     def course_controller(self) -> CourseController:
         return self.__course_controller
 
+    def get_state_of_controller(self, controller_name: str):
+        try:
+            return self.__program_state[controller_name]
+        except KeyError:
+            return None
+
     def start(self):
         self.show_view()
 
+    def __init_controllers(self):
+        self.__user_controller = self.get_state_of_controller("user_controller")
+        if self.__user_controller is None:
+            self.__user_controller = UserController(self)
+
+        self.__producer_controller = self.get_state_of_controller("producer_controller")
+        if self.__producer_controller is None:
+            self.__producer_controller = ProducerController(self)
+
+        self.__affiliate_controller = self.get_state_of_controller("affiliate_controller")
+        if self.__affiliate_controller is None:
+            self.__affiliate_controller = AffiliateController(self)
+
+        self.__sale_controller = self.get_state_of_controller("sale_controller")
+        if self.__sale_controller is None:
+            self.__sale_controller = SaleController(self)
+
+        self.__course_controller = self.get_state_of_controller("course_controller")
+        if self.__course_controller is None:
+            self.__course_controller = CourseController(self)
+
     def exit(self):
-        self.__system_view.show_easter_egg()
+        self.__program_state["user_controller"] = self.__user_controller
+        self.__program_state["producer_controller"] = self.__producer_controller
+        self.__program_state["affiliate_controller"] = self.__affiliate_controller
+        self.__program_state["sale_controller"] = self.__sale_controller
+        self.__program_state["course_controller"] = self.__course_controller
+        self.__program_state["module_controller"] = (
+            self.__course_controller.module_controller
+        )
+        self.__program_state["lesson_controller"] = (
+            self.__course_controller.module_controller.lesson_controller
+        )
+        self.__program_state["comment_controller"] = (
+            self.__course_controller.module_controller.lesson_controller.comment_controller
+        )
+
+        self.__system_dao.add("program_state", self.__program_state)
         exit(0)
 
     def to_user_view(self):

@@ -10,7 +10,9 @@ class ModuleController:
         self.__modules = dict()
         self.__course_controller = course_controller
         self.__module_view = ModuleView()
-        self.__lesson_controller = LessonController(self, system_controller)
+        self.__lesson_controller = system_controller.get_state_of_controller("lesson_controller")
+        if self.__lesson_controller is None:
+            self.__lesson_controller = LessonController(self, system_controller)
 
     '''
     def __new__(cls):
@@ -18,6 +20,9 @@ class ModuleController:
             ModuleController.__instance = object.__new__(cls)
         return ModuleController.__instance
     '''
+    @property
+    def lesson_controller(self):
+        return self.__lesson_controller
 
     def generate_id(self):
         id = random.randint(1, 1000)
@@ -128,7 +133,7 @@ class ModuleController:
         return course_id
 
 
-    def lesson_controller(self):
+    def to_lesson_view(self):
         self.__lesson_controller.show_view()
 
     def previous_view(self):
@@ -140,7 +145,7 @@ class ModuleController:
             2: self.remove_module,
             3: self.edit_module,
             4: self.list_modules,
-            5: self.lesson_controller,
+            5: self.to_lesson_view,
             0: self.previous_view
         }
 
