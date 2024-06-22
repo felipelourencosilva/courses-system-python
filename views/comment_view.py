@@ -1,8 +1,5 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
+import PySimpleGUI as sg
 
 
 class CommentView(AbstractView):
@@ -21,17 +18,36 @@ class CommentView(AbstractView):
         return super().view_options("COMENTÁRIOS", options)
 
     def get_comment_data(self):
-        data = dict()
-        data["comment"] = input("Comentário: ")
-        return data
+        layout = [
+            [sg.Text(f'Escreva seu comentário:', font=("Helvica", 25))],
+            [sg.Text('Comentário:', size=(15, 1)), sg.InputText('', key='comment')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar comentário').Layout(layout)
 
-    def show_comment(self, comment_data):
-        showCommentTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showCommentTable.add_column("Comentário", justify="center", style="#54cdc1 bold")
-        showCommentTable.add_row(str(comment_data["comment"]))
-        showCommentTable.add_row("Id: " + str(comment_data["id"]))
-        console.print(showCommentTable)
-        print()
+        button, values = self.open(edit_module_window)
+        comment = values['comment']
+        edit_module_window.Close()
+
+        return {"comment": comment}
+
+    def show_comment(self, comments, lesson_name):
+        layout = [
+            [sg.Text(f'Comentários da aula: {lesson_name}: ', font=("Helvica", 25))],
+        ]
+
+        for comment in comments:
+            layout.extend(
+                [[sg.Text(f'{comment["comment"]}', size=(60, 1))],
+                 [sg.Text(f'Id: {comment["id"]}', size=(60, 1))],
+                 [sg.Text('', size=(60, 1))]]
+            )
+
+        layout.append([sg.Button('Confirmar')])
+        show_users_window = sg.Window('Aulas').Layout(layout)
+
+        button, values = self.open(show_users_window)
+        show_users_window.Close()
 
     def read_lesson_id(self):
         return self.read_int_range(

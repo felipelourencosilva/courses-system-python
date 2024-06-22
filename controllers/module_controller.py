@@ -6,6 +6,7 @@ import random
 
 class ModuleController:
     __instance = None
+
     def __init__(self, course_controller, system_controller):
         self.__modules = dict()
         self.__course_controller = course_controller
@@ -20,6 +21,7 @@ class ModuleController:
             ModuleController.__instance = object.__new__(cls)
         return ModuleController.__instance
     '''
+
     @property
     def lesson_controller(self):
         return self.__lesson_controller
@@ -54,7 +56,9 @@ class ModuleController:
         if len(self.__course_controller.get_courses()) == 0:
             self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema")
             return
+
         self.__course_controller.list_courses()
+
         course_id = self.__module_view.read_course_id()
         if course_id in self.__course_controller.get_courses():
             module_data = self.__module_view.get_add_module_data()
@@ -128,10 +132,9 @@ class ModuleController:
             modules_info = []
             for module in course.modules:
                 modules_info.append({"title": module.title, "description": module.description,
-                                                "id": module.id})
-            self.__module_view.show_modules(modules_info)
+                                     "id": module.id})
+            self.__module_view.show_modules(modules_info, course.name)
         return course_id
-
 
     def to_lesson_view(self):
         self.__lesson_controller.show_view()

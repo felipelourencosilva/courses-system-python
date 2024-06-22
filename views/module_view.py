@@ -34,19 +34,20 @@ class ModuleView(AbstractView):
 
         return {"title": title, "description": description}
 
-    def show_modules(self, modules):
+    def show_modules(self, modules, course_name):
         layout = [
-            [sg.Text(f'Módulos: ', font=("Helvica", 25))],
+            [sg.Text(f'Módulos do curso: {course_name}: ', font=("Helvica", 25))],
         ]
 
         for module in modules:
             layout.extend(
                 [[sg.Text(f'Título: {module["title"]}', size=(60, 1))],
-                 [sg.Text(f'Descrição: {module["email"]}', size=(60, 1))],
+                 [sg.Text(f'Descrição: {module["description"]}', size=(60, 1))],
+                 [sg.Text(f'Id: {module["id"]}', size=(60, 1))],
                  [sg.Text('----------------------------------------', size=(60, 1))]]
             )
 
-        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
+        layout.append([sg.Button('Confirmar')])
         show_users_window = sg.Window('Usuarios').Layout(layout)
 
         button, values = self.open(show_users_window)

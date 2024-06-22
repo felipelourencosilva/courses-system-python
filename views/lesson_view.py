@@ -1,8 +1,6 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
+import PySimpleGUI as sg
+
 
 class LessonView(AbstractView):
 
@@ -21,23 +19,42 @@ class LessonView(AbstractView):
         return super().view_options("AULAS", options)
 
     def get_lesson_data(self):
-        data = dict()
-        data["title"] = self.read_with_n_chars("Título: ", "Título do módulo deve ter pelo menos 4 letras.", 4)
-        data["description"] = input("Descrição: ")
-        data["video_url"] = input("Url do Vídeo: ")
-        return data
+        layout = [
+            [sg.Text(f'Criar aula:', font=("Helvica", 25))],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar módulo').Layout(layout)
 
-    def show_lesson(self, lesson_data):
-        showLessonTable = Table(box=box.ROUNDED, border_style="#6D7280")
-        showLessonTable.add_column("Aula", justify="left", style="#54cdc1")
-        showLessonTable.add_column("Informações", justify="left", style="bold italic")
-        showLessonTable.add_row("Título da aula", str(lesson_data["title"]))
-        showLessonTable.add_row("Descrição da aula", str(lesson_data["description"]))
-        showLessonTable.add_row("Id", str(lesson_data["id"]))
-        video_url = lesson_data["video_url"]
-        showLessonTable.add_row("Url do vídeo", str(video_url), style="link " + str(video_url) + " #1260CC")
-        console.print(showLessonTable)
-        print()
+        button, values = self.open(edit_module_window)
+        title = values['title']
+        description = values['description']
+        video_url = values['video_url']
+        edit_module_window.Close()
+
+        return {"title": title, "description": description, "video_url": video_url}
+
+    def show_lessons(self, lessons, module_name):
+        layout = [
+            [sg.Text(f'Aulas do módulo {module_name}: ', font=("Helvica", 25))],
+        ]
+
+        for lesson in lessons:
+            layout.extend(
+                [[sg.Text(f'Título: {lesson["title"]}', size=(60, 1))],
+                 [sg.Text(f'Descrição: {lesson["description"]}', size=(60, 1))],
+                 [sg.Text(f'Id: {lesson["id"]}', size=(60, 1))],
+                 [sg.Text(f'URL do vídeo: {lesson["video_url"]}', size=(60, 1))],
+                 [sg.Text('----------------------------------------', size=(60, 1))]]
+            )
+
+        layout.append([sg.Button('Confirmar')])
+        show_users_window = sg.Window('Aulas').Layout(layout)
+
+        button, values = self.open(show_users_window)
+        show_users_window.Close()
 
     def read_lesson_id(self):
         return self.read_int_range(

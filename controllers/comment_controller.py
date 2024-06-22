@@ -115,8 +115,10 @@ class CommentController:
             if len(lesson.comments) == 0:
                 self.__comment_view.show_message("Não há comentários cadastrados nessa aula")
             else:
+                comments_info = []
                 for comment in lesson.comments:
-                    self.__comment_view.show_comment({"comment": comment, "id": comment.id})
+                    comments_info.append({"comment": comment, "id": comment.id})
+                self.__comment_view.show_comment(comments_info, lesson.title)
             return lesson_id
         else:
             self.__comment_view.show_message("Aula não encontrada")

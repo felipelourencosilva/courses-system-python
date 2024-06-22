@@ -154,8 +154,8 @@ class AbstractView(ABC):
         #sg.theme_previewer()
         sg.ChangeLookAndFeel('LightGray1')
         layout = [
-            [sg.Text(title, font=("Helvica",25))],
-            [sg.Text('Escolha sua opção', font=("Helvica",15))]
+            [sg.Text(title, font=("Helvetica", 18))],
+            [sg.Text('Escolha sua opção', font=("Arial", 15))]
         ]
 
         for k, value in sorted(options.items()):

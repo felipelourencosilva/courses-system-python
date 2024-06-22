@@ -133,9 +133,11 @@ class LessonController:
             if len(module.lessons) == 0:
                 self.__lesson_view.show_message("Não há aulas cadastradas nesse módulo")
             else:
+                lessons_info = []
                 for lesson in module.lessons:
-                    self.__lesson_view.show_lesson({"title": lesson.title, "description": lesson.description,
-                                                    "id": lesson.id, "video_url": lesson.video})
+                    lessons_info.append({"title": lesson.title, "description": lesson.description,
+                                         "id": lesson.id, "video_url": lesson.video})
+                self.__lesson_view.show_lessons(lessons_info, module.title)
                 return module_id
         else:
             self.__lesson_view.show_message("Este módulo não existe")
