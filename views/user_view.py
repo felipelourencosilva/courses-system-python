@@ -44,7 +44,6 @@ class UserView(AbstractView):
 
         layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
         show_users_window = sg.Window('Usuarios').Layout(layout)
-
         button, values = self.open(show_users_window)
 
         show_users_window.Close()

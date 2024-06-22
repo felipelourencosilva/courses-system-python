@@ -2,8 +2,10 @@ from views.user_view import *
 from entities.user import *
 from entities.course import *
 
+
 class UserController:
     __instance = None
+
     def __init__(self, system_controller):
         self.__users = []
         self.__user_view = UserView()
@@ -36,7 +38,7 @@ class UserController:
         return (self.__users
                 + self.__system_controller.producer_controller.get_producers()
                 + self.__system_controller.affiliate_controller.get_affiliates()
-        )
+                )
 
     def get_proper_users(self):
         return self.__users
@@ -58,8 +60,10 @@ class UserController:
 
     def edit_user(self):
         self.list_users()
+
         if len(self.__users) == 0:
             return
+
         user_cpf = self.__user_view.read_cpf("Digite o CPF do usuário que deseja atualizar")
         user = self.get_user_by_cpf(user_cpf)
 
@@ -81,13 +85,14 @@ class UserController:
             for user in self.__users:
                 course_names = [c.name for c in user.courses]
                 users_info.append({"name": user.name + " " + user.surname, "email": user.email,
-                                    "password": user.password, "cpf": user.cpf, "balance": user.balance,
-                                    "courses": course_names})
+                                   "password": user.password, "cpf": user.cpf, "balance": user.balance,
+                                   "courses": course_names})
 
             self.__user_view.show_users(users_info)
 
     def remove_user(self):
         self.list_users()
+
         if len(self.__users) == 0:
             return
 
@@ -119,10 +124,9 @@ class UserController:
 
     def add_balance(self):
         if (
-            len(self.__users) == 0
-            and len(self.__system_controller.producer_controller.get_producers()) == 0
-            and len(self.__system_controller.affiliate_controller.get_affiliates()) == 0
-        ):
+                len(self.__users) == 0
+                and len(self.__system_controller.producer_controller.get_producers()) == 0
+                and len(self.__system_controller.affiliate_controller.get_affiliates()) == 0):
             self.__user_view.show_message("Não é possível adicionar saldo sem usuários no sistema")
             return
 
@@ -135,10 +139,12 @@ class UserController:
 
         user_cpf = self.__user_view.read_cpf()
         user = self.get_user_by_cpf(user_cpf)
+
         if user is None:
             self.__user_view.show_message("Usuário não encontrado")
             return
-        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ",
+                                            "O valor precisa ser um número decimal maior que 0 (separado por '.')")
         user.add_balance(value)
         self.__user_view.show_success_message("Saldo adicionado com sucesso")
 

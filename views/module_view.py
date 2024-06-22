@@ -1,8 +1,4 @@
 from views.abstract_view import AbstractView
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
 import PySimpleGUI as sg
 
 
@@ -34,8 +30,8 @@ class ModuleView(AbstractView):
         button, values = self.open(edit_module_window)
         title = values['title']
         description = values['description']
-
         edit_module_window.Close()
+
         return {"title": title, "description": description}
 
     def show_modules(self, modules):
@@ -54,7 +50,6 @@ class ModuleView(AbstractView):
         show_users_window = sg.Window('Usuarios').Layout(layout)
 
         button, values = self.open(show_users_window)
-
         show_users_window.Close()
 
     def read_course_id(self):

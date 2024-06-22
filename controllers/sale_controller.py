@@ -4,6 +4,7 @@ from entities.sale import *
 
 class SaleController:
     __instance = None
+
     def __init__(self, system_controller):
         self.__sales = []
         self.__sale_view = SaleView()
@@ -36,17 +37,13 @@ class SaleController:
             options[chosen_option]()
 
     def generate_full_report(self):
-        messages = []
-        messages.append(self.show_most_sold_course(True))
-        messages.append(self.show_course_with_most_profit(True))
-        messages.append(self.show_user_with_most_courses(True))
-        messages.append(self.show_producer_with_most_sales(True))
-        messages.append(self.show_producer_with_most_profit(True))
-        messages.append(self.show_affiliate_with_most_sales(True))
-        messages.append(self.show_affiliate_with_most_profit(True))
+        messages = [self.show_most_sold_course(True), self.show_course_with_most_profit(True),
+                    self.show_user_with_most_courses(True), self.show_producer_with_most_sales(True),
+                    self.show_producer_with_most_profit(True), self.show_affiliate_with_most_sales(True),
+                    self.show_affiliate_with_most_profit(True)]
         self.__sale_view.show_complete_report(messages)
 
-    def add_sale(self, user, course, affiliate = None):
+    def add_sale(self, user, course, affiliate=None):
         self.__sales.append(Sale(user, course, affiliate))
 
     def show_most_sold_course(self, forCompleteReport=False):

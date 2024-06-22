@@ -5,6 +5,7 @@ class AffiliateView(AbstractView):
 
     def __init__(self):
         pass
+
     def view_options(self) -> int:
         options = {
             1: "Adicionar Afiliado",

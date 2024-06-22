@@ -28,13 +28,18 @@ class CommentController:
         if len(self.__lesson_controller.get_lessons()) == 0:
             self.__comment_view.show_message("Não é possível adicionar um Comentário sem uma Aula no sistema")
             return
+
         course_id = self.__lesson_controller.list_lessons()
+
         if course_id == -1:
             return
+
         lesson_id = self.__comment_view.read_lesson_id()
+
         if lesson_id not in self.__lesson_controller.get_lessons():
             self.__comment_view.show_message("Esta aula não existe")
             return
+
         if len(self.__system_controller.user_controller.get_proper_users()):
             self.__system_controller.user_controller.list_users()
         if len(self.__system_controller.producer_controller.get_producers()):
@@ -56,7 +61,6 @@ class CommentController:
             self.__lesson_controller.add_lesson_comment(lesson_id, comment)
             self.__comments[comment_id] = comment
             self.__comment_view.show_success_message("Comentário adicionado com sucesso")
-
         else:
             self.__comment_view.show_message("Esta aula não existe")
 
@@ -64,9 +68,12 @@ class CommentController:
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
+
         lesson_id = self.list_comments()
+
         if lesson_id == -1:
             return
+
         comment_id = self.__comment_view.read_comment_id()
         if comment_id is not None and comment_id in self.__comments:
             comment = self.__comments[comment_id]

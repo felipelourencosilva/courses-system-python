@@ -4,6 +4,7 @@ from entities.affiliate import *
 
 class AffiliateController:
     __instance = None
+
     def __init__(self, system_controller):
         self.__affiliates = []
         self.__affiliate_view = AffiliateView()
@@ -42,8 +43,10 @@ class AffiliateController:
 
     def edit_affiliate(self):
         self.list_affiliates()
+
         if len(self.__affiliates) == 0:
             return
+
         affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja atualizar")
         affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
 
@@ -70,8 +73,10 @@ class AffiliateController:
 
     def remove_affiliate(self):
         self.list_affiliates()
+
         if len(self.__affiliates) == 0:
             return
+
         affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja remover")
         affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
 
@@ -83,8 +88,10 @@ class AffiliateController:
 
     def add_balance(self):
         self.list_affiliates()
+
         if len(self.__affiliates) == 0:
             return
+
         producer_cpf = self.__affiliate_view.read_cpf()
         affiliate = self.get_affiliate_by_cpf(producer_cpf)
         value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
@@ -114,4 +121,3 @@ class AffiliateController:
         while True:
             chosen_option = self.__affiliate_view.view_options()
             options[chosen_option]()
-

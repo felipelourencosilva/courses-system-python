@@ -1,9 +1,5 @@
 from abc import ABC, abstractmethod
 import re
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
 import PySimpleGUI as sg
 from exceptions import NegativeMoneyException, WrongInputException
 
@@ -17,19 +13,18 @@ class AbstractView(ABC):
     def view_options(self, title: str, options: dict):
         window = self.init_components(title, options)
         button, values = window.Read()
-        opcao = 0
+        option = 0
 
         for i in range(1, len(options)):
             if values[str(i)]:
-                opcao = i
+                option = i
                 break
 
         if button in (None, 'Cancelar'):
-            opcao = 0
+            option = 0
 
         window.Close()
-
-        return opcao
+        return option
 
     def show_message(self, msg: str):
         layout = [
@@ -38,9 +33,7 @@ class AbstractView(ABC):
             [sg.Button('Ok')]
         ]
         message_window = sg.Window('Mensagem').Layout(layout)
-
         button, values = self.open(message_window)
-
         message_window.Close()
 
     def show_success_message(self, msg: str):
@@ -50,9 +43,7 @@ class AbstractView(ABC):
             [sg.Button('Ok')]
         ]
         success_message_window = sg.Window('Mensagem').Layout(layout)
-
         button, values = self.open(success_message_window)
-
         success_message_window.Close()
 
     def read_int(self, default_msg: str, error_msg: str):
@@ -65,8 +56,8 @@ class AbstractView(ABC):
 
         button, values = self.open(read_int_window)
         num = values['int']
-
         read_int_window.Close()
+
         if not num.isnumeric():
             self.show_message(error_msg)
         else:
@@ -106,7 +97,6 @@ class AbstractView(ABC):
             except WrongInputException:
                 self.show_message(error_msg)
 
-
     def read_with_n_chars(self, default_msg: str, error_msg: str, n: int):
         while True:
             str = input(default_msg)
@@ -116,7 +106,6 @@ class AbstractView(ABC):
                 return str
 
     def read_cpf(self, default_msg: str = None, error_msg: str = None):
-        sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(f'{default_msg}', font=("Helvica", 25))],
             [sg.Text('CPF:', size=(15, 1)), sg.InputText('', key='cpf')],
@@ -130,7 +119,6 @@ class AbstractView(ABC):
         return int(cpf)
 
     def read_basic_edit_user_data(self, title: str):
-        sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
             [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],

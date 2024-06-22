@@ -4,6 +4,7 @@ from entities.producer import *
 
 class ProducerController:
     __instance = None
+
     def __init__(self, system_controller):
         self.__producers = []
         self.__producer_view = ProducerView()
@@ -15,6 +16,7 @@ class ProducerController:
             ProducerController.__instance = object.__new__(cls)
         return ProducerController.__instance
     '''
+
     def get_producers(self):
         return self.__producers
 
@@ -38,13 +40,16 @@ class ProducerController:
 
         producer = Producer(producer_data["name"], producer_data["surname"],
                             producer_data["email"], producer_data["password"], producer_data["cpf"])
+
         self.__producers.append(producer)
         self.__producer_view.show_success_message("Produtor cadastrado com sucesso")
 
     def edit_producer(self):
         self.list_producer()
+
         if len(self.__producers) == 0:
             return
+
         producer_cpf = self.__producer_view.read_cpf("Digite o CPF do usuário que deseja remover")
         producer = self.get_producer_by_cpf(producer_cpf)
 
@@ -65,14 +70,16 @@ class ProducerController:
             producers_info = []
             for producer in self.__producers:
                 producers_info.append({"name": producer.name + " " + producer.surname, "email": producer.email,
-                                    "password": producer.password, "cpf": producer.cpf, "balance": producer.balance})
+                                       "password": producer.password, "cpf": producer.cpf, "balance": producer.balance})
 
             self.__producer_view.show_producers(producers_info)
 
     def remove_producer(self):
         self.list_producer()
+
         if len(self.__producers) == 0:
             return
+
         producer_cpf = self.__producer_view.read_cpf("Digite o CPF do produtor que deseja remover")
         producer = self.get_producer_by_cpf(producer_cpf)
 
@@ -84,12 +91,14 @@ class ProducerController:
 
     def add_balance(self):
         self.list_producer()
+
         if len(self.__producers) == 0:
             return
+
         producer_cpf = self.__producer_view.read_cpf()
         producer = self.get_producer_by_cpf(producer_cpf)
         value = self.__producer_view.read_value("Digite o valor que deseja adicionar: ",
-                                            "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+                                                "O valor precisa ser um número decimal maior que 0 (separado por '.')")
 
         if producer is not None:
             producer.add_balance(value)
