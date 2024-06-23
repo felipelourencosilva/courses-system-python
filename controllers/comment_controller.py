@@ -34,12 +34,6 @@ class CommentController:
         if course_id == -1:
             return
 
-        lesson_id = self.__comment_view.read_lesson_id()
-
-        if lesson_id not in self.__lesson_controller.get_lessons():
-            self.__comment_view.show_message("Esta aula não existe")
-            return
-
         if len(self.__system_controller.user_controller.get_proper_users()):
             self.__system_controller.user_controller.list_users()
         if len(self.__system_controller.producer_controller.get_producers()):
@@ -47,15 +41,12 @@ class CommentController:
         if len(self.__system_controller.affiliate_controller.get_affiliates()):
             self.__system_controller.affiliate_controller.list_affiliates()
 
-        user_cpf = self.__comment_view.read_cpf("CPF do autor: ")
+        comment_data = self.__comment_view.get_comment_data()
+        user_cpf = int(comment_data["user_cpf"])
+        lesson_id = int(comment_data["lesson_id"])
         user = self.__system_controller.user_controller.get_user_by_cpf(user_cpf)
 
-        if user is None:
-            self.__comment_view.show_message("Este usuário não existe")
-            return
-
         if lesson_id in self.__lesson_controller.get_lessons():
-            comment_data = self.__comment_view.get_comment_data()
             comment_id = self.generate_id()
             comment = Comment(user, comment_data["comment"], comment_id)
             self.__lesson_controller.add_lesson_comment(lesson_id, comment)
@@ -87,11 +78,13 @@ class CommentController:
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
+
         self.list_comments()
-        comment_id = self.__comment_view.read_comment_id()
+        comment_data = self.__comment_view.get_edit_comment_data()
+        comment_id = int(comment_data["comment_id"])
 
         if comment_id is not None and comment_id in self.__comments:
-            comment_data = self.__comment_view.get_comment_data()
+
             comment = self.__comments[comment_id]
             comment.comment = comment_data["comment"]
             self.__comment_view.show_success_message("Comentário editado com sucesso")

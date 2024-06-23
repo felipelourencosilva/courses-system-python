@@ -62,14 +62,12 @@ class LessonController:
         course_id = self.__module_controller.list_modules()
         if course_id == -1:
             return
-        module_id = self.__lesson_view.read_module_id()
-        if module_id == -1:
-            return
+
+        lesson_data = self.__lesson_view.get_lesson_data()
+        module_id = int(lesson_data["module_id"])
 
         if module_id is not None and module_id in self.__module_controller.get_modules():
-            lesson_data = self.__lesson_view.get_lesson_data()
             lesson_id = self.generate_id()
-
             lesson = Lesson(lesson_data["title"], lesson_data["description"], Video(lesson_data["video_url"]), lesson_id)
             self.__module_controller.add_module_lesson(module_id, lesson)
             self.__lessons[lesson_id] = lesson
@@ -103,12 +101,11 @@ class LessonController:
         course_id = self.list_lessons()
         if course_id == -1:
             return
-        lesson_id = self.__lesson_view.read_lesson_id()
-        if lesson_id == -1:
-            return
+
+        lesson_data = self.__lesson_view.get_edit_lesson_data()
+        lesson_id = int(lesson_data["lesson_id"])
 
         if lesson_id in self.__lessons:
-            lesson_data = self.__lesson_view.get_lesson_data()
             lesson = self.__lessons[lesson_id]
             lesson.title = lesson_data["title"]
             lesson.description = lesson_data["description"]

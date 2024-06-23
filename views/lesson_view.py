@@ -24,6 +24,7 @@ class LessonView(AbstractView):
             [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
             [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
+            [sg.Text('Id do módulo:', size=(15, 1)), sg.InputText('', key='module_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)
@@ -32,9 +33,30 @@ class LessonView(AbstractView):
         title = values['title']
         description = values['description']
         video_url = values['video_url']
+        module_id = values['module_id']
         edit_module_window.Close()
 
-        return {"title": title, "description": description, "video_url": video_url}
+        return {"title": title, "description": description, "video_url": video_url, "module_id": module_id}
+
+    def get_edit_lesson_data(self):
+        layout = [
+            [sg.Text(f'Atualizar aula:', font=("Helvica", 25))],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
+            [sg.Text('Id da aula:', size=(15, 1)), sg.InputText('', key='lesson_id')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar módulo').Layout(layout)
+
+        button, values = self.open(edit_module_window)
+        title = values['title']
+        description = values['description']
+        video_url = values['video_url']
+        lesson_id = values['lesson_id']
+        edit_module_window.Close()
+
+        return {"title": title, "description": description, "video_url": video_url, "lesson_id": lesson_id}
 
     def show_lessons(self, lessons, module_name):
         layout = [

@@ -21,15 +21,35 @@ class CommentView(AbstractView):
         layout = [
             [sg.Text(f'Escreva seu comentário:', font=("Helvica", 25))],
             [sg.Text('Comentário:', size=(15, 1)), sg.InputText('', key='comment')],
+            [sg.Text('CPF do autor:', size=(15, 1)), sg.InputText('', key='user_cpf')],
+            [sg.Text('Id da aula:', size=(15, 1)), sg.InputText('', key='lesson_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar comentário').Layout(layout)
 
         button, values = self.open(edit_module_window)
         comment = values['comment']
+        user_cpf = values['user_cpf']
+        lesson_id = values['lesson_id']
         edit_module_window.Close()
 
-        return {"comment": comment}
+        return {"comment": comment, "user_cpf": user_cpf, "lesson_id": lesson_id}
+
+    def get_edit_comment_data(self):
+        layout = [
+            [sg.Text(f'Escreva seu comentário:', font=("Helvica", 25))],
+            [sg.Text('Comentário:', size=(15, 1)), sg.InputText('', key='comment')],
+            [sg.Text('Id do comentário:', size=(15, 1)), sg.InputText('', key='comment_id')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar comentário').Layout(layout)
+
+        button, values = self.open(edit_module_window)
+        comment = values['comment']
+        comment_id = values['comment_id']
+        edit_module_window.Close()
+
+        return {"comment": comment, "comment_id": comment_id}
 
     def show_comment(self, comments, lesson_name):
         layout = [
