@@ -3,21 +3,13 @@ from entities.producer import *
 
 class Course:
     def __init__(self, name: str, producer: Producer, description: str, price: float, commission_percentage: int, id: int):
-        if isinstance(name, str):
-            self.__name = name
-        if isinstance(producer, Producer):
-            self.__producer = producer
-        if isinstance(description, str):
-            self.__description = description
-        if isinstance(price, float):
-            self.__price = price
-        if isinstance(commission_percentage, int):
-            self.__commission_percentage = commission_percentage
-        if isinstance(id, int):
-            self.__id = id
-        if isinstance(price, float) and isinstance(commission_percentage, int):
-            self.__commission_price = (commission_percentage/100) * price
-
+        self.__name = name
+        self.__producer = producer
+        self.__description = description
+        self.__price = price
+        self.__commission_percentage = commission_percentage
+        self.__id = id
+        self.__commission_price = (commission_percentage/100) * price
         self.__modules = []
 
     @property

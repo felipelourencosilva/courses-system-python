@@ -56,20 +56,12 @@ class CourseController:
         if len(self.__system_controller.producer_controller.get_producers()) == 0:
             self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
             return
-        course_data = self.__course_view.get_edit_course_data()
         self.__system_controller.producer_controller.list_producer()
+        course_data = self.__course_view.get_add_course_data()
 
-        cpf = self.__course_view.read_cpf()
-        course_data["cpf"] = cpf
-        '''
-        while True:
-            cpf = self.__course_view.read_cpf("CPF do Produtor: ")
-            if self.get_producer(cpf) is None:
-                self.__course_view.show_message("Este produtor não existe")
-            else:
-                course_data["cpf"] = cpf
-                break
-        '''
+        course_data["price"] = float(course_data["price"])
+        course_data["commission_percentage"] = int(course_data["commission_percentage"])
+        course_data["cpf"] = int(course_data["cpf"])
 
         id = self.generate_id()
         course = Course(course_data["name"], self.get_producer(course_data["cpf"]),
@@ -89,6 +81,10 @@ class CourseController:
 
         if id in self.get_courses():
             course_data = self.__course_view.get_edit_course_data()
+
+            course_data["price"] = float(course_data["price"])
+            course_data["commission_percentage"] = int(course_data["commission_percentage"])
+
             course = self.__courses[id]
             course.name = course_data["name"]
             course.description = course_data["description"]
