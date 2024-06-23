@@ -23,6 +23,7 @@ class ModuleView(AbstractView):
             [sg.Text(f'Criar módulo', font=("Helvica", 25))],
             [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Text('Id do curso:', size=(15, 1)), sg.InputText('', key='course_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)
@@ -30,9 +31,28 @@ class ModuleView(AbstractView):
         button, values = self.open(edit_module_window)
         title = values['title']
         description = values['description']
+        course_id = values['course_id']
         edit_module_window.Close()
 
-        return {"title": title, "description": description}
+        return {"title": title, "description": description, "course_id": course_id}
+
+    def get_edit_module_data(self):
+        layout = [
+            [sg.Text(f'Criar módulo', font=("Helvica", 25))],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
+            [sg.Text('Id do módulo:', size=(15, 1)), sg.InputText('', key='module_id')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        edit_module_window = sg.Window('Criar módulo').Layout(layout)
+
+        button, values = self.open(edit_module_window)
+        title = values['title']
+        description = values['description']
+        module_id = values['module_id']
+        edit_module_window.Close()
+
+        return {"title": title, "description": description, "module_id": module_id}
 
     def show_modules(self, modules, course_name):
         layout = [

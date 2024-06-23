@@ -58,14 +58,13 @@ class ModuleController:
             return
 
         self.__course_controller.list_courses()
+        module_data = self.__module_view.get_add_module_data()
 
-        course_id = self.__module_view.read_course_id()
-        if course_id in self.__course_controller.get_courses():
-            module_data = self.__module_view.get_add_module_data()
+        if int(module_data["course_id"]) in self.__course_controller.get_courses():
             id = self.generate_id()
-
             module = Module(module_data["title"], module_data["description"], id)
-            self.__course_controller.add_course_module(course_id, module)
+
+            self.__course_controller.add_course_module(int(module_data["course_id"]), module)
             self.__modules[id] = module
             self.__module_view.show_success_message("Módulo adicionado com sucesso")
         else:
@@ -94,17 +93,20 @@ class ModuleController:
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
+
         course_id = self.list_modules()
+
         if course_id == -1:
             return
 
-        module_id = self.__module_view.read_module_id()
+        module_data = self.__module_view.get_edit_module_data()
+        module_id = int(module_data["module_id"])
 
         if module_id in self.__modules:
             if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
                 self.__module_view.show_message("Este módulo não pertence a este curso")
                 return
-            module_data = self.__module_view.get_add_module_data()
+
             module = self.__modules[module_id]
             module.title = module_data["title"]
             module.description = module_data["description"]
