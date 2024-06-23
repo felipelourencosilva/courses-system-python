@@ -22,14 +22,19 @@ class SaleView(AbstractView):
         self.closeSelf()
 
     def show_complete_report(self, messages: list):
-        table = Table(box=box.ROUNDED, border_style="#6D7280")
-        table.add_column("Relatório", justify="center", style="#54cdc1")
-        for msg in messages:
-            table.add_row(msg)
+        layout = [
+            [sg.Text(f'Relatórios', font=("Helvica", 25))]
+        ]
 
-        print()
-        console.print(table)
-        print()
+        for message in messages:
+            layout.append([sg.Text(message, size=(100, 1))])
+
+        layout.append([sg.Cancel('Voltar')])
+
+        user_data_window = sg.Window('Dados Curso').Layout(layout)
+        button, values = self.open(user_data_window)
+
+        user_data_window.Close()
 
     def view_options(self) -> int:
         options = {
