@@ -20,7 +20,7 @@ class AbstractView(ABC):
                 option = i
                 break
 
-        if button in (None, 'Cancelar'):
+        if button in (None, 'Voltar'):
             option = 0
 
         window.Close()
@@ -97,14 +97,6 @@ class AbstractView(ABC):
             except WrongInputException:
                 self.show_message(error_msg)
 
-    def read_with_n_chars(self, default_msg: str, error_msg: str, n: int):
-        while True:
-            str = input(default_msg)
-            if len(str) < n:
-                self.show_message(error_msg)
-            else:
-                return str
-
     def read_cpf(self, default_msg: str = None, error_msg: str = None):
         layout = [
             [sg.Text(f'{default_msg}', font=("Helvica", 25))],
@@ -114,11 +106,12 @@ class AbstractView(ABC):
         cpf_window = sg.Window('Dados usuário').Layout(layout)
 
         button, values = self.open(cpf_window)
-        cpf = values['cpf']
         cpf_window.Close()
-        return int(cpf)
+        if button in (None, 'Cancelar'):
+            return
+        return int(values['cpf'])
 
-    def read_basic_edit_user_data(self, title: str):
+    def read_basic_add_user_data(self, title: str):
         layout = [
             [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
             [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
@@ -129,29 +122,41 @@ class AbstractView(ABC):
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         user_data_window = sg.Window('Dados usuário').Layout(layout)
+        button, values = self.open(user_data_window)
+        user_data_window.Close()
+        if button in (None, 'Cancelar'):
+            return
+        return values
+
+    def read_basic_edit_user_data(self, title: str):
+        layout = [
+            [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
+            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
+            [sg.Text('Sobrenome:', size=(15, 1)), sg.InputText('', key='surname')],
+            [sg.Text('Email:', size=(15, 1)), sg.InputText('', key='email')],
+            [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
+            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+        ]
+        user_data_window = sg.Window('Dados usuário').Layout(layout)
 
         button, values = self.open(user_data_window)
-        name = values['name']
-        surname = values['surname']
-        email = values['email']
-        cpf = values['cpf']
-        password = values['password']
-
         user_data_window.Close()
-        return {"name": name, "surname": surname, "cpf": int(cpf), "email": email, "password": password}
+        if button in (None, 'Voltar'):
+            return
+        return values
 
     def read_value(self, default_msg: str, error_msg: str):
         while True:
             value = self.read_float(default_msg, error_msg)
             try:
-                if value <= 0:\
+                if value <= 0:
                     raise NegativeMoneyException
                 return value
             except NegativeMoneyException:
                 self.show_message(error_msg)
 
     def init_components(self, title, options):
-        #sg.theme_previewer()
+        # sg.theme_previewer()
         sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(title, font=("Helvetica", 18))],

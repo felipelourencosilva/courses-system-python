@@ -1,6 +1,7 @@
 from views.user_view import *
 from entities.user import *
 from entities.course import *
+from exceptions.user_not_found_exception import UserNotFoundException
 
 
 class UserController:
@@ -23,16 +24,17 @@ class UserController:
             for user in self.__users:
                 if user.cpf == cpf:
                     return user
+            try:
+                return self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
+            except UserNotFoundException:
+                pass
 
-            producer = self.__system_controller.producer_controller.get_producer_by_cpf(cpf)
-            if producer is not None:
-                return producer
+            try:
+                return self.__system_controller.affiliate_controller.get_affiliate_by_cpf(cpf)
+            except UserNotFoundException:
+                pass
 
-            affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(cpf)
-            if affiliate is not None:
-                return affiliate
-
-        return None
+        raise UserNotFoundException
 
     def get_users(self):
         return (self.__users
@@ -44,38 +46,34 @@ class UserController:
         return self.__users
 
     def add_user(self):
-        user_data = self.__user_view.get_edit_user_data()
-        '''while True:
-            cpf = self.__user_view.read_cpf()
-            if self.get_user_by_cpf(cpf) is not None:
-                self.__user_view.show_message("Este CPF já foi utilizado.")
-            else:
-                user_data["cpf"] = cpf
-                break'''
+        user_data = self.__user_view.get_add_user_data()
+        if user_data is None:
+            return
 
         user = User(user_data["name"], user_data["surname"],
-                    user_data["email"], user_data["password"], user_data["cpf"])
+                    user_data["email"], user_data["password"], int(user_data["cpf"]))
         self.__users.append(user)
         self.__user_view.show_success_message("Usuário cadastrado com sucesso")
 
     def edit_user(self):
-        self.list_users()
+        user_cpf = self.list_users()
+        user_cpf = int(user_cpf)
 
-        if len(self.__users) == 0:
+        try:
+            user = self.get_user_by_cpf(user_cpf)
+        except UserNotFoundException as e:
+            self.__user_view.show_message(e)
             return
 
-        user_cpf = self.__user_view.read_cpf("Digite o CPF do usuário que deseja atualizar")
-        user = self.get_user_by_cpf(user_cpf)
+        user_data = self.__user_view.get_edit_user_data()
+        if user_data is None:
+            return
+        user.name = user_data["name"]
+        user.surname = user_data["surname"]
+        user.email = user_data["email"]
+        user.password = user_data["password"]
+        self.__user_view.show_success_message("Usuário editado com sucesso")
 
-        if user is not None:
-            user_data = self.__user_view.get_edit_user_data()
-            user.name = user_data["name"]
-            user.surname = user_data["surname"]
-            user.email = user_data["email"]
-            user.password = user_data["password"]
-            self.__user_view.show_success_message("Usuário editado com sucesso")
-        else:
-            self.__user_view.show_message("Usuário não encontrado")
 
     def list_users(self):
         if len(self.__users) == 0:
@@ -87,22 +85,19 @@ class UserController:
                 users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
                                    " ".join(course_names)])
 
-            self.__user_view.show_users(users_info)
+            return self.__user_view.show_users(users_info) # should return user cpf
 
     def remove_user(self):
-        self.list_users()
-
-        if len(self.__users) == 0:
+        user_cpf = self.list_users()
+        if user_cpf is None:
             return
-
-        user_cpf = self.__user_view.read_cpf("Digite o CPF do usuário que deseja remover")
-        user = self.get_user_by_cpf(user_cpf)
-
-        if user is not None:
-            self.__users.remove(user)
-            self.__user_view.show_success_message("Usuário removido com sucesso")
-        else:
-            self.__user_view.show_message("Usuário não encontrado")
+        try:
+            user = self.get_user_by_cpf(user_cpf)
+        except UserNotFoundException as e:
+            self.__user_view.show_message(e)
+            return
+        self.__users.remove(user)
+        self.__user_view.show_success_message("Usuário removido com sucesso.")
 
     def user_has_course(self, cpf: int, course: Course):
         if isinstance(cpf, int) and isinstance(course, Course):
@@ -163,3 +158,8 @@ class UserController:
         while True:
             chosen_option = self.__user_view.view_options()
             options[chosen_option]()
+
+
+
+
+

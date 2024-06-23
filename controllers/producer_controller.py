@@ -1,5 +1,6 @@
 from views.producer_view import *
 from entities.producer import *
+from exceptions.user_not_found_exception import UserNotFoundException
 
 
 class ProducerController:
@@ -25,10 +26,10 @@ class ProducerController:
             for producer in self.__producers:
                 if producer.cpf == cpf:
                     return producer
-        return None
+        raise UserNotFoundException("Produtor não encontrado.")
 
     def add_producer(self):
-        producer_data = self.__producer_view.get_edit_producer_data()
+        producer_data = self.__producer_view.get_add_producer_data()
 
         '''while True:
             cpf = self.__producer_view.read_cpf()
@@ -51,17 +52,18 @@ class ProducerController:
             return
 
         producer_cpf = self.__producer_view.read_cpf("Digite o CPF do usuário que deseja remover")
-        producer = self.get_producer_by_cpf(producer_cpf)
+        try:
+            producer = self.get_producer_by_cpf(producer_cpf)
+        except UserNotFoundException as e:
+            self.__producer_view.show_message(e)
+            return
 
-        if producer is not None:
-            producer_data = self.__producer_view.get_edit_producer_data()
-            producer.name = producer_data["name"]
-            producer.surname = producer_data["surname"]
-            producer.email = producer_data["email"]
-            producer.password = producer_data["password"]
-            self.__producer_view.show_success_message("Produtor editado com sucesso")
-        else:
-            self.__producer_view.show_message("Produtor não encontrado")
+        producer_data = self.__producer_view.get_edit_producer_data()
+        producer.name = producer_data["name"]
+        producer.surname = producer_data["surname"]
+        producer.email = producer_data["email"]
+        producer.password = producer_data["password"]
+        self.__producer_view.show_success_message("Produtor editado com sucesso")
 
     def list_producer(self):
         if len(self.__producers) == 0:
@@ -69,8 +71,13 @@ class ProducerController:
         else:
             producers_info = []
             for producer in self.__producers:
-                producers_info.append({"name": producer.name + " " + producer.surname, "email": producer.email,
-                                       "password": producer.password, "cpf": producer.cpf, "balance": producer.balance})
+                producers_info.append([
+                    producer.name + " " + producer.surname,
+                    producer.email,
+                    producer.password,
+                    producer.cpf,
+                    producer.balance
+                ])
 
             self.__producer_view.show_producers(producers_info)
 
@@ -81,13 +88,14 @@ class ProducerController:
             return
 
         producer_cpf = self.__producer_view.read_cpf("Digite o CPF do produtor que deseja remover")
-        producer = self.get_producer_by_cpf(producer_cpf)
+        try:
+            producer = self.get_producer_by_cpf(producer_cpf)
+        except UserNotFoundException as e:
+            self.__producer_view.show_message(e)
+            return
 
-        if producer is not None:
-            self.__producers.remove(producer)
-            self.__producer_view.show_success_message("Produtor removido com sucesso")
-        else:
-            self.__producer_view.show_message("Produtor não encontrado")
+        self.__producers.remove(producer)
+        self.__producer_view.show_success_message("Produtor removido com sucesso")
 
     def add_balance(self):
         self.list_producer()

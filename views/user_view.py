@@ -18,24 +18,33 @@ class UserView(AbstractView):
         }
         return super().view_options("USUÁRIOS", options)
 
+    def get_add_user_data(self):
+        return super().read_basic_add_user_data("USUÁRIO")
+
     def get_edit_user_data(self):
         return super().read_basic_edit_user_data("USUÁRIO")
 
     def show_users(self, users_data):
-        headings = ["Nome", "Email", "CPF", "Senha", "Saldo"]
+        headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]
         layout = [[sg.Table(values=users_data, headings=headings, max_col_width=25, background_color='lightblue',
                             auto_size_columns=True,
-                            display_row_numbers=True,
                             justification='right',
                             num_rows=6,
                             alternating_row_color='lightyellow',
-                            key='-TABLE-')],
+                            key='user',
+                            select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
                   [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
         show_users_window = sg.Window('Usuarios').Layout(layout)
         button, values = self.open(show_users_window)
-
         show_users_window.Close()
+
+        selected_rows = values["user"]
+        if len(selected_rows) == 0:
+            return None  # no selected User
+        user_row = values["user"][0]
+        user_cpf = users_data[user_row][3]  # because 3rd position is the cpf
+        return user_cpf
 
     def open(self, window):
         button, values = window.Read()

@@ -1,5 +1,6 @@
 from views.affiliate_view import *
 from entities.affiliate import *
+from exceptions.user_not_found_exception import UserNotFoundException
 
 
 class AffiliateController:
@@ -25,17 +26,10 @@ class AffiliateController:
             for affiliate in self.__affiliates:
                 if affiliate.cpf == cpf:
                     return affiliate
-        return None
+        raise UserNotFoundException("Afiliado não encontrado.")
 
     def add_affiliate(self):
-        affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
-        '''while True:
-            cpf = self.__affiliate_view.read_cpf()
-            if self.__system_controller.user_controller.get_user_by_cpf(cpf) is not None:
-                self.__affiliate_view.show_message("Este CPF já foi utilizado")
-            else:
-                affiliate_data["cpf"] = cpf
-                break'''
+        affiliate_data = self.__affiliate_view.get_add_affiliate_data()
         affiliate = Affiliate(affiliate_data["name"], affiliate_data["surname"],
                               affiliate_data["email"], affiliate_data["password"], affiliate_data["cpf"])
         self.__affiliates.append(affiliate)
@@ -48,17 +42,18 @@ class AffiliateController:
             return
 
         affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja atualizar")
-        affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
+        try:
+            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
+        except UserNotFoundException as e:
+            self.__affiliate_view.show_message(e)
+            return
 
-        if affiliate is not None:
-            affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
-            affiliate.name = affiliate_data["name"]
-            affiliate.surname = affiliate_data["surname"]
-            affiliate.email = affiliate_data["email"]
-            affiliate.password = affiliate_data["password"]
-            self.__affiliate_view.show_success_message("Afiliado editado com sucesso")
-        else:
-            self.__affiliate_view.show_message("Afiliado não encontrado")
+        affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+        affiliate.name = affiliate_data["name"]
+        affiliate.surname = affiliate_data["surname"]
+        affiliate.email = affiliate_data["email"]
+        affiliate.password = affiliate_data["password"]
+        self.__affiliate_view.show_success_message("Afiliado editado com sucesso")
 
     def list_affiliates(self):
         if len(self.__affiliates) == 0:
@@ -66,8 +61,13 @@ class AffiliateController:
         else:
             affiliates_info = []
             for affiliates in self.__affiliates:
-                affiliates_info.append({"name": affiliates.name + " " + affiliates.surname, "email": affiliates.email,
-                                        "password": affiliates.password, "cpf": affiliates.cpf, "balance": affiliates.balance})
+                affiliates_info.append([
+                    affiliates.name + " " + affiliates.surname,
+                    affiliates.email,
+                    affiliates.password,
+                    affiliates.cpf,
+                    affiliates.balance
+                ])
 
             self.__affiliate_view.show_affiliates(affiliates_info)
 
@@ -78,13 +78,14 @@ class AffiliateController:
             return
 
         affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja remover")
-        affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
+        try:
+            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
+        except UserNotFoundException as e:
+            self.__affiliate_view.show_message(e)
+            return
 
-        if affiliate is not None:
-            self.__affiliates.remove(affiliate)
-            self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
-        else:
-            self.__affiliate_view.show_message("Afiliado não encontrado")
+        self.__affiliates.remove(affiliate)
+        self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
 
     def add_balance(self):
         self.list_affiliates()
@@ -93,14 +94,15 @@ class AffiliateController:
             return
 
         producer_cpf = self.__affiliate_view.read_cpf()
-        affiliate = self.get_affiliate_by_cpf(producer_cpf)
-        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+        try:
+            affiliate = self.get_affiliate_by_cpf(producer_cpf)
+        except UserNotFoundException as e:
+            self.__affiliate_view.show_message(e)
+            return
 
-        if affiliate is not None:
-            affiliate.add_balance(value)
-            self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
-        else:
-            self.__affiliate_view.show_message("Afiliado não encontrado")
+        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+        affiliate.add_balance(value)
+        self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
 
     def pay_affiliate(self, course, affiliate):
         if affiliate is not None:

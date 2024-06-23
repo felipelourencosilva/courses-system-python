@@ -58,6 +58,8 @@ class CourseController:
             return
         self.__system_controller.producer_controller.list_producer()
         course_data = self.__course_view.get_add_course_data()
+        if course_data is None:
+            return
 
         course_data["price"] = float(course_data["price"])
         course_data["commission_percentage"] = int(course_data["commission_percentage"])
@@ -81,6 +83,8 @@ class CourseController:
 
         if id in self.get_courses():
             course_data = self.__course_view.get_edit_course_data()
+            if course_data is None:
+                return
 
             course_data["price"] = float(course_data["price"])
             course_data["commission_percentage"] = int(course_data["commission_percentage"])
@@ -100,13 +104,13 @@ class CourseController:
             return
         courses_data = []
         for key, course in self.__courses.items():
-            courses_data.append({
-                "name": course.name,
-                "description": course.description,
-                "price": course.price,
-                "id": key,
-                "producer": f"{course.producer.name} {course.producer.surname}"
-            })
+            courses_data.append([
+                course.name,
+                course.description,
+                course.price,
+                key,
+                f"{course.producer.name} {course.producer.surname}"
+            ])
         self.__course_view.show_courses(courses_data)
 
     def buy_course(self):
