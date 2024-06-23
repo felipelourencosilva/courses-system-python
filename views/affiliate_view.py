@@ -20,25 +20,20 @@ class AffiliateView(AbstractView):
         return super().read_basic_edit_user_data("AFILIADO")
 
     def show_affiliates(self, affiliates):
-        layout = [
-            [sg.Text(f'Afiliados: ', font=("Helvica", 25))],
-        ]
+        headings = ["Nome", "Email", "CPF", "Senha", "Saldo"]
+        layout = [[sg.Table(values=affiliates, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Voltar')]]
 
-        for affiliate in affiliates:
-            layout.extend(
-                [[sg.Text(f'Nome: {affiliate["name"]}', size=(60, 1))],
-                 [sg.Text(f'Email: {affiliate["email"]}', size=(60, 1))],
-                 [sg.Text(f'CPF: {affiliate["cpf"]}', size=(60, 1))],
-                 [sg.Text(f'Senha: {affiliate["password"]}', size=(60, 1))],
-                 [sg.Text(f'Saldo: {affiliate["balance"]}', size=(60, 1))],
-                 [sg.Text('----------------------------------------', size=(60, 1))]]
-            )
+        show_users_window = sg.Window('Afiliados').Layout(layout)
+        button, values = self.open(show_users_window)
 
-        layout.append([sg.Cancel('Voltar')])
-        show_affiliates_window = sg.Window('Afiliados').Layout(layout)
-        button, values = self.open(show_affiliates_window)
-
-        show_affiliates_window.Close()
+        show_users_window.Close()
 
     def open(self, window):
         button, values = window.Read()

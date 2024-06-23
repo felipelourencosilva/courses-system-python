@@ -58,24 +58,20 @@ class LessonView(AbstractView):
 
         return {"title": title, "description": description, "video_url": video_url, "lesson_id": lesson_id}
 
-    def show_lessons(self, lessons, module_name):
-        layout = [
-            [sg.Text(f'Aulas do módulo {module_name}: ', font=("Helvica", 25))],
-        ]
+    def show_lessons(self, lessons):
+        headings = ["Título", "Descrição", "Id", "Url do vídeo"]
+        layout = [[sg.Table(values=lessons, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Voltar')]]
 
-        for lesson in lessons:
-            layout.extend(
-                [[sg.Text(f'Título: {lesson["title"]}', size=(60, 1))],
-                 [sg.Text(f'Descrição: {lesson["description"]}', size=(60, 1))],
-                 [sg.Text(f'Id: {lesson["id"]}', size=(60, 1))],
-                 [sg.Text(f'URL do vídeo: {lesson["video_url"]}', size=(60, 1))],
-                 [sg.Text('----------------------------------------', size=(60, 1))]]
-            )
-
-        layout.append([sg.Button('Confirmar')])
         show_users_window = sg.Window('Aulas').Layout(layout)
-
         button, values = self.open(show_users_window)
+
         show_users_window.Close()
 
     def read_lesson_id(self):

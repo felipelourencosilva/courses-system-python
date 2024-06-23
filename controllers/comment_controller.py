@@ -110,8 +110,8 @@ class CommentController:
             else:
                 comments_info = []
                 for comment in lesson.comments:
-                    comments_info.append({"comment": comment, "id": comment.id})
-                self.__comment_view.show_comment(comments_info, lesson.title)
+                    comments_info.append([comment, comment.id])
+                self.__comment_view.show_comment(comments_info)
             return lesson_id
         else:
             self.__comment_view.show_message("Aula não encontrada")

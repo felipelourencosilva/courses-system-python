@@ -51,22 +51,20 @@ class CommentView(AbstractView):
 
         return {"comment": comment, "comment_id": comment_id}
 
-    def show_comment(self, comments, lesson_name):
-        layout = [
-            [sg.Text(f'Comentários da aula: {lesson_name}: ', font=("Helvica", 25))],
-        ]
+    def show_comment(self, comments):
+        headings = ["Comentário", "id"]
+        layout = [[sg.Table(values=comments, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Voltar')]]
 
-        for comment in comments:
-            layout.extend(
-                [[sg.Text(f'{comment["comment"]}', size=(60, 1))],
-                 [sg.Text(f'Id: {comment["id"]}', size=(60, 1))],
-                 [sg.Text('', size=(60, 1))]]
-            )
-
-        layout.append([sg.Button('Confirmar')])
-        show_users_window = sg.Window('Aulas').Layout(layout)
-
+        show_users_window = sg.Window('Cursos').Layout(layout)
         button, values = self.open(show_users_window)
+
         show_users_window.Close()
 
     def read_lesson_id(self):

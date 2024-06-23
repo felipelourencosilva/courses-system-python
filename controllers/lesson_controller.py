@@ -132,9 +132,9 @@ class LessonController:
             else:
                 lessons_info = []
                 for lesson in module.lessons:
-                    lessons_info.append({"title": lesson.title, "description": lesson.description,
-                                         "id": lesson.id, "video_url": lesson.video})
-                self.__lesson_view.show_lessons(lessons_info, module.title)
+                    lessons_info.append([lesson.title, lesson.description,
+                                         lesson.id, lesson.video])
+                self.__lesson_view.show_lessons(lessons_info)
                 return module_id
         else:
             self.__lesson_view.show_message("Este módulo não existe")

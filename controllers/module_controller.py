@@ -133,9 +133,9 @@ class ModuleController:
         else:
             modules_info = []
             for module in course.modules:
-                modules_info.append({"title": module.title, "description": module.description,
-                                     "id": module.id})
-            self.__module_view.show_modules(modules_info, course.name)
+                modules_info.append([module.title, module.description,
+                                     module.id])
+            self.__module_view.show_modules(modules_info)
         return course_id
 
     def to_lesson_view(self):

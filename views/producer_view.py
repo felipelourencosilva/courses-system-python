@@ -21,25 +21,20 @@ class ProducerView(AbstractView):
         return super().read_basic_edit_user_data("PRODUTOR")
 
     def show_producers(self, producers):
-        layout = [
-            [sg.Text(f'Produtores: ', font=("Helvica", 25))],
-        ]
+        headings = ["Nome", "Email", "CPF", "Senha", "Saldo"]
+        layout = [[sg.Table(values=producers, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Voltar')]]
 
-        for producer in producers:
-            layout.extend(
-                [[sg.Text(f'Nome: {producer["name"]}', size=(60, 1))],
-                 [sg.Text(f'Email: {producer["email"]}', size=(60, 1))],
-                 [sg.Text(f'CPF: {producer["cpf"]}', size=(60, 1))],
-                 [sg.Text(f'Senha: {producer["password"]}', size=(60, 1))],
-                 [sg.Text(f'Saldo: {producer["balance"]}', size=(60, 1))],
-                 [sg.Text('----------------------------------------', size=(60, 1))]]
-            )
+        show_users_window = sg.Window('Produtor').Layout(layout)
+        button, values = self.open(show_users_window)
 
-        layout.append([sg.Cancel('Voltar')])
-        show_producers_window = sg.Window('Produtores').Layout(layout)
-        button, values = self.open(show_producers_window)
-
-        show_producers_window.Close()
+        show_users_window.Close()
 
     def open(self, window):
         button, values = window.Read()

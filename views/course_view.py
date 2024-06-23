@@ -56,26 +56,20 @@ class CourseView(AbstractView):
         return values
 
     def show_courses(self, courses_data):
-        layout = [
-            [sg.Text(f'Cursos: ', font=("Helvica", 25))],
-        ]
+        headings = ["Nome", "Descrição", "Preço", "Id", "Produtor"]
+        layout = [[sg.Table(values=courses_data, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Voltar')]]
 
+        show_users_window = sg.Window('Cursos').Layout(layout)
+        button, values = self.open(show_users_window)
 
-
-        for course in courses_data:
-            layout.extend([
-                [sg.Text(f'Nome: {course["name"]}', size=(60, 1))],
-                [sg.Text(f'Descrição: {course["description"]}', size=(60, 1))],
-                [sg.Text(f'Preço: {course["price"]}', size=(60, 1))],
-                [sg.Text(f'ID: {course["id"]}', size=(60, 1))],
-                [sg.Text(f'Produtor: {course["producer"]}', size=(60, 1))],
-                [sg.Text('----------------------------------------', size=(60, 1))]
-            ])
-
-        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
-        show_courses_window = sg.Window('Cursos').Layout(layout)
-        button, values = self.open(show_courses_window)
-        show_courses_window.Close()
+        show_users_window.Close()
 
     def read_id(self):
         return self.read_int_range(
