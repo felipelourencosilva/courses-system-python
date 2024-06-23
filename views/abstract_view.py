@@ -71,13 +71,21 @@ class AbstractView(ABC):
             else:
                 return num
 
-    def read_float(self, default_msg: str, error_msg: str):
-        while True:
-            num = input(default_msg)
-            if not num.isnumeric() and not re.search(r"\d*\.\d+", num):
-                self.show_message(error_msg)
-            else:
-                return float(num)
+    def read_float(self, default_msg: str):
+        layout = [
+            [sg.Text(f'{default_msg}', font=("Helvica", 25))],
+            [sg.InputText('', key='float')],
+            [sg.Button('Confirmar'), sg.Cancel('Cancelar')]
+        ]
+        read_int_window = sg.Window(default_msg).Layout(layout)
+
+        button, values = self.open(read_int_window)
+        read_int_window.Close()
+
+        if button in (None, 'Cancelar'):
+            return
+
+        return values['float']
 
     def read_letters_string(self, default_msg: str, error_msg: str):
         while True:
@@ -121,10 +129,10 @@ class AbstractView(ABC):
             [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
-        user_data_window = sg.Window('Dados usuário').Layout(layout)
+        user_data_window = sg.Window('Dados usuário', layout)
         button, values = self.open(user_data_window)
         user_data_window.Close()
-        if button in (None, 'Cancelar'):
+        if button in (None, 'Voltar'):
             return
         return values
 
@@ -145,15 +153,8 @@ class AbstractView(ABC):
             return
         return values
 
-    def read_value(self, default_msg: str, error_msg: str):
-        while True:
-            value = self.read_float(default_msg, error_msg)
-            try:
-                if value <= 0:
-                    raise NegativeMoneyException
-                return value
-            except NegativeMoneyException:
-                self.show_message(error_msg)
+    def read_value(self, default_msg: str):
+        return self.read_float(default_msg)
 
     def init_components(self, title, options):
         # sg.theme_previewer()
@@ -168,7 +169,7 @@ class AbstractView(ABC):
                 layout.append([sg.Radio(value,"RD1", key=str(k))])
 
         layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
-        return sg.Window('Sistema de cursos').Layout(layout)
+        return sg.Window('Sistema de cursos', layout)
 
     def open(self, window):
         button, values = window.Read()

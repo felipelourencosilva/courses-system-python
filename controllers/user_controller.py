@@ -57,6 +57,8 @@ class UserController:
 
     def edit_user(self):
         user_cpf = self.list_users()
+        if user_cpf is None:
+            return
         user_cpf = int(user_cpf)
 
         try:
@@ -73,7 +75,6 @@ class UserController:
         user.email = user_data["email"]
         user.password = user_data["password"]
         self.__user_view.show_success_message("Usuário editado com sucesso")
-
 
     def list_users(self):
         if len(self.__users) == 0:
@@ -117,30 +118,32 @@ class UserController:
             user.add_course(course)
 
     def add_balance(self):
-        if (
-                len(self.__users) == 0
-                and len(self.__system_controller.producer_controller.get_producers()) == 0
-                and len(self.__system_controller.affiliate_controller.get_affiliates()) == 0):
+        if len(self.get_users()) == 0:
             self.__user_view.show_message("Não é possível adicionar saldo sem usuários no sistema")
             return
 
-        if len(self.__users):
-            self.list_users()
-        if len(self.__system_controller.producer_controller.get_producers()):
-            self.__system_controller.producer_controller.list_producer()
-        if len(self.__system_controller.affiliate_controller.get_affiliates()):
-            self.__system_controller.affiliate_controller.list_affiliates()
+        users_info = []
+        for user in self.get_users():
+            course_names = [c.name for c in user.courses]
+            users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
+                               " ".join(course_names)])
 
-        user_cpf = self.__user_view.read_cpf()
-        user = self.get_user_by_cpf(user_cpf)
-
-        if user is None:
-            self.__user_view.show_message("Usuário não encontrado")
+        user_cpf = self.__user_view.show_users(users_info)
+        if user_cpf is None:
             return
-        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ",
-                                            "O valor precisa ser um número decimal maior que 0 (separado por '.')")
-        user.add_balance(value)
-        self.__user_view.show_success_message("Saldo adicionado com sucesso")
+
+        user = self.get_user_by_cpf(user_cpf)
+        value = self.__user_view.read_value("Digite o valor que deseja adicionar: ")
+        if value is None:
+            return
+        
+        try:
+            value = float(value)
+            user.add_balance(value)
+            self.__user_view.show_success_message("Saldo adicionado com sucesso")
+        except ValueError:
+            self.__user_view.show_message("Saldo deve ser um número decimal.")
+
 
     def previous_view(self):
         self.__system_controller.show_view()
