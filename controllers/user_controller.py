@@ -84,9 +84,8 @@ class UserController:
             users_info = []
             for user in self.__users:
                 course_names = [c.name for c in user.courses]
-                users_info.append({"name": user.name + " " + user.surname, "email": user.email,
-                                   "password": user.password, "cpf": user.cpf, "balance": user.balance,
-                                   "courses": course_names})
+                users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
+                                   " ".join(course_names)])
 
             self.__user_view.show_users(users_info)
 

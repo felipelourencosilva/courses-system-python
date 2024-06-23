@@ -12,20 +12,13 @@ class SaleView(AbstractView):
         self.__windowSelf = None
 
     def show_single_report(self, msg: str):
-        sg.ChangeLookAndFeel('LightGray1')
         layout = [
-            [sg.Text(f"tmnc", font=("Helvica", 25))],
-            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
-            [sg.Text('Sobrenome:', size=(15, 1)), sg.InputText('', key='surname')],
-            [sg.Text('Email:', size=(15, 1)), sg.InputText('', key='email')],
-            [sg.Text('CPF:', size=(15, 1)), sg.InputText('', key='cpf')],
-            [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
-            [sg.Button('Confirmar'), sg.Cancel('Voltar')]
+            [sg.Text(f"{msg}", font=("Helvica", 14))],
+            [sg.Button('Voltar')]
         ]
+
         self.__windowSelf = sg.Window('Dados usuário').Layout(layout)
-
         button, values = self.openSelf()
-
         self.closeSelf()
 
     def show_complete_report(self, messages: list):

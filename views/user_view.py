@@ -22,27 +22,16 @@ class UserView(AbstractView):
         return super().read_basic_edit_user_data("USUÁRIO")
 
     def show_users(self, users_data):
-        layout = [
-            [sg.Text(f'Usuários: ', font=("Helvica", 25))],
-        ]
+        headings = ["Nome", "Email", "CPF", "Senha", "Saldo"]
+        layout = [[sg.Table(values=users_data, headings=headings, max_col_width=25, background_color='lightblue',
+                            auto_size_columns=True,
+                            display_row_numbers=True,
+                            justification='right',
+                            num_rows=6,
+                            alternating_row_color='lightyellow',
+                            key='-TABLE-')],
+                  [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        for user in users_data:
-            layout.extend(
-                [[sg.Text(f'Nome: {user["name"]}', size=(60, 1))],
-                 [sg.Text(f'Email: {user["email"]}', size=(60, 1))],
-                 [sg.Text(f'CPF: {user["cpf"]}', size=(60, 1))],
-                 [sg.Text(f'Senha: {user["password"]}', size=(60, 1))],
-                 [sg.Text(f'Saldo: {user["balance"]}', size=(60, 1))],]
-            )
-
-            if len(user["courses"]) == 0:
-                layout.append([sg.Text(f'Cursos do usuário: Nenhum', size=(60, 1))])
-            else:
-                layout.append([sg.Text(f'Cursos do usuário: ' + " ".join(user["courses"]))])
-
-            layout.append([sg.Text('----------------------------------------', size=(60, 1))])
-
-        layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
         show_users_window = sg.Window('Usuarios').Layout(layout)
         button, values = self.open(show_users_window)
 
