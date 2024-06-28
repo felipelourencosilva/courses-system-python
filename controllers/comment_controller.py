@@ -61,11 +61,11 @@ class CommentController:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
 
-        course_id = self.__module_controller.course_controller.list_courses()
+        course_id = self.__system_controller.course_controller.list_courses()
         if course_id is None:
             return
 
-        module_id = self.__module_controller.list_modules(course_id)
+        module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
         if module_id is None:
             return
 
@@ -73,7 +73,7 @@ class CommentController:
         if lesson_id is None:
             return
 
-        comment_id = self.list_comments()
+        comment_id = self.list_comments(lesson_id)
         if comment_id is None:
             return
 
@@ -91,7 +91,7 @@ class CommentController:
         if course_id is None:
             return
 
-        module_id = self.__system_controller.module_controller.list_modules(course_id)
+        module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
         if module_id is None:
             return
 
@@ -99,7 +99,7 @@ class CommentController:
         if lesson_id is None:
             return
 
-        comment_id = self.list_comments(course_id, module_id, lesson_id)
+        comment_id = self.list_comments(lesson_id)
         if comment_id is None:
             return
 
@@ -123,18 +123,15 @@ class CommentController:
 
         lesson = self.__lesson_controller.get_lesson(lesson_id)
 
-        if lesson is not None:
-            if len(lesson.comments) == 0:
-                self.__comment_view.show_message("Não há comentários cadastrados nessa aula")
-            else:
-                comments_info = []
-                for comment in lesson.comments:
-                    comments_info.append([comment, comment.id])
-                self.__comment_view.show_comment(comments_info)
-            return lesson_id
-        else:
-            self.__comment_view.show_message("Aula não encontrada")
-            return -1
+        if len(lesson.comments) == 0:
+            self.__comment_view.show_message("Não há comentários cadastrados nessa aula")
+            return
+
+        comments_info = []
+        for comment in lesson.comments:
+            comments_info.append([comment, comment.id])
+        comment_id = self.__comment_view.show_comment(comments_info)
+        return comment_id
 
     def previous_view(self):
         self.__lesson_controller.show_view()
