@@ -51,145 +51,163 @@ class CourseController:
         return id
 
     def add_course(self):
-        if len(self.__system_controller.producer_controller.get_producers()) == 0:
-            raise MissingParentException("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
+        try:
+            if len(self.__system_controller.producer_controller.get_producers()) == 0:
+                raise MissingParentException("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
 
-        producer_cpf = self.__system_controller.producer_controller.list_producer()
-        if producer_cpf is None:
-            return
+            producer_cpf = self.__system_controller.producer_controller.list_producer()
+            if producer_cpf is None:
+                return
 
-        course_data = self.__course_view.get_add_course_data()
-        if course_data is None:
-            return
+            course_data = self.__course_view.get_add_course_data()
+            if course_data is None:
+                return
 
-        if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
-                course_data["commission_percentage"] == ""):
-            raise EmptyInputException()
+            if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
+                    course_data["commission_percentage"] == ""):
+                raise EmptyInputException()
 
-        if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
-            raise WrongInputException('Digite os valores corretamente.')
+            if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
+                raise WrongInputException('Digite os valores corretamente.')
 
-        if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
-            raise NegativeValueException('Valores devem ser maiores do que 0.')
+            if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
+                raise WrongInputException('Valores devem ser maiores do que 0.')
 
-        course_data["price"] = float(course_data["price"])
-        course_data["commission_percentage"] = int(course_data["commission_percentage"])
+            if int(course_data["commission_percentage"]) > 100:
+                raise WrongInputException('A porcentagem deve ser menor ou igual a 100.')
 
-        id = self.generate_id()
-        producer = self.get_producer(producer_cpf)
-        course = Course(
-            course_data["name"],
-            producer,
-            course_data["description"],
-            course_data["price"],
-            course_data["commission_percentage"],
-            id
-        )
-        self.__courses[id] = course
-        self.__course_view.show_success_message("Curso adicionado com sucesso")
+            course_data["price"] = float(course_data["price"])
+            course_data["commission_percentage"] = int(course_data["commission_percentage"])
+
+            id = self.generate_id()
+            producer = self.get_producer(producer_cpf)
+            course = Course(
+                course_data["name"],
+                producer,
+                course_data["description"],
+                course_data["price"],
+                course_data["commission_percentage"],
+                id
+            )
+            self.__courses[id] = course
+            self.__course_view.show_success_message("Curso adicionado com sucesso")
+        except (MissingParentException, EmptyInputException, WrongInputException) as e:
+            self.__course_view.show_message(e)
 
     def edit_course(self):
-        if len(self.__courses) == 0:
-            raise MissingEntityException("Não há cursos cadastrados.")
+        try:
+            if len(self.__courses) == 0:
+                raise MissingEntityException("Não há cursos cadastrados.")
 
-        id = self.list_courses()
-        if id is None:
-            return
-        if id not in self.__courses:
-            raise MissingEntityException("Este curso não existe.")
+            id = self.list_courses()
+            if id is None:
+                return
+            if id not in self.__courses:
+                raise MissingEntityException("Este curso não existe.")
 
-        course_data = self.__course_view.get_edit_course_data()
-        if course_data is None:
-            return
+            course_data = self.__course_view.get_edit_course_data()
+            if course_data is None:
+                return
 
-        if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
-                course_data["commission_percentage"] == ""):
-            raise EmptyInputException()
+            if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
+                    course_data["commission_percentage"] == ""):
+                raise EmptyInputException()
 
-        if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
-            raise WrongInputException('Digite os valores corretamente.')
+            if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
+                raise WrongInputException('Digite os valores corretamente.')
 
-        if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
-            raise NegativeValueException('Valores devem ser maiores do que 0.')
+            if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
+                raise WrongInputException('Valores devem ser maiores do que 0.')
 
-        course_data["price"] = float(course_data["price"])
-        course_data["commission_percentage"] = int(course_data["commission_percentage"])
+            if int(course_data["commission_percentage"]) > 100:
+                raise WrongInputException('A porcentagem deve ser menor ou igual a 100.')
 
-        course = self.__courses[id]
-        course.name = course_data["name"]
-        course.description = course_data["description"]
-        course.price = course_data["price"]
-        course.commission_percentage = course_data["commission_percentage"]
-        self.__course_view.show_success_message("Curso editado com sucesso")
+            course_data["price"] = float(course_data["price"])
+            course_data["commission_percentage"] = int(course_data["commission_percentage"])
+
+            course = self.__courses[id]
+            course.name = course_data["name"]
+            course.description = course_data["description"]
+            course.price = course_data["price"]
+            course.commission_percentage = course_data["commission_percentage"]
+            self.__course_view.show_success_message("Curso editado com sucesso")
+        except (MissingEntityException, EmptyInputException, WrongInputException) as e:
+            self.__course_view.show_message(e)
 
     def list_courses(self):
-        if len(self.__courses) == 0:
-            raise MissingEntityException("Não há cursos cadastrados.")
+        try:
+            if len(self.__courses) == 0:
+                raise MissingEntityException("Não há cursos cadastrados.")
 
-        courses_data = []
-        for key, course in self.__courses.items():
-            courses_data.append([
-                course.name,
-                course.description,
-                course.price,
-                key,
-                f"{course.producer.name} {course.producer.surname}"
-            ])
-        return self.__course_view.show_courses(courses_data)
+            courses_data = []
+            for key, course in self.__courses.items():
+                courses_data.append([
+                    course.name,
+                    course.description,
+                    course.price,
+                    key,
+                    f"{course.producer.name} {course.producer.surname}"
+                ])
+            return self.__course_view.show_courses(courses_data)
+        except MissingEntityException as e:
+            self.__course_view.show_message(e)
 
     def buy_course(self):
-        if len(self.__system_controller.user_controller.get_users()) == 0:
-            raise MissingParentException("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
-        if len(self.__courses) == 0:
-            raise MissingEntityException("Não há cursos cadastrados")
+        try:
+            if len(self.__system_controller.user_controller.get_users()) == 0:
+                raise MissingParentException("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
+            if len(self.__courses) == 0:
+                raise MissingEntityException("Não há cursos cadastrados")
 
-        self.list_courses()
+            self.list_courses()
 
-        id = self.__course_view.read_id()
-        if id not in self.__courses:
-            raise WrongInputException("Este curso não existe")
+            id = self.__course_view.read_id()
+            if id not in self.__courses:
+                raise WrongInputException("Este curso não existe")
 
-        if len(self.__system_controller.user_controller.get_proper_users()):
-            self.__system_controller.user_controller.list_users()
-        if len(self.__system_controller.producer_controller.get_producers()):
-            self.__system_controller.producer_controller.list_producer()
-        if len(self.__system_controller.affiliate_controller.get_affiliates()):
-            self.__system_controller.affiliate_controller.list_affiliates()
+            if len(self.__system_controller.user_controller.get_proper_users()):
+                self.__system_controller.user_controller.list_users()
+            if len(self.__system_controller.producer_controller.get_producers()):
+                self.__system_controller.producer_controller.list_producer()
+            if len(self.__system_controller.affiliate_controller.get_affiliates()):
+                self.__system_controller.affiliate_controller.list_affiliates()
 
-        while True:
-            cpf = self.__course_view.read_cpf("CPF do Usuário: ")
-            if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
-                self.__course_view.show_message("Este usuário não existe")
-            else:
-                break
+            while True:
+                cpf = self.__course_view.read_cpf("CPF do Usuário: ")
+                if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
+                    self.__course_view.show_message("Este usuário não existe")
+                else:
+                    break
 
-        course = self.__courses[id]
-        if self.__system_controller.user_controller.user_has_course(cpf, course):
-            self.__course_view.show_message("Você já possui esse curso")
-            return
-        if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
-            self.__course_view.show_message("Você não possui saldo suficiente")
-            return
+            course = self.__courses[id]
+            if self.__system_controller.user_controller.user_has_course(cpf, course):
+                self.__course_view.show_message("Você já possui esse curso")
+                return
+            if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
+                self.__course_view.show_message("Você não possui saldo suficiente")
+                return
 
-        if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
-            self.__system_controller.affiliate_controller.list_affiliates()
-        affiliate = None
-        while True:
-            affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
-            if affiliate_cpf == 0:
-                break
-            if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
-                self.__course_view.show_message("Este afiliado não existe")
-            else:
-                affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
-                break
+            if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
+                self.__system_controller.affiliate_controller.list_affiliates()
+            affiliate = None
+            while True:
+                affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
+                if affiliate_cpf == 0:
+                    break
+                if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
+                    self.__course_view.show_message("Este afiliado não existe")
+                else:
+                    affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
+                    break
 
-        self.__system_controller.user_controller.user_add_course(cpf, course)
-        self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)
-        self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
-        user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
-        self.__system_controller.sale_controller.add_sale(user, course, affiliate)
-        self.__course_view.show_success_message("Curso adquirido com sucesso")
+            self.__system_controller.user_controller.user_add_course(cpf, course)
+            self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)
+            self.__system_controller.affiliate_controller.pay_affiliate(course, affiliate)
+            user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
+            self.__system_controller.sale_controller.add_sale(user, course, affiliate)
+            self.__course_view.show_success_message("Curso adquirido com sucesso")
+        except (MissingParentException, WrongInputException) as e:
+            self.__course_view.show_message(e)
 
     def to_module_view(self):
         self.__module_controller.show_view()
