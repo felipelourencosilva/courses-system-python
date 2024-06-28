@@ -10,7 +10,7 @@ class ModuleController:
     def __init__(self, course_controller, system_controller):
         self.__modules = dict()
         self.__course_controller = course_controller
-        self.__module_view = ModuleView()
+        self.__module_view = ModuleView(self)
         self.__lesson_controller = system_controller.get_state_of_controller("lesson_controller")
         if self.__lesson_controller is None:
             self.__lesson_controller = LessonController(self, system_controller)
@@ -21,6 +21,9 @@ class ModuleController:
             ModuleController.__instance = object.__new__(cls)
         return ModuleController.__instance
     '''
+    @property
+    def course_controller(self):
+        return self.__course_controller
 
     @property
     def lesson_controller(self):
@@ -57,86 +60,86 @@ class ModuleController:
             self.__module_view.show_message("Não é possível adicionar um Módulo sem um Curso no sistema")
             return
 
-        self.__course_controller.list_courses()
+        course_id = self.__course_controller.list_courses()
+        if course_id is None:
+            return
+
         module_data = self.__module_view.get_add_module_data()
+        if module_data is None:
+            return
 
-        if int(module_data["course_id"]) in self.__course_controller.get_courses():
-            id = self.generate_id()
-            module = Module(module_data["title"], module_data["description"], id)
-
-            self.__course_controller.add_course_module(int(module_data["course_id"]), module)
-            self.__modules[id] = module
-            self.__module_view.show_success_message("Módulo adicionado com sucesso")
-        else:
-            self.__module_view.show_message("Este curso não existe")
+        module_id = self.generate_id()
+        module = Module(module_data["title"], module_data["description"], module_id)
+        self.__course_controller.add_course_module(course_id, module)
+        self.__modules[module_id] = module
+        self.__module_view.show_success_message("Módulo adicionado com sucesso")
 
     def remove_module(self):
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
-        course_id = self.list_modules()
-        if course_id == -1:
+
+        course_id = self.course_controller.list_courses()
+        if course_id is None:
             return
-        module_id = self.__module_view.read_module_id()
-        if module_id in self.__modules:
-            if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
-                self.__module_view.show_message("Este módulo não pertence a este curso")
-                return
-            module = self.__modules[module_id]
-            self.__modules.pop(module_id)
-            self.__course_controller.remove_course_module(course_id, module)
-            self.__module_view.show_success_message("Módulo removido com sucesso")
-        else:
-            self.__module_view.show_message("Este módulo não existe")
+        module_id = self.list_modules(course_id)
+        if module_id is None:
+            return
+
+        if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
+            self.__module_view.show_message("Este módulo não pertence a este curso")
+            return
+        module = self.__modules[module_id]
+        self.__modules.pop(module_id)
+        self.__course_controller.remove_course_module(course_id, module)
+        self.__module_view.show_success_message("Módulo removido com sucesso")
 
     def edit_module(self):
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
 
-        course_id = self.list_modules()
-
-        if course_id == -1:
+        course_id = self.__course_controller.list_courses()
+        if course_id is None:
+            return
+        module_id = self.list_modules(course_id)
+        if module_id is None:
+            return
+        module_data = self.__module_view.get_edit_module_data()
+        if module_data is None:
             return
 
-        module_data = self.__module_view.get_edit_module_data()
-        module_id = int(module_data["module_id"])
+        if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
+            self.__module_view.show_message("Este módulo não pertence a este curso")
+            return
 
-        if module_id in self.__modules:
-            if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
-                self.__module_view.show_message("Este módulo não pertence a este curso")
-                return
+        module = self.__modules[module_id]
+        module.title = module_data["title"]
+        module.description = module_data["description"]
+        self.__module_view.show_success_message("Módulo editado com sucesso")
 
-            module = self.__modules[module_id]
-            module.title = module_data["title"]
-            module.description = module_data["description"]
-            self.__module_view.show_success_message("Módulo editado com sucesso")
-        else:
-            self.__module_view.show_message("Este módulo não existe")
-
-    def list_modules(self):
+    def list_modules(self, course_id=None):
         if len(self.__modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados")
             return
 
-        self.__course_controller.list_courses()
-        course_id = self.__module_view.read_course_id()
-        course = self.__course_controller.get_course(course_id)
+        if course_id is None:
+            course_id = self.course_controller.list_courses()
+            if course_id is None:
+                return
 
-        if course is None:
-            self.__module_view.show_message("Este curso não existe")
-            return -1
+        course = self.__course_controller.get_course(course_id)
 
         if len(course.modules) == 0:
             self.__module_view.show_message("Não há módulos cadastrados nesse curso")
-            return -1
-        else:
-            modules_info = []
-            for module in course.modules:
-                modules_info.append([module.title, module.description,
-                                     module.id])
-            self.__module_view.show_modules(modules_info)
-        return course_id
+            return
+
+        modules_info = []
+        for module in course.modules:
+            modules_info.append([module.title, module.description,
+                                 module.id])
+        module_id = self.__module_view.show_modules(modules_info)
+        return module_id
 
     def to_lesson_view(self):
         self.__lesson_controller.show_view()

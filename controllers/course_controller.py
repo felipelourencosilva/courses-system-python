@@ -1,7 +1,6 @@
 from views.course_view import *
 from entities.course import *
 from controllers.module_controller import *
-from entities.dao.courseDAO import CourseDAO
 import random
 
 

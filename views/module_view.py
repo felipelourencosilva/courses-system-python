@@ -23,18 +23,15 @@ class ModuleView(AbstractView):
             [sg.Text(f'Criar módulo', font=("Helvica", 25))],
             [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
-            [sg.Text('Id do curso:', size=(15, 1)), sg.InputText('', key='course_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)
-
         button, values = self.open(edit_module_window)
-        title = values['title']
-        description = values['description']
-        course_id = values['course_id']
         edit_module_window.Close()
 
-        return {"title": title, "description": description, "course_id": course_id}
+        if button in (None, 'Voltar'):
+            return
+        return values
 
     def get_edit_module_data(self):
         layout = [
@@ -54,21 +51,30 @@ class ModuleView(AbstractView):
 
         return {"title": title, "description": description, "module_id": module_id}
 
-    def show_modules(self, modules):
+    def show_modules(self, module_data):
         headings = ["Título", "Descição", "Id"]
-        layout = [[sg.Table(values=modules, headings=headings, max_col_width=25, background_color='lightblue',
+        layout = [[sg.Table(values=module_data, headings=headings, max_col_width=25, background_color='lightblue',
                             auto_size_columns=True,
-                            display_row_numbers=True,
                             justification='right',
                             num_rows=6,
                             alternating_row_color='lightyellow',
-                            key='-TABLE-')],
-                  [sg.Button('Voltar')]]
+                            key='module',
+                            select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
+                  [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        show_users_window = sg.Window('Modulos').Layout(layout)
-        button, values = self.open(show_users_window)
+        show_modules_window = sg.Window('Modulos').Layout(layout)
+        button, values = self.open(show_modules_window)
+        show_modules_window.Close()
 
-        show_users_window.Close()
+        if button in (None, 'Voltar'):
+            return None
+
+        selected_rows = values["module"]
+        if len(selected_rows) == 0:
+            return None  # no selected Module
+        module_row = values["module"][0]
+        module_id = module_data[module_row][2]  # because 2nd position is the id
+        return int(module_id)
 
     def read_course_id(self):
         return self.read_int_range(
