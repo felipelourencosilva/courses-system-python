@@ -161,15 +161,15 @@ class AbstractView(ABC):
 
     def init_components(self, title, options):
         #sg.theme_previewer()
-        sg.ChangeLookAndFeel('LightGray1')
+        sg.ChangeLookAndFeel('DarkGrey15')
         layout = [
             [sg.Text(title, font=("Helvetica", 18))],
-            [sg.Text('Escolha sua opção', font=("Arial", 15))]
+            [sg.Text('Escolha sua opção', font=("Arial", 14))]
         ]
 
         for k, value in sorted(options.items()):
             if k != 0:
-                layout.append([sg.Radio(value,"RD1", key=str(k))])
+                layout.append([sg.Radio(value, "RD1", key=str(k))])
 
         layout.append([sg.Button('Confirmar'), sg.Cancel('Voltar')])
         return sg.Window('Sistema de cursos', layout)

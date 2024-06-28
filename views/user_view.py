@@ -26,11 +26,11 @@ class UserView(AbstractView):
 
     def show_users(self, users_data):
         headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]
-        layout = [[sg.Table(values=users_data, headings=headings, max_col_width=25, background_color='lightblue',
+        layout = [[sg.Table(values=users_data, headings=headings, max_col_width=25, background_color='#0F0E10',
                             auto_size_columns=True,
                             justification='right',
                             num_rows=6,
-                            alternating_row_color='lightyellow',
+                            alternating_row_color='#1C2C30',
                             key='user',
                             select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
                   [sg.Button('Confirmar'), sg.Button('Voltar')]]

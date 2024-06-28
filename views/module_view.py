@@ -53,11 +53,11 @@ class ModuleView(AbstractView):
 
     def show_modules(self, module_data):
         headings = ["Título", "Descição", "Id"]
-        layout = [[sg.Table(values=module_data, headings=headings, max_col_width=25, background_color='lightblue',
+        layout = [[sg.Table(values=module_data, headings=headings, max_col_width=25, background_color='#0F0E10',
                             auto_size_columns=True,
                             justification='right',
                             num_rows=6,
-                            alternating_row_color='lightyellow',
+                            alternating_row_color='#1C2C30',
                             key='module',
                             select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
                   [sg.Button('Confirmar'), sg.Button('Voltar')]]
