@@ -1,3 +1,5 @@
+from exceptions.empty_input_exception import EmptyInputException
+from exceptions.wrong_input_exception import WrongInputException
 from views.affiliate_view import *
 from entities.affiliate import *
 from exceptions.user_not_found_exception import UserNotFoundException
@@ -30,8 +32,22 @@ class AffiliateController:
 
     def add_affiliate(self):
         affiliate_data = self.__affiliate_view.get_add_affiliate_data()
+
         if affiliate_data is None:
             return
+
+        if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
+                affiliate_data["cpf"] == "" or affiliate_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(affiliate_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not affiliate_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
 
         affiliate = Affiliate(
             affiliate_data["name"],
@@ -45,19 +61,30 @@ class AffiliateController:
 
     def edit_affiliate(self):
         affiliate_cpf = self.list_affiliates()
+
         if affiliate_cpf is None:
             return
+
         affiliate_cpf = int(affiliate_cpf)
-
-        try:
-            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
-        except UserNotFoundException as e:
-            self.__affiliate_view.show_message(e)
-            return
-
+        affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
         affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+
         if affiliate_data is None:
             return
+
+        if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
+                affiliate_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(affiliate_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not affiliate_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
+
         affiliate.name = affiliate_data["name"]
         affiliate.surname = affiliate_data["surname"]
         affiliate.email = affiliate_data["email"]
@@ -82,14 +109,11 @@ class AffiliateController:
 
     def remove_affiliate(self):
         affiliate_cpf = self.list_affiliates()
+
         if affiliate_cpf is None:
             return
 
-        try:
-            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
-        except UserNotFoundException as e:
-            self.__affiliate_view.show_message(e)
-            return
+        affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
         self.__affiliates.remove(affiliate)
         self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
 

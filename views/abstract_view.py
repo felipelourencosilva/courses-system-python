@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 import re
 import PySimpleGUI as sg
-from exceptions import NegativeMoneyException, WrongInputException
+from exceptions import negative_money_exception, wrong_input_exception
+from exceptions.wrong_input_exception import WrongInputException
 
 
 class AbstractView(ABC):
@@ -100,9 +101,9 @@ class AbstractView(ABC):
             email = input(default_msg)
             try:
                 if "@" not in email or ".com" in email:
-                    raise WrongInputException
+                    raise WrongInputException()
                 return email
-            except WrongInputException:
+            except WrongInputException():
                 self.show_message(error_msg)
 
     def read_cpf(self, default_msg: str = None, error_msg: str = None):

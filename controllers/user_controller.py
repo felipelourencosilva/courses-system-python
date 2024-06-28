@@ -1,3 +1,5 @@
+from exceptions.empty_input_exception import EmptyInputException
+from exceptions.wrong_input_exception import WrongInputException
 from views.user_view import *
 from entities.user import *
 from entities.course import *
@@ -47,29 +49,55 @@ class UserController:
 
     def add_user(self):
         user_data = self.__user_view.get_add_user_data()
+
         if user_data is None:
             return
 
+        if (user_data["name"] == "" or user_data["surname"] == "" or user_data["email"] == "" or
+                user_data["cpf"] == "" or user_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in user_data["email"] or ".com" not in user_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(user_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not user_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
+
         user = User(user_data["name"], user_data["surname"],
                     user_data["email"], user_data["password"], int(user_data["cpf"]))
+
         self.__users.append(user)
         self.__user_view.show_success_message("Usuário cadastrado com sucesso")
 
     def edit_user(self):
         user_cpf = self.list_users()
+
         if user_cpf is None:
             return
+
         user_cpf = int(user_cpf)
-
-        try:
-            user = self.get_user_by_cpf(user_cpf)
-        except UserNotFoundException as e:
-            self.__user_view.show_message(e)
-            return
-
+        user = self.get_user_by_cpf(user_cpf)
         user_data = self.__user_view.get_edit_user_data()
+
         if user_data is None:
             return
+
+        if (user_data["name"] == "" or user_data["surname"] == "" or user_data["email"] == "" or
+                user_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in user_data["email"] or ".com" not in user_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(user_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not user_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
+
         user.name = user_data["name"]
         user.surname = user_data["surname"]
         user.email = user_data["email"]
@@ -86,17 +114,15 @@ class UserController:
                 users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
                                    " ".join(course_names)])
 
-            return self.__user_view.show_users(users_info) # should return user cpf
+            return self.__user_view.show_users(users_info)  # should return user cpf
 
     def remove_user(self):
         user_cpf = self.list_users()
+
         if user_cpf is None:
             return
-        try:
-            user = self.get_user_by_cpf(user_cpf)
-        except UserNotFoundException as e:
-            self.__user_view.show_message(e)
-            return
+
+        user = self.get_user_by_cpf(user_cpf)
         self.__users.remove(user)
         self.__user_view.show_success_message("Usuário removido com sucesso.")
 
@@ -136,14 +162,13 @@ class UserController:
         value = self.__user_view.read_value("Digite o valor que deseja adicionar: ")
         if value is None:
             return
-        
+
         try:
             value = float(value)
             user.add_balance(value)
             self.__user_view.show_success_message("Saldo adicionado com sucesso")
         except ValueError:
             self.__user_view.show_message("Saldo deve ser um número decimal.")
-
 
     def previous_view(self):
         self.__system_controller.show_view()
@@ -161,8 +186,3 @@ class UserController:
         while True:
             chosen_option = self.__user_view.view_options()
             options[chosen_option]()
-
-
-
-
-

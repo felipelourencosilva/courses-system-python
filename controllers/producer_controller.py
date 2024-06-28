@@ -1,3 +1,5 @@
+from exceptions.empty_input_exception import EmptyInputException
+from exceptions.wrong_input_exception import WrongInputException
 from views.producer_view import *
 from entities.producer import *
 from exceptions.user_not_found_exception import UserNotFoundException
@@ -30,8 +32,22 @@ class ProducerController:
 
     def add_producer(self):
         producer_data = self.__producer_view.get_add_producer_data()
+
         if producer_data is None:
             return
+
+        if (producer_data["name"] == "" or producer_data["surname"] == "" or producer_data["email"] == "" or
+                producer_data["cpf"] == "" or producer_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in producer_data["email"] or ".com" not in producer_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(producer_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not producer_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
 
         producer = Producer(producer_data["name"], producer_data["surname"],
                             producer_data["email"], producer_data["password"], int(producer_data["cpf"]))
@@ -40,19 +56,30 @@ class ProducerController:
 
     def edit_producer(self):
         producer_cpf = self.list_producer()
+
         if producer_cpf is None:
             return
+
         producer_cpf = int(producer_cpf)
-
-        try:
-            producer = self.get_producer_by_cpf(producer_cpf)
-        except UserNotFoundException as e:
-            self.__producer_view.show_message(e)
-            return
-
+        producer = self.get_producer_by_cpf(producer_cpf)
         producer_data = self.__producer_view.get_edit_producer_data()
+
         if producer_data is None:
             return
+
+        if (producer_data["name"] == "" or producer_data["surname"] == "" or producer_data["email"] == "" or
+                producer_data["password"] == ""):
+            raise EmptyInputException()
+
+        if "@" not in producer_data["email"] or ".com" not in producer_data["email"]:
+            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+
+        if len(producer_data["password"]) < 4:
+            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+
+        if not producer_data["cpf"].isdigit():
+            raise WrongInputException('CPF precisa ser um número.')
+
         producer.name = producer_data["name"]
         producer.surname = producer_data["surname"]
         producer.email = producer_data["email"]
@@ -77,14 +104,8 @@ class ProducerController:
 
     def remove_producer(self):
         producer_cpf = self.list_producer()
-        if producer_cpf is None:
-            return
 
-        try:
-            producer = self.get_producer_by_cpf(producer_cpf)
-        except UserNotFoundException as e:
-            self.__producer_view.show_message(e)
-            return
+        producer = self.get_producer_by_cpf(producer_cpf)
         self.__producers.remove(producer)
         self.__producer_view.show_success_message("Produtor removido com sucesso")
 
