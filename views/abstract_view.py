@@ -28,6 +28,7 @@ class AbstractView(ABC):
         return option
 
     def show_message(self, msg: str):
+        sg.ChangeLookAndFeel('DarkRed2')
         layout = [
             [sg.Text('Importante:', font=("Helvica", 25))],
             [sg.Text(msg, size=(40, 1))],
@@ -38,6 +39,7 @@ class AbstractView(ABC):
         message_window.Close()
 
     def show_success_message(self, msg: str):
+        sg.ChangeLookAndFeel('LightGreen6')
         layout = [
             [sg.Text('Sucesso:', font=("Helvica", 25))],
             [sg.Text(msg, size=(40, 1))],
@@ -158,7 +160,7 @@ class AbstractView(ABC):
         return self.read_float(default_msg)
 
     def init_components(self, title, options):
-        # sg.theme_previewer()
+        #sg.theme_previewer()
         sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(title, font=("Helvetica", 18))],
