@@ -37,7 +37,7 @@ class User:
         return self.__email
 
     @email.setter
-    def email(self, email) -> str:
+    def email(self, email):
         if isinstance(email, str):
             self.__email = email
 
@@ -46,7 +46,7 @@ class User:
         return self.__password
 
     @password.setter
-    def password(self, password) -> str:
+    def password(self, password):
         if isinstance(password, str):
             self.__password = password
 

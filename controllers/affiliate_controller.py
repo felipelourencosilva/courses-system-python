@@ -30,18 +30,25 @@ class AffiliateController:
 
     def add_affiliate(self):
         affiliate_data = self.__affiliate_view.get_add_affiliate_data()
-        affiliate = Affiliate(affiliate_data["name"], affiliate_data["surname"],
-                              affiliate_data["email"], affiliate_data["password"], affiliate_data["cpf"])
+        if affiliate_data is None:
+            return
+
+        affiliate = Affiliate(
+            affiliate_data["name"],
+            affiliate_data["surname"],
+            affiliate_data["email"],
+            affiliate_data["password"],
+            int(affiliate_data["cpf"])
+        )
         self.__affiliates.append(affiliate)
         self.__affiliate_view.show_success_message("Afiliado cadastrado com sucesso")
 
     def edit_affiliate(self):
-        self.list_affiliates()
-
-        if len(self.__affiliates) == 0:
+        affiliate_cpf = self.list_affiliates()
+        if affiliate_cpf is None:
             return
+        affiliate_cpf = int(affiliate_cpf)
 
-        affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja atualizar")
         try:
             affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
         except UserNotFoundException as e:
@@ -49,6 +56,8 @@ class AffiliateController:
             return
 
         affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+        if affiliate_data is None:
+            return
         affiliate.name = affiliate_data["name"]
         affiliate.surname = affiliate_data["surname"]
         affiliate.email = affiliate_data["email"]
@@ -59,48 +68,41 @@ class AffiliateController:
         if len(self.__affiliates) == 0:
             self.__affiliate_view.show_message("Não há afiliados cadastrados")
         else:
-            affiliates_info = []
-            for affiliates in self.__affiliates:
-                affiliates_info.append([
-                    affiliates.name + " " + affiliates.surname,
-                    affiliates.email,
-                    affiliates.password,
-                    affiliates.cpf,
-                    affiliates.balance
+            affiliates_data = []
+            for affiliate in self.__affiliates:
+                affiliates_data.append([
+                    affiliate.name + " " + affiliate.surname,
+                    affiliate.email,
+                    affiliate.password,
+                    affiliate.cpf,
+                    affiliate.balance
                 ])
 
-            self.__affiliate_view.show_affiliates(affiliates_info)
+            return self.__affiliate_view.show_affiliates(affiliates_data)
 
     def remove_affiliate(self):
-        self.list_affiliates()
-
-        if len(self.__affiliates) == 0:
+        affiliate_cpf = self.list_affiliates()
+        if affiliate_cpf is None:
             return
 
-        affiliate_cpf = self.__affiliate_view.read_cpf("Digite o CPF do afiliado que deseja remover")
         try:
             affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
         except UserNotFoundException as e:
             self.__affiliate_view.show_message(e)
             return
-
         self.__affiliates.remove(affiliate)
         self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
 
     def add_balance(self):
-        self.list_affiliates()
-
-        if len(self.__affiliates) == 0:
+        affiliate_cpf = self.list_affiliates()
+        if affiliate_cpf is None:
             return
-
-        producer_cpf = self.__affiliate_view.read_cpf()
         try:
-            affiliate = self.get_affiliate_by_cpf(producer_cpf)
+            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
         except UserNotFoundException as e:
             self.__affiliate_view.show_message(e)
             return
-
-        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ", "O valor precisa ser um número decimal maior que 0 (separado por '.')")
+        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ")
         affiliate.add_balance(value)
         self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
 

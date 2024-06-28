@@ -38,6 +38,8 @@ class UserView(AbstractView):
         show_users_window = sg.Window('Usuarios').Layout(layout)
         button, values = self.open(show_users_window)
         show_users_window.Close()
+        if button in (None, 'Voltar'):
+            return
 
         selected_rows = values["user"]
         if len(selected_rows) == 0:
