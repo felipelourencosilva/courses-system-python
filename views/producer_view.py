@@ -45,7 +45,7 @@ class ProducerView(AbstractView):
             return None  # no selected Producer
         producer_row = values["producer"][0]
         producer_cpf = producer_data[producer_row][3]  # because 3rd position is the cpf
-        return producer_cpf
+        return int(producer_cpf)
 
     def open(self, window):
         button, values = window.Read()

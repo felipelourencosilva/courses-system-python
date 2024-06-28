@@ -46,7 +46,6 @@ class CourseView(AbstractView):
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
             [sg.Text('Preço:', size=(15, 1)), sg.InputText('', key='price')],
             [sg.Text('Comissão:', size=(15, 1)), sg.InputText('', key='commission_percentage')],
-            [sg.Text('CPF do Produtor:', size=(15, 1)), sg.InputText('', key='cpf')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         user_data_window = sg.Window('Dados Curso').Layout(layout)
@@ -55,21 +54,29 @@ class CourseView(AbstractView):
         user_data_window.Close()
         return values
 
-    def show_courses(self, courses_data):
+    def show_courses(self, course_data):
         headings = ["Nome", "Descrição", "Preço", "Id", "Produtor"]
-        layout = [[sg.Table(values=courses_data, headings=headings, max_col_width=25, background_color='lightblue',
+        layout = [[sg.Table(values=course_data, headings=headings, max_col_width=25, background_color='lightblue',
                             auto_size_columns=True,
-                            display_row_numbers=True,
                             justification='right',
                             num_rows=6,
                             alternating_row_color='lightyellow',
-                            key='-TABLE-')],
-                  [sg.Button('Voltar')]]
+                            key='course',
+                            select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
+                  [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        show_users_window = sg.Window('Cursos').Layout(layout)
-        button, values = self.open(show_users_window)
+        show_courses_window = sg.Window('Cursos').Layout(layout)
+        button, values = self.open(show_courses_window)
+        show_courses_window.Close()
+        if button in (None, 'Voltar'):
+            return
 
-        show_users_window.Close()
+        selected_rows = values["course"]
+        if len(selected_rows) == 0:
+            return None  # no selected Course
+        course_row = values["course"][0]
+        course_id = course_data[course_row][3]  # because 4th position is the id
+        return int(course_id)
 
     def read_id(self):
         return self.read_int_range(

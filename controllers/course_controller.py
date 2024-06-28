@@ -16,12 +16,6 @@ class CourseController:
         if self.__module_controller is None:
             self.__module_controller = ModuleController(self, system_controller)
 
-    '''
-    def __new__(cls):
-        if CourseController.__instance is None:
-            CourseController.__instance = object.__new__(cls)
-        return CourseController.__instance
-    '''
     @property
     def module_controller(self):
         return self.__module_controller
@@ -56,18 +50,26 @@ class CourseController:
         if len(self.__system_controller.producer_controller.get_producers()) == 0:
             self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
             return
-        self.__system_controller.producer_controller.list_producer()
+        producer_cpf = self.__system_controller.producer_controller.list_producer()
+        if producer_cpf is None:
+            return
         course_data = self.__course_view.get_add_course_data()
         if course_data is None:
             return
 
         course_data["price"] = float(course_data["price"])
         course_data["commission_percentage"] = int(course_data["commission_percentage"])
-        course_data["cpf"] = int(course_data["cpf"])
 
         id = self.generate_id()
-        course = Course(course_data["name"], self.get_producer(course_data["cpf"]),
-                        course_data["description"], course_data["price"], course_data["commission_percentage"], id)
+        producer = self.get_producer(producer_cpf)
+        course = Course(
+            course_data["name"],
+            producer,
+            course_data["description"],
+            course_data["price"],
+            course_data["commission_percentage"],
+            id
+        )
         self.__courses[id] = course
         self.__course_view.show_success_message("Curso adicionado com sucesso")
 
@@ -75,28 +77,26 @@ class CourseController:
         if len(self.__courses) == 0:
             self.__course_view.show_message("Não há cursos cadastrados")
             return
-        self.list_courses()
-        id = self.__course_view.read_id()
+        id = self.list_courses()
+        if id is None:
+            return
         if id not in self.__courses:
             self.__course_view.show_message("Este curso não existe")
             return
 
-        if id in self.get_courses():
-            course_data = self.__course_view.get_edit_course_data()
-            if course_data is None:
-                return
+        course_data = self.__course_view.get_edit_course_data()
+        if course_data is None:
+            return
 
-            course_data["price"] = float(course_data["price"])
-            course_data["commission_percentage"] = int(course_data["commission_percentage"])
+        course_data["price"] = float(course_data["price"])
+        course_data["commission_percentage"] = int(course_data["commission_percentage"])
 
-            course = self.__courses[id]
-            course.name = course_data["name"]
-            course.description = course_data["description"]
-            course.price = course_data["price"]
-            course.commission_percentage = course_data["commission_percentage"]
-            self.__course_view.show_success_message("Curso editado com sucesso")
-        else:
-            self.__course_view.show_message("Este curso não existe")
+        course = self.__courses[id]
+        course.name = course_data["name"]
+        course.description = course_data["description"]
+        course.price = course_data["price"]
+        course.commission_percentage = course_data["commission_percentage"]
+        self.__course_view.show_success_message("Curso editado com sucesso")
 
     def list_courses(self):
         if len(self.__courses) == 0:
@@ -111,7 +111,7 @@ class CourseController:
                 key,
                 f"{course.producer.name} {course.producer.surname}"
             ])
-        self.__course_view.show_courses(courses_data)
+        return self.__course_view.show_courses(courses_data)
 
     def buy_course(self):
         if len(self.__system_controller.user_controller.get_users()) == 0:
