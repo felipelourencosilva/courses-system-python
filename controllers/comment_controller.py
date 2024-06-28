@@ -29,79 +29,98 @@ class CommentController:
             self.__comment_view.show_message("Não é possível adicionar um Comentário sem uma Aula no sistema")
             return
 
-        course_id = self.__lesson_controller.list_lessons()
-
-        if course_id == -1:
+        course_id = self.__system_controller.course_controller.list_courses()
+        if course_id is None:
             return
 
-        if len(self.__system_controller.user_controller.get_proper_users()):
-            self.__system_controller.user_controller.list_users()
-        if len(self.__system_controller.producer_controller.get_producers()):
-            self.__system_controller.producer_controller.list_producer()
-        if len(self.__system_controller.affiliate_controller.get_affiliates()):
-            self.__system_controller.affiliate_controller.list_affiliates()
+        module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
+        if module_id is None:
+            return
+
+        lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
+        if lesson_id is None:
+            return
+
+        user_cpf = self.__system_controller.user_controller.list_users()
+        if user_cpf is None:
+            return
 
         comment_data = self.__comment_view.get_comment_data()
-        user_cpf = int(comment_data["user_cpf"])
-        lesson_id = int(comment_data["lesson_id"])
-        user = self.__system_controller.user_controller.get_user_by_cpf(user_cpf)
+        if comment_data is None:
+            return
 
-        if lesson_id in self.__lesson_controller.get_lessons():
-            comment_id = self.generate_id()
-            comment = Comment(user, comment_data["comment"], comment_id)
-            self.__lesson_controller.add_lesson_comment(lesson_id, comment)
-            self.__comments[comment_id] = comment
-            self.__comment_view.show_success_message("Comentário adicionado com sucesso")
-        else:
-            self.__comment_view.show_message("Esta aula não existe")
+        user = self.__system_controller.user_controller.get_user_by_cpf(user_cpf)
+        comment_id = self.generate_id()
+        comment = Comment(user, comment_data["comment"], comment_id)
+        self.__lesson_controller.add_lesson_comment(lesson_id, comment)
+        self.__comments[comment_id] = comment
+        self.__comment_view.show_success_message("Comentário adicionado com sucesso")
 
     def remove_comment(self):
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
 
-        lesson_id = self.list_comments()
-
-        if lesson_id == -1:
+        course_id = self.__module_controller.course_controller.list_courses()
+        if course_id is None:
             return
 
-        comment_id = self.__comment_view.read_comment_id()
-        if comment_id is not None and comment_id in self.__comments:
-            comment = self.__comments[comment_id]
-            self.__comments.pop(comment_id)
-            self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
-            self.__comment_view.show_success_message("Comentário removido com sucesso")
-        else:
-            self.__comment_view.show_message("Este comentário não existe")
+        module_id = self.__module_controller.list_modules(course_id)
+        if module_id is None:
+            return
+
+        lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
+        if lesson_id is None:
+            return
+
+        comment_id = self.list_comments()
+        if comment_id is None:
+            return
+
+        comment = self.__comments[comment_id]
+        self.__comments.pop(comment_id)
+        self.__lesson_controller.remove_lesson_comment(lesson_id, comment)
+        self.__comment_view.show_success_message("Comentário removido com sucesso")
 
     def edit_comment(self):
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
             return
 
-        self.list_comments()
+        course_id = self.__system_controller.course_controller.list_courses()
+        if course_id is None:
+            return
+
+        module_id = self.__system_controller.module_controller.list_modules(course_id)
+        if module_id is None:
+            return
+
+        lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
+        if lesson_id is None:
+            return
+
+        comment_id = self.list_comments(course_id, module_id, lesson_id)
+        if comment_id is None:
+            return
+
         comment_data = self.__comment_view.get_edit_comment_data()
-        comment_id = int(comment_data["comment_id"])
+        if comment_data is None:
+            return
 
-        if comment_id is not None and comment_id in self.__comments:
+        comment = self.__comments[comment_id]
+        comment.comment = comment_data["comment"]
+        self.__comment_view.show_success_message("Comentário editado com sucesso")
 
-            comment = self.__comments[comment_id]
-            comment.comment = comment_data["comment"]
-            self.__comment_view.show_success_message("Comentário editado com sucesso")
-        else:
-            self.__comment_view.show_message("Este comentário não existe")
-
-    def list_comments(self):
+    def list_comments(self, lesson_id=None):
         if len(self.__comments) == 0:
             self.__comment_view.show_message("Não há comentários cadastrados")
-            return -1
+            return
 
-        course_id = self.__lesson_controller.list_lessons()
-        if course_id == -1:
-            return -1
-        lesson_id = self.__comment_view.read_lesson_id()
-        if lesson_id == -1:
-            return -1
+        if lesson_id is None:
+            lesson_id = self.__lesson_controller.list_lessons()
+            if lesson_id is None:
+                return
+
         lesson = self.__lesson_controller.get_lesson(lesson_id)
 
         if lesson is not None:

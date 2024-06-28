@@ -42,14 +42,12 @@ class ModuleView(AbstractView):
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)
-
         button, values = self.open(edit_module_window)
-        title = values['title']
-        description = values['description']
-        module_id = values['module_id']
         edit_module_window.Close()
 
-        return {"title": title, "description": description, "module_id": module_id}
+        if button in (None, 'Voltar'):
+            return
+        return values
 
     def show_modules(self, module_data):
         headings = ["Título", "Descição", "Id"]

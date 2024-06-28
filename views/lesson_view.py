@@ -20,23 +20,19 @@ class LessonView(AbstractView):
 
     def get_lesson_data(self):
         layout = [
-            [sg.Text(f'Criar aula:', font=("Helvica", 25))],
+            [sg.Text(f'Criar aula', font=("Helvica", 25))],
             [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
             [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
-            [sg.Text('Id do módulo:', size=(15, 1)), sg.InputText('', key='module_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)
-
         button, values = self.open(edit_module_window)
-        title = values['title']
-        description = values['description']
-        video_url = values['video_url']
-        module_id = values['module_id']
         edit_module_window.Close()
 
-        return {"title": title, "description": description, "video_url": video_url, "module_id": module_id}
+        if button in (None, 'Voltar'):
+            return
+        return values
 
     def get_edit_lesson_data(self):
         layout = [
@@ -44,35 +40,41 @@ class LessonView(AbstractView):
             [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
             [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
             [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
-            [sg.Text('Id da aula:', size=(15, 1)), sg.InputText('', key='lesson_id')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
-        edit_module_window = sg.Window('Criar módulo').Layout(layout)
+        edit_lesson_window = sg.Window('Criar módulo').Layout(layout)
+        button, values = self.open(edit_lesson_window)
+        edit_lesson_window.Close()
 
-        button, values = self.open(edit_module_window)
-        title = values['title']
-        description = values['description']
-        video_url = values['video_url']
-        lesson_id = values['lesson_id']
-        edit_module_window.Close()
+        if button in (None, 'Voltar'):
+            return
+        return values
 
-        return {"title": title, "description": description, "video_url": video_url, "lesson_id": lesson_id}
 
-    def show_lessons(self, lessons):
+    def show_lessons(self, lesson_data):
         headings = ["Título", "Descrição", "Id", "Url do vídeo"]
-        layout = [[sg.Table(values=lessons, headings=headings, max_col_width=25, background_color='lightblue',
+        layout = [[sg.Table(values=lesson_data, headings=headings, max_col_width=25, background_color='#0F0E10',
                             auto_size_columns=True,
-                            display_row_numbers=True,
                             justification='right',
                             num_rows=6,
-                            alternating_row_color='lightyellow',
-                            key='-TABLE-')],
-                  [sg.Button('Voltar')]]
+                            alternating_row_color='#1C2C30',
+                            key='lesson',
+                            select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
+                  [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        show_users_window = sg.Window('Aulas').Layout(layout)
-        button, values = self.open(show_users_window)
+        show_lessons_window = sg.Window('Modulos').Layout(layout)
+        button, values = self.open(show_lessons_window)
+        show_lessons_window.Close()
 
-        show_users_window.Close()
+        if button in (None, 'Voltar'):
+            return None
+
+        selected_rows = values["lesson"]
+        if len(selected_rows) == 0:
+            return None  # no selected Lesson
+        lesson_row = values["lesson"][0]
+        lesson_id = lesson_data[lesson_row][2]  # because 2nd position is the id
+        return int(lesson_id)
 
     def read_lesson_id(self):
         return self.read_int_range(

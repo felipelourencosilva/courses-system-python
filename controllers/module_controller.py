@@ -10,7 +10,7 @@ class ModuleController:
     def __init__(self, course_controller, system_controller):
         self.__modules = dict()
         self.__course_controller = course_controller
-        self.__module_view = ModuleView(self)
+        self.__module_view = ModuleView()
         self.__lesson_controller = system_controller.get_state_of_controller("lesson_controller")
         if self.__lesson_controller is None:
             self.__lesson_controller = LessonController(self, system_controller)
