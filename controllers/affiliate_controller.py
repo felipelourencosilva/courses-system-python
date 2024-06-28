@@ -1,4 +1,5 @@
 from exceptions.empty_input_exception import EmptyInputException
+from exceptions.missing_entity_exception import MissingEntityException
 from exceptions.wrong_input_exception import WrongInputException
 from views.affiliate_view import *
 from entities.affiliate import *
@@ -31,70 +32,77 @@ class AffiliateController:
         raise UserNotFoundException("Afiliado não encontrado.")
 
     def add_affiliate(self):
-        affiliate_data = self.__affiliate_view.get_add_affiliate_data()
+        try:
+            affiliate_data = self.__affiliate_view.get_add_affiliate_data()
 
-        if affiliate_data is None:
-            return
+            if affiliate_data is None:
+                return
 
-        if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
-                affiliate_data["cpf"] == "" or affiliate_data["password"] == ""):
-            raise EmptyInputException()
+            if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
+                    affiliate_data["cpf"] == "" or affiliate_data["password"] == ""):
+                raise EmptyInputException()
 
-        if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
-            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+            if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
+                raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
 
-        if len(affiliate_data["password"]) < 4:
-            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+            if len(affiliate_data["password"]) < 4:
+                raise WrongInputException('A senha deve ter 4 ou mais caracteres')
 
-        if not affiliate_data["cpf"].isdigit():
-            raise WrongInputException('CPF precisa ser um número.')
+            if not affiliate_data["cpf"].isdigit():
+                raise WrongInputException('CPF precisa ser um número.')
 
-        affiliate = Affiliate(
-            affiliate_data["name"],
-            affiliate_data["surname"],
-            affiliate_data["email"],
-            affiliate_data["password"],
-            int(affiliate_data["cpf"])
-        )
-        self.__affiliates.append(affiliate)
-        self.__affiliate_view.show_success_message("Afiliado cadastrado com sucesso")
+            affiliate = Affiliate(
+                affiliate_data["name"],
+                affiliate_data["surname"],
+                affiliate_data["email"],
+                affiliate_data["password"],
+                int(affiliate_data["cpf"])
+            )
+            self.__affiliates.append(affiliate)
+            self.__affiliate_view.show_success_message("Afiliado cadastrado com sucesso")
+        except (WrongInputException, EmptyInputException) as e:
+            self.__affiliate_view.show_message(e)
 
     def edit_affiliate(self):
-        affiliate_cpf = self.list_affiliates()
+        try:
+            affiliate_cpf = self.list_affiliates()
 
-        if affiliate_cpf is None:
-            return
+            if affiliate_cpf is None:
+                return
 
-        affiliate_cpf = int(affiliate_cpf)
-        affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
-        affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+            affiliate_cpf = int(affiliate_cpf)
+            affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
+            affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
 
-        if affiliate_data is None:
-            return
+            if affiliate_data is None:
+                return
 
-        if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
-                affiliate_data["password"] == ""):
-            raise EmptyInputException()
+            if (affiliate_data["name"] == "" or affiliate_data["surname"] == "" or affiliate_data["email"] == "" or
+                    affiliate_data["password"] == ""):
+                raise EmptyInputException()
 
-        if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
-            raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
+            if "@" not in affiliate_data["email"] or ".com" not in affiliate_data["email"]:
+                raise WrongInputException('Email inválido. Deve conter "@" e ".com".')
 
-        if len(affiliate_data["password"]) < 4:
-            raise WrongInputException('A senha deve ter 4 ou mais caracteres')
+            if len(affiliate_data["password"]) < 4:
+                raise WrongInputException('A senha deve ter 4 ou mais caracteres')
 
-        if not affiliate_data["cpf"].isdigit():
-            raise WrongInputException('CPF precisa ser um número.')
+            if not affiliate_data["cpf"].isdigit():
+                raise WrongInputException('CPF precisa ser um número.')
 
-        affiliate.name = affiliate_data["name"]
-        affiliate.surname = affiliate_data["surname"]
-        affiliate.email = affiliate_data["email"]
-        affiliate.password = affiliate_data["password"]
-        self.__affiliate_view.show_success_message("Afiliado editado com sucesso")
+            affiliate.name = affiliate_data["name"]
+            affiliate.surname = affiliate_data["surname"]
+            affiliate.email = affiliate_data["email"]
+            affiliate.password = affiliate_data["password"]
+            self.__affiliate_view.show_success_message("Afiliado editado com sucesso")
+        except (WrongInputException, EmptyInputException) as e:
+            self.__affiliate_view.show_message(e)
 
     def list_affiliates(self):
-        if len(self.__affiliates) == 0:
-            self.__affiliate_view.show_message("Não há afiliados cadastrados")
-        else:
+        try:
+            if len(self.__affiliates) == 0:
+                MissingEntityException("Não há afiliados cadastrados")
+
             affiliates_data = []
             for affiliate in self.__affiliates:
                 affiliates_data.append([
@@ -106,6 +114,8 @@ class AffiliateController:
                 ])
 
             return self.__affiliate_view.show_affiliates(affiliates_data)
+        except MissingEntityException as e:
+            self.__affiliate_view.show_message(e)
 
     def remove_affiliate(self):
         affiliate_cpf = self.list_affiliates()
@@ -118,17 +128,22 @@ class AffiliateController:
         self.__affiliate_view.show_success_message("Afiliado removido com sucesso")
 
     def add_balance(self):
-        affiliate_cpf = self.list_affiliates()
-        if affiliate_cpf is None:
-            return
         try:
+            affiliate_cpf = self.list_affiliates()
+            if affiliate_cpf is None:
+                return
+
             affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
-        except UserNotFoundException as e:
+
+            value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ")
+
+            if not value.isdigit() or float(value) < 0:
+                raise WrongInputException("Valor precisa ser um número maior do que 0.")
+
+            affiliate.add_balance(float(value))
+            self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
+        except (UserNotFoundException, WrongInputException) as e:
             self.__affiliate_view.show_message(e)
-            return
-        value = self.__affiliate_view.read_value("Digite o valor que deseja adicionar: ")
-        affiliate.add_balance(value)
-        self.__affiliate_view.show_success_message("Saldo adicionado com sucesso")
 
     def pay_affiliate(self, course, affiliate):
         if affiliate is not None:
