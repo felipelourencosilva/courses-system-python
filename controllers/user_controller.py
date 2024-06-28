@@ -2,7 +2,6 @@ from exceptions.empty_input_exception import EmptyInputException
 from exceptions.missing_entity_exception import MissingEntityException
 from exceptions.wrong_input_exception import WrongInputException
 from views.user_view import *
-from entities.user import *
 from entities.course import *
 from exceptions.user_not_found_exception import UserNotFoundException
 

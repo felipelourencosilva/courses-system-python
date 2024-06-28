@@ -1,9 +1,5 @@
 from views.abstract_view import AbstractView
 import PySimpleGUI as sg
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
 
 
 class SaleView(AbstractView):
@@ -17,9 +13,9 @@ class SaleView(AbstractView):
             [sg.Button('Voltar')]
         ]
 
-        self.__windowSelf = sg.Window('Dados usuário').Layout(layout)
-        button, values = self.openSelf()
-        self.closeSelf()
+        single_report_window = sg.Window('Dados usuário').Layout(layout)
+        button, values = self.open(single_report_window)
+        single_report_window.Close()
 
     def show_complete_report(self, messages: list):
         layout = [

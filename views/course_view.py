@@ -1,9 +1,5 @@
 from views.abstract_view import AbstractView
 import PySimpleGUI as sg
-from rich.console import Console
-from rich import box
-from rich.table import Table
-console = Console()
 
 
 class CourseView(AbstractView):

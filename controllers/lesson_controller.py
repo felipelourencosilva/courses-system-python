@@ -1,6 +1,5 @@
 from views.lesson_view import *
 from entities.lesson import *
-from entities.comment import *
 from controllers.comment_controller import *
 import random
 

@@ -82,15 +82,6 @@ class SystemController:
         self.__program_state["affiliate_controller"] = self.__affiliate_controller
         self.__program_state["sale_controller"] = self.__sale_controller
         self.__program_state["course_controller"] = self.__course_controller
-        self.__program_state["module_controller"] = (
-            self.__course_controller.module_controller
-        )
-        self.__program_state["lesson_controller"] = (
-            self.__course_controller.module_controller.lesson_controller
-        )
-        self.__program_state["comment_controller"] = (
-            self.__course_controller.module_controller.lesson_controller.comment_controller
-        )
 
         self.__system_dao.add("program_state", self.__program_state)
         exit(0)
