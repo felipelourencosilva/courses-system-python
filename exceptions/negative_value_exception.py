@@ -1,4 +1,4 @@
-class MissingParentException(Exception):
+class NegativeValueException(Exception):
 
     def __init__(self, msg: str):
         super().__init__(msg)

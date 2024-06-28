@@ -1,3 +1,8 @@
+from exceptions.empty_input_exception import EmptyInputException
+from exceptions.missing_entity_exception import MissingEntityException
+from exceptions.missing_parent_exception import MissingParentException
+from exceptions.negative_value_exception import NegativeValueException
+from exceptions.wrong_input_exception import WrongInputException
 from views.course_view import *
 from entities.course import *
 from controllers.module_controller import *
@@ -47,14 +52,25 @@ class CourseController:
 
     def add_course(self):
         if len(self.__system_controller.producer_controller.get_producers()) == 0:
-            self.__course_view.show_message("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
-            return
+            raise MissingParentException("Não é possível adicionar um Curso sem um Produtor cadastrado no sistema.")
+
         producer_cpf = self.__system_controller.producer_controller.list_producer()
         if producer_cpf is None:
             return
+
         course_data = self.__course_view.get_add_course_data()
         if course_data is None:
             return
+
+        if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
+                course_data["commission_percentage"] == ""):
+            raise EmptyInputException()
+
+        if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
+            raise WrongInputException('Digite os valores corretamente.')
+
+        if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
+            raise NegativeValueException('Valores devem ser maiores do que 0.')
 
         course_data["price"] = float(course_data["price"])
         course_data["commission_percentage"] = int(course_data["commission_percentage"])
@@ -74,18 +90,27 @@ class CourseController:
 
     def edit_course(self):
         if len(self.__courses) == 0:
-            self.__course_view.show_message("Não há cursos cadastrados")
-            return
+            raise MissingEntityException("Não há cursos cadastrados.")
+
         id = self.list_courses()
         if id is None:
             return
         if id not in self.__courses:
-            self.__course_view.show_message("Este curso não existe")
-            return
+            raise MissingEntityException("Este curso não existe.")
 
         course_data = self.__course_view.get_edit_course_data()
         if course_data is None:
             return
+
+        if (course_data["name"] == "" or course_data["description"] == "" or course_data["price"] == "" or
+                course_data["commission_percentage"] == ""):
+            raise EmptyInputException()
+
+        if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
+            raise WrongInputException('Digite os valores corretamente.')
+
+        if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
+            raise NegativeValueException('Valores devem ser maiores do que 0.')
 
         course_data["price"] = float(course_data["price"])
         course_data["commission_percentage"] = int(course_data["commission_percentage"])
@@ -99,8 +124,8 @@ class CourseController:
 
     def list_courses(self):
         if len(self.__courses) == 0:
-            self.__course_view.show_message("Não há cursos cadastrados")
-            return
+            raise MissingEntityException("Não há cursos cadastrados.")
+
         courses_data = []
         for key, course in self.__courses.items():
             courses_data.append([
@@ -114,16 +139,15 @@ class CourseController:
 
     def buy_course(self):
         if len(self.__system_controller.user_controller.get_users()) == 0:
-            self.__course_view.show_message("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
-            return
+            raise MissingParentException("Não é possível comprar um Curso sem um Usuário cadastrado no sistema")
         if len(self.__courses) == 0:
-            self.__course_view.show_message("Não há cursos cadastrados")
-            return
+            raise MissingEntityException("Não há cursos cadastrados")
+
         self.list_courses()
+
         id = self.__course_view.read_id()
         if id not in self.__courses:
-            self.__course_view.show_message("Este curso não existe")
-            return
+            raise WrongInputException("Este curso não existe")
 
         if len(self.__system_controller.user_controller.get_proper_users()):
             self.__system_controller.user_controller.list_users()

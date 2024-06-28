@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import re
 import PySimpleGUI as sg
-from exceptions import negative_money_exception, wrong_input_exception
+from exceptions import negative_value_exception, wrong_input_exception
 from exceptions.wrong_input_exception import WrongInputException
 
 

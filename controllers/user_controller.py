@@ -1,4 +1,5 @@
 from exceptions.empty_input_exception import EmptyInputException
+from exceptions.missing_entity_exception import MissingEntityException
 from exceptions.wrong_input_exception import WrongInputException
 from views.user_view import *
 from entities.user import *
@@ -106,15 +107,15 @@ class UserController:
 
     def list_users(self):
         if len(self.__users) == 0:
-            self.__user_view.show_message("Não há usuários cadastrados")
-        else:
-            users_info = []
-            for user in self.__users:
-                course_names = [c.name for c in user.courses]
-                users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
-                                   " ".join(course_names)])
+            raise MissingEntityException("Não há usuários cadastrados")
 
-            return self.__user_view.show_users(users_info)  # should return user cpf
+        users_info = []
+        for user in self.get_users():
+            course_names = [c.name for c in user.courses]
+            users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
+                                " ".join(course_names)])
+
+        return self.__user_view.show_users(users_info)  # should return user cpf
 
     def remove_user(self):
         user_cpf = self.list_users()
