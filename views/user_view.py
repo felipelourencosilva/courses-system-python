@@ -25,7 +25,7 @@ class UserView(AbstractView):
         return super().read_basic_edit_user_data("USUÁRIO")
 
     def show_users(self, users_data):
-        headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]
+        headings = ["Nome", "Email", "Senha", "CPF", "Saldo", "Cursos"]
         layout = [[sg.Table(values=users_data, headings=headings, max_col_width=25, background_color='#0F0E10',
                             auto_size_columns=True,
                             justification='right',
@@ -35,7 +35,7 @@ class UserView(AbstractView):
                             select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
                   [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        show_users_window = sg.Window('Usuarios').Layout(layout)
+        show_users_window = sg.Window('Usuários').Layout(layout)
         button, values = self.open(show_users_window)
         show_users_window.Close()
         if button in (None, 'Voltar'):

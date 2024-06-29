@@ -22,8 +22,11 @@ class AffiliateView(AbstractView):
     def get_edit_affiliate_data(self):
         return super().read_basic_edit_user_data("AFILIADO")
 
-    def show_affiliates(self, affiliate_data):
+    def show_affiliates(self, affiliate_data, show_no_affiliate_button):
         headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]
+        button_list = [sg.Button('Confirmar'), sg.Button('Voltar')]
+        if show_no_affiliate_button:
+            button_list.append(sg.Button('Sem Afiliado'))
         layout = [[sg.Table(values=affiliate_data, headings=headings, max_col_width=25, background_color='#0F0E10',
                             auto_size_columns=True,
                             justification='right',
@@ -31,13 +34,15 @@ class AffiliateView(AbstractView):
                             alternating_row_color='#1C2C30',
                             key='affiliate',
                             select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
-                  [sg.Button('Confirmar'), sg.Button('Voltar')]]
+                  button_list]
 
         show_affiliates_window = sg.Window('Afiliados').Layout(layout)
         button, values = self.open(show_affiliates_window)
         show_affiliates_window.Close()
         if button in (None, 'Voltar'):
             return
+        if button == 'Sem Afiliado':
+            return -1
 
         selected_rows = values["affiliate"]
         if len(selected_rows) == 0:

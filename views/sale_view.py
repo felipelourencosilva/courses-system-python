@@ -45,10 +45,3 @@ class SaleView(AbstractView):
             0: "Voltar"
         }
         return super().view_options("RELATÓRIOS", options)
-
-    def closeSelf(self):
-        self.__windowSelf.Close()
-
-    def openSelf(self):
-        button, values = self.__windowSelf.Read()
-        return button, values

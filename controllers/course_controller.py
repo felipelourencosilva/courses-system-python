@@ -159,46 +159,27 @@ class CourseController:
             if len(self.__courses) == 0:
                 raise MissingEntityException("Não há cursos cadastrados")
 
-            self.list_courses()
+            course_id = self.list_courses()
+            if course_id is None:
+                return
+            cpf = self.__system_controller.user_controller.list_users()
+            if cpf is None:
+                return
+            course = self.__courses[course_id]
 
-            id = self.__course_view.read_id()
-            if id not in self.__courses:
-                raise WrongInputException("Este curso não existe")
-
-            if len(self.__system_controller.user_controller.get_proper_users()):
-                self.__system_controller.user_controller.list_users()
-            if len(self.__system_controller.producer_controller.get_producers()):
-                self.__system_controller.producer_controller.list_producer()
-            if len(self.__system_controller.affiliate_controller.get_affiliates()):
-                self.__system_controller.affiliate_controller.list_affiliates()
-
-            while True:
-                cpf = self.__course_view.read_cpf("CPF do Usuário: ")
-                if self.__system_controller.user_controller.get_user_by_cpf(cpf) is None:
-                    self.__course_view.show_message("Este usuário não existe")
-                else:
-                    break
-
-            course = self.__courses[id]
             if self.__system_controller.user_controller.user_has_course(cpf, course):
                 self.__course_view.show_message("Você já possui esse curso")
                 return
-            if not (self.__system_controller.user_controller.user_has_enough_balance(cpf, course)):
+            if not self.__system_controller.user_controller.user_has_enough_balance(cpf, course):
                 self.__course_view.show_message("Você não possui saldo suficiente")
                 return
 
-            if len(self.__system_controller.affiliate_controller.get_affiliates()) != 0:
-                self.__system_controller.affiliate_controller.list_affiliates()
+            affiliate_cpf = self.__system_controller.affiliate_controller.list_affiliates(True)
+            if affiliate_cpf is None:
+                return
             affiliate = None
-            while True:
-                affiliate_cpf = self.__course_view.read_int("CPF do Afiliado (coloque 0 se não houver Afiliado): ", "CPF deve ser inteiro positivo ou 0.")
-                if affiliate_cpf == 0:
-                    break
-                if self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf) is None:
-                    self.__course_view.show_message("Este afiliado não existe")
-                else:
-                    affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
-                    break
+            if affiliate_cpf != -1:  # if the user did not select the "no affiliate" button
+                affiliate = self.__system_controller.affiliate_controller.get_affiliate_by_cpf(affiliate_cpf)
 
             self.__system_controller.user_controller.user_add_course(cpf, course)
             self.__system_controller.producer_controller.pay_producer(course, affiliate is not None)

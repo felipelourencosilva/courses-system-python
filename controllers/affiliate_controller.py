@@ -98,9 +98,9 @@ class AffiliateController:
         except (WrongInputException, EmptyInputException) as e:
             self.__affiliate_view.show_message(e)
 
-    def list_affiliates(self):
+    def list_affiliates(self, show_no_affiliate_button=False):
         try:
-            if len(self.__affiliates) == 0:
+            if len(self.__affiliates) == 0 and not show_no_affiliate_button:
                 MissingEntityException("Não há afiliados cadastrados")
 
             affiliates_data = []
@@ -113,7 +113,7 @@ class AffiliateController:
                     affiliate.balance
                 ])
 
-            return self.__affiliate_view.show_affiliates(affiliates_data)
+            return self.__affiliate_view.show_affiliates(affiliates_data, show_no_affiliate_button)
         except MissingEntityException as e:
             self.__affiliate_view.show_message(e)
 
