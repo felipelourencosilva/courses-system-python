@@ -72,7 +72,6 @@ class UserController:
                 if user.cpf == cpf:
                     raise WrongInputException('Este CPF já foi utilizado.')
 
-
             user = User(
                 user_data["name"],
                 user_data["surname"],
@@ -95,7 +94,9 @@ class UserController:
 
             user_cpf = int(user_cpf)
             user = self.get_user_by_cpf(user_cpf)
-            user_data = self.__user_view.get_edit_user_data()
+            user_info = {"name": user.name, "surname": user.surname, "email": user.email,
+                         "password": user.password}
+            user_data = self.__user_view.get_edit_user_data(user_info)
 
             if user_data is None:
                 return
@@ -109,9 +110,6 @@ class UserController:
 
             if len(user_data["password"]) < 4:
                 raise WrongInputException('A senha deve ter 4 ou mais caracteres')
-
-            if not user_data["cpf"].isdigit():
-                raise WrongInputException('CPF precisa ser um número.')
 
             user.name = user_data["name"]
             user.surname = user_data["surname"]

@@ -113,17 +113,17 @@ class CommentController:
             if comment_id is None:
                 return
 
-            comment_data = self.__comment_view.get_edit_comment_data()
+            comment = self.__comments[comment_id]
+            comment_data = self.__comment_view.get_edit_comment_data({"comment": comment.comment})
             if comment_data is None:
                 return
 
             if comment_data["comment"] == "":
                 raise EmptyInputException()
 
-            comment = self.__comments[comment_id]
             comment.comment = comment_data["comment"]
             self.__comment_view.show_success_message("Comentário editado com sucesso")
-        except MissingEntityException as e:
+        except (MissingEntityException, EmptyInputException) as e:
             self.__comment_view.show_message(e)
 
     def list_comments(self, lesson_id=None):
@@ -139,7 +139,7 @@ class CommentController:
             lesson = self.__lesson_controller.get_lesson(lesson_id)
 
             if len(lesson.comments) == 0:
-                MissingEntityException("Não há comentários cadastrados nessa aula")
+                raise MissingEntityException("Não há comentários cadastrados nessa aula")
 
             comments_info = []
             for comment in lesson.comments:

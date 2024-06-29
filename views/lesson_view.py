@@ -34,22 +34,21 @@ class LessonView(AbstractView):
             return
         return values
 
-    def get_edit_lesson_data(self):
+    def get_edit_lesson_data(self, info):
         layout = [
             [sg.Text(f'Atualizar aula:', font=("Helvica", 25))],
-            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
-            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
-            [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText('', key='video_url')],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText(info["title"], key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText(info["description"], key='description')],
+            [sg.Text('Url do vídeo:', size=(15, 1)), sg.InputText(info["video_url"], key='video_url')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
-        edit_lesson_window = sg.Window('Criar módulo').Layout(layout)
+        edit_lesson_window = sg.Window('Criar modulo').Layout(layout)
         button, values = self.open(edit_lesson_window)
         edit_lesson_window.Close()
 
         if button in (None, 'Voltar'):
             return
         return values
-
 
     def show_lessons(self, lesson_data):
         headings = ["Título", "Descrição", "Id", "Url do vídeo"]
@@ -62,7 +61,7 @@ class LessonView(AbstractView):
                             select_mode=sg.TABLE_SELECT_MODE_BROWSE)],
                   [sg.Button('Confirmar'), sg.Button('Voltar')]]
 
-        show_lessons_window = sg.Window('Modulos').Layout(layout)
+        show_lessons_window = sg.Window('Aulas').Layout(layout)
         button, values = self.open(show_lessons_window)
         show_lessons_window.Close()
 

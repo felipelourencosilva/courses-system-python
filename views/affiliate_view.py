@@ -19,8 +19,8 @@ class AffiliateView(AbstractView):
     def get_add_affiliate_data(self):
         return super().read_basic_add_user_data("AFILIADO")
 
-    def get_edit_affiliate_data(self):
-        return super().read_basic_edit_user_data("AFILIADO")
+    def get_edit_affiliate_data(self, affiliate_info):
+        return super().read_basic_edit_user_data("AFILIADO", affiliate_info)
 
     def show_affiliates(self, affiliate_data, show_no_affiliate_button):
         headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]

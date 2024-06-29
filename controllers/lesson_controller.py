@@ -129,12 +129,15 @@ class LessonController:
             if lesson_id is None:
                 return
 
-            lesson_data = self.__lesson_view.get_edit_lesson_data()
+            lesson = self.__lessons[lesson_id]
+            lesson_info = {"title": lesson.title, "description": lesson.description, "video_url": lesson.video}
+            lesson_data = self.__lesson_view.get_edit_lesson_data(lesson_info)
+            if lesson_data is None:
+                return
 
             if lesson_data["title"] == "" or lesson_data["description"] == "" or lesson_data["video_url"] == "":
                 raise EmptyInputException()
 
-            lesson = self.__lessons[lesson_id]
             lesson.title = lesson_data["title"]
             lesson.description = lesson_data["description"]
             lesson.video = Video(lesson_data["video_url"])
@@ -159,12 +162,12 @@ class LessonController:
 
             module = self.__module_controller.get_module(module_id)
             if len(module.lessons) == 0:
-                MissingEntityException("Não há aulas cadastradas nesse módulo")
+                raise MissingEntityException("Não há aulas cadastradas nesse módulo")
 
             lesson_data = []
             for lesson in module.lessons:
                 lesson_data.append([lesson.title, lesson.description,
-                                     lesson.id, lesson.video])
+                                    lesson.id, lesson.video])
             lesson_id = self.__lesson_view.show_lessons(lesson_data)
             return lesson_id
         except MissingEntityException as e:

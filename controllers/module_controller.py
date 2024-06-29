@@ -115,7 +115,9 @@ class ModuleController:
             if module_id is None:
                 return
 
-            module_data = self.__module_view.get_edit_module_data()
+            module = self.__modules[module_id]
+            module_info = {"title": module.title, "description": module.description}
+            module_data = self.__module_view.get_edit_module_data(module_info)
             if module_data is None:
                 return
 
@@ -125,7 +127,7 @@ class ModuleController:
             if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
                 WrongInputException("Este módulo não pertence a este curso")
 
-            module = self.__modules[module_id]
+
             module.title = module_data["title"]
             module.description = module_data["description"]
             self.__module_view.show_success_message("Módulo editado com sucesso")

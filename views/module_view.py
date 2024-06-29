@@ -33,12 +33,11 @@ class ModuleView(AbstractView):
             return
         return values
 
-    def get_edit_module_data(self):
+    def get_edit_module_data(self, info):
         layout = [
             [sg.Text(f'Criar módulo', font=("Helvica", 25))],
-            [sg.Text('Título:', size=(15, 1)), sg.InputText('', key='title')],
-            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
-            [sg.Text('Id do módulo:', size=(15, 1)), sg.InputText('', key='module_id')],
+            [sg.Text('Título:', size=(15, 1)), sg.InputText(info["title"], key='title')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText(info["description"], key='description')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar módulo').Layout(layout)

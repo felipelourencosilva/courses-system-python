@@ -20,8 +20,8 @@ class ProducerView(AbstractView):
     def get_add_producer_data(self):
         return super().read_basic_add_user_data("PRODUTOR")
 
-    def get_edit_producer_data(self):
-        return super().read_basic_edit_user_data("PRODUTOR")
+    def get_edit_producer_data(self, producer_info):
+        return super().read_basic_edit_user_data("PRODUTOR", producer_info)
 
     def show_producers(self, producer_data):
         headings = ["Nome", "Email", "Senha", "CPF", "Saldo"]

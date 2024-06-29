@@ -18,14 +18,13 @@ class CourseView(AbstractView):
         }
         return super().view_options("CURSOS", options)
 
-    def get_edit_course_data(self):
-        sg.ChangeLookAndFeel('LightGray1')
+    def get_edit_course_data(self, info: dict):
         layout = [
             [sg.Text(f'DADOS CURSO', font=("Helvica", 25))],
-            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
-            [sg.Text('Descrição:', size=(15, 1)), sg.InputText('', key='description')],
-            [sg.Text('Preço:', size=(15, 1)), sg.InputText('', key='price')],
-            [sg.Text('Comissão:', size=(15, 1)), sg.InputText('', key='commission_percentage')],
+            [sg.Text('Nome:', size=(15, 1)), sg.InputText(info["name"], key='name')],
+            [sg.Text('Descrição:', size=(15, 1)), sg.InputText(info["description"], key='description')],
+            [sg.Text('Preço:', size=(15, 1)), sg.InputText(info["price"], key='price')],
+            [sg.Text('Comissão:', size=(15, 1)), sg.InputText(info["commission_percentage"], key='commission_percentage')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         user_data_window = sg.Window('Dados Curso').Layout(layout)
@@ -35,7 +34,6 @@ class CourseView(AbstractView):
         return values
 
     def get_add_course_data(self):
-        sg.ChangeLookAndFeel('LightGray1')
         layout = [
             [sg.Text(f'DADOS CURSO', font=("Helvica", 25))],
             [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],

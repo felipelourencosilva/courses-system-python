@@ -138,13 +138,13 @@ class AbstractView(ABC):
             return
         return values
 
-    def read_basic_edit_user_data(self, title: str):
+    def read_basic_edit_user_data(self, title: str, info: dict):
         layout = [
             [sg.Text(f'DADOS {title}', font=("Helvica", 25))],
-            [sg.Text('Nome:', size=(15, 1)), sg.InputText('', key='name')],
-            [sg.Text('Sobrenome:', size=(15, 1)), sg.InputText('', key='surname')],
-            [sg.Text('Email:', size=(15, 1)), sg.InputText('', key='email')],
-            [sg.Text('Senha:', size=(15, 1)), sg.InputText('', key='password')],
+            [sg.Text('Nome:', size=(15, 1)), sg.InputText(info["name"], key='name')],
+            [sg.Text('Sobrenome:', size=(15, 1)), sg.InputText(info["surname"], key='surname')],
+            [sg.Text('Email:', size=(15, 1)), sg.InputText(info["email"], key='email')],
+            [sg.Text('Senha:', size=(15, 1)), sg.InputText(info["password"], key='password')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         user_data_window = sg.Window('Dados usuário').Layout(layout)

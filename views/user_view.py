@@ -21,8 +21,8 @@ class UserView(AbstractView):
     def get_add_user_data(self):
         return super().read_basic_add_user_data("USUÁRIO")
 
-    def get_edit_user_data(self):
-        return super().read_basic_edit_user_data("USUÁRIO")
+    def get_edit_user_data(self, user_info):
+        return super().read_basic_edit_user_data("USUÁRIO", user_info)
 
     def show_users(self, users_data):
         headings = ["Nome", "Email", "Senha", "CPF", "Saldo", "Cursos"]

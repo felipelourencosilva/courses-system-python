@@ -77,7 +77,9 @@ class AffiliateController:
 
             affiliate_cpf = int(affiliate_cpf)
             affiliate = self.get_affiliate_by_cpf(affiliate_cpf)
-            affiliate_data = self.__affiliate_view.get_edit_affiliate_data()
+
+            affiliate_info = {"name": affiliate.name, "surname": affiliate.surname, "email": affiliate.email, "password": affiliate.password}
+            affiliate_data = self.__affiliate_view.get_edit_affiliate_data(affiliate_info)
 
             if affiliate_data is None:
                 return
@@ -91,9 +93,6 @@ class AffiliateController:
 
             if len(affiliate_data["password"]) < 4:
                 raise WrongInputException('A senha deve ter 4 ou mais caracteres')
-
-            if not affiliate_data["cpf"].isdigit():
-                raise WrongInputException('CPF precisa ser um número.')
 
             affiliate.name = affiliate_data["name"]
             affiliate.surname = affiliate_data["surname"]

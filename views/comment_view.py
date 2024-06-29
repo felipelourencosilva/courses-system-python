@@ -31,17 +31,17 @@ class CommentView(AbstractView):
             return
         return values
 
-    def get_edit_comment_data(self):
+    def get_edit_comment_data(self, info):
         layout = [
             [sg.Text(f'Escreva seu comentário:', font=("Helvica", 25))],
-            [sg.Text('Comentário:', size=(15, 1)), sg.InputText('', key='comment')],
+            [sg.Text('Comentário:', size=(15, 1)), sg.InputText(info["comment"], key='comment')],
             [sg.Button('Confirmar'), sg.Cancel('Voltar')]
         ]
         edit_module_window = sg.Window('Criar comentário').Layout(layout)
         button, values = self.open(edit_module_window)
         edit_module_window.Close()
 
-        if button in (None, 'Cancelar'):
+        if button in (None, 'Voltar'):
             return
         return values
 

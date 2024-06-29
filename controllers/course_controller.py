@@ -67,8 +67,11 @@ class CourseController:
                     course_data["commission_percentage"] == ""):
                 raise EmptyInputException()
 
-            if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
-                raise WrongInputException('Digite os valores corretamente.')
+            try:
+                float(course_data["price"])
+                float(course_data["commission_percentage"])
+            except ValueError:
+                raise WrongInputException('Digite os valores corretamente para o preço e porcentagem de comissão.')
 
             if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
                 raise WrongInputException('Valores devem ser maiores do que 0.')
@@ -105,7 +108,11 @@ class CourseController:
             if id not in self.__courses:
                 raise MissingEntityException("Este curso não existe.")
 
-            course_data = self.__course_view.get_edit_course_data()
+            course = self.__courses[id]
+            course_info = {"name": course.name, "description": course.description,
+                           "price": course.price, "commission_percentage": course.commission_percentage}
+
+            course_data = self.__course_view.get_edit_course_data(course_info)
             if course_data is None:
                 return
 
@@ -113,8 +120,11 @@ class CourseController:
                     course_data["commission_percentage"] == ""):
                 raise EmptyInputException()
 
-            if not course_data["price"].isdigit() or not course_data["commission_percentage"].isdigit():
-                raise WrongInputException('Digite os valores corretamente.')
+            try:
+                float(course_data["price"])
+                float(course_data["commission_percentage"])
+            except ValueError:
+                raise WrongInputException('Digite os valores corretamente para o preço e porcentagem de comissão.')
 
             if float(course_data["price"]) < 0 or int(course_data["commission_percentage"]) < 0:
                 raise WrongInputException('Valores devem ser maiores do que 0.')
@@ -125,7 +135,6 @@ class CourseController:
             course_data["price"] = float(course_data["price"])
             course_data["commission_percentage"] = int(course_data["commission_percentage"])
 
-            course = self.__courses[id]
             course.name = course_data["name"]
             course.description = course_data["description"]
             course.price = course_data["price"]

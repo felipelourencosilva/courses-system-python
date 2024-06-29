@@ -78,7 +78,9 @@ class ProducerController:
 
             producer_cpf = int(producer_cpf)
             producer = self.get_producer_by_cpf(producer_cpf)
-            producer_data = self.__producer_view.get_edit_producer_data()
+            producer_info = {"name": producer.name, "surname": producer.surname, "email": producer.email,
+                             "password": producer.password}
+            producer_data = self.__producer_view.get_edit_producer_data(producer_info)
 
             if producer_data is None:
                 return
@@ -92,9 +94,6 @@ class ProducerController:
 
             if len(producer_data["password"]) < 4:
                 raise WrongInputException('A senha deve ter 4 ou mais caracteres')
-
-            if not producer_data["cpf"].isdigit():
-                raise WrongInputException('CPF precisa ser um número.')
 
             producer.name = producer_data["name"]
             producer.surname = producer_data["surname"]
