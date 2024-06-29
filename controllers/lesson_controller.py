@@ -19,12 +19,10 @@ class LessonController:
         if self.__comment_controller is None:
             self.__comment_controller = CommentController(self, system_controller)
 
-    '''
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if LessonController.__instance is None:
-            LessonController.__instance = object.__new__(cls)
+            LessonController.__instance = super(LessonController, cls).__new__(cls)
         return LessonController.__instance
-    '''
 
     @property
     def comment_controller(self):

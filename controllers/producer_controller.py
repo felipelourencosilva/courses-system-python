@@ -14,12 +14,10 @@ class ProducerController:
         self.__producer_view = ProducerView()
         self.__system_controller = system_controller
 
-    '''
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if ProducerController.__instance is None:
-            ProducerController.__instance = object.__new__(cls)
+            ProducerController.__instance = super(ProducerController, cls).__new__(cls)
         return ProducerController.__instance
-    '''
 
     def get_producers(self):
         return self.__producers

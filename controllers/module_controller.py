@@ -15,12 +15,10 @@ class ModuleController:
         if self.__lesson_controller is None:
             self.__lesson_controller = LessonController(self, system_controller)
 
-    '''
-    def __new__(cls):
+    def __new__(cls, *args, **kwargs):
         if ModuleController.__instance is None:
-            ModuleController.__instance = object.__new__(cls)
+            ModuleController.__instance = super(ModuleController, cls).__new__(cls)
         return ModuleController.__instance
-    '''
 
     @property
     def course_controller(self):

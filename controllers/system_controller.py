@@ -18,13 +18,10 @@ class SystemController:
         self.__init_controllers()
         self.__system_view = SystemView()
 
-
-    '''
     def __new__(cls):
         if SystemController.__instance is None:
             SystemController.__instance = object.__new__(cls)
         return SystemController.__instance
-    '''
 
     @property
     def user_controller(self) -> UserController:

@@ -22,6 +22,11 @@ class CourseController:
         if self.__module_controller is None:
             self.__module_controller = ModuleController(self, system_controller)
 
+    def __new__(cls, *args, **kwargs):
+        if CourseController.__instance is None:
+            CourseController.__instance = super(CourseController, cls).__new__(cls)
+        return CourseController.__instance
+
     @property
     def module_controller(self):
         return self.__module_controller
@@ -180,7 +185,6 @@ class CourseController:
 
             if self.__system_controller.user_controller.user_has_course(cpf, course):
                 raise RepeatedCourseException()
-                return
             if not self.__system_controller.user_controller.user_has_enough_balance(cpf, course):
                 raise NotEnoughBalanceException()
 
