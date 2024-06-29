@@ -63,11 +63,7 @@ class LessonController:
             if len(self.__module_controller.get_modules()) == 0:
                 raise MissingParentException("Não é possível adicionar uma Aula sem um Módulo no sistema")
 
-            course_id = self.__module_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__module_controller.list_modules(course_id)
+            module_id = self.__module_controller.list_modules()
             if module_id is None:
                 return
 
@@ -91,15 +87,11 @@ class LessonController:
             if len(self.__lessons) == 0:
                 raise MissingEntityException("Não há aulas cadastradas")
 
-            course_id = self.__module_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__module_controller.list_modules(course_id)
+            module_id = self.__module_controller.list_modules()
             if module_id is None:
                 return
 
-            lesson_id = self.list_lessons()
+            lesson_id = self.list_lessons(module_id)
             if lesson_id is None:
                 return
 
@@ -117,15 +109,7 @@ class LessonController:
             if len(self.__lessons) == 0:
                 MissingEntityException("Não há aulas cadastradas")
 
-            course_id = self.__module_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__module_controller.list_modules(course_id)
-            if module_id is None:
-                return
-
-            lesson_id = self.list_lessons(course_id, module_id)
+            lesson_id = self.list_lessons()
             if lesson_id is None:
                 return
 
@@ -145,18 +129,13 @@ class LessonController:
         except (MissingEntityException, EmptyInputException) as e:
             self.__lesson_view.show_message(e)
 
-    def list_lessons(self, course_id=None, module_id=None):
+    def list_lessons(self, module_id=None):
         try:
             if len(self.__lessons) == 0:
                 MissingEntityException("Não há aulas cadastradas")
 
-            if course_id is None:
-                course_id = self.__module_controller.course_controller.list_courses()
-                if course_id is None:
-                    return
-
             if module_id is None:
-                module_id = self.__module_controller.list_modules(course_id)
+                module_id = self.__module_controller.list_modules()
                 if module_id is None:
                     return
 

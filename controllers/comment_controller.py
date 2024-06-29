@@ -32,15 +32,7 @@ class CommentController:
             if len(self.__lesson_controller.get_lessons()) == 0:
                 raise MissingParentException("Não é possível adicionar um Comentário sem uma Aula no sistema")
 
-            course_id = self.__system_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
-            if module_id is None:
-                return
-
-            lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
+            lesson_id = self.__lesson_controller.list_lessons()
             if lesson_id is None:
                 return
 
@@ -69,15 +61,7 @@ class CommentController:
             if len(self.__comments) == 0:
                 MissingEntityException("Não há comentários cadastrados")
 
-            course_id = self.__system_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
-            if module_id is None:
-                return
-
-            lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
+            lesson_id = self.__lesson_controller.list_lessons()
             if lesson_id is None:
                 return
 
@@ -97,19 +81,7 @@ class CommentController:
             if len(self.__comments) == 0:
                 MissingEntityException("Não há comentários cadastrados")
 
-            course_id = self.__system_controller.course_controller.list_courses()
-            if course_id is None:
-                return
-
-            module_id = self.__system_controller.course_controller.module_controller.list_modules(course_id)
-            if module_id is None:
-                return
-
-            lesson_id = self.__lesson_controller.list_lessons(course_id, module_id)
-            if lesson_id is None:
-                return
-
-            comment_id = self.list_comments(lesson_id)
+            comment_id = self.list_comments()
             if comment_id is None:
                 return
 
