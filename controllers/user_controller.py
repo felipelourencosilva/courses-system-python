@@ -85,7 +85,7 @@ class UserController:
 
     def edit_user(self):
         try:
-            user_cpf = self.list_users()
+            user_cpf = self.list_proper_users()
 
             if user_cpf is None:
                 return
@@ -138,8 +138,29 @@ class UserController:
         except MissingEntityException as e:
             self.__user_view.show_message(e)
 
+    def list_proper_users(self):
+        try:
+            if len(self.__users) == 0:
+                raise MissingEntityException("Não há usuários cadastrados")
+
+            users_info = []
+            for user in self.__users:
+                course_names = [c.name for c in user.courses]
+                users_info.append([
+                    user.name + " " + user.surname,
+                    user.email,
+                    user.password,
+                    user.cpf,
+                    user.balance,
+                    ", ".join(course_names)
+                ])
+
+            return self.__user_view.show_users(users_info)  # should return user cpf
+        except MissingEntityException as e:
+            self.__user_view.show_message(e)
+
     def remove_user(self):
-        user_cpf = self.list_users()
+        user_cpf = self.list_proper_users()
 
         if user_cpf is None:
             return
@@ -196,7 +217,7 @@ class UserController:
             1: self.add_user,
             2: self.remove_user,
             3: self.edit_user,
-            4: self.list_users,
+            4: self.list_proper_users,
             5: self.add_balance,
             0: self.previous_view
         }
