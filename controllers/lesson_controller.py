@@ -44,14 +44,14 @@ class LessonController:
 
     def add_lesson_comment(self, id: int, comment: Comment):
         if id is None or id not in self.__lessons or not isinstance(comment, Comment):
-            WrongInputException("Aula não encontrada")
+            raise WrongInputException("Aula não encontrada")
 
         lesson = self.get_lesson(id)
         lesson.add_comment(comment)
 
     def remove_lesson_comment(self, id: int, comment: Comment):
         if id is None or id not in self.__lessons or not isinstance(comment, Comment):
-            WrongInputException("Comentário não encontrado.")
+            raise WrongInputException("Comentário não encontrado.")
 
         lesson = self.get_lesson(id)
         lesson.remove_comment(comment)
@@ -94,7 +94,7 @@ class LessonController:
                 return
 
             if self.__lessons[lesson_id] not in self.__module_controller.get_module(module_id).lessons:
-                WrongInputException("Esta aula não pertence a este módulo")
+                raise WrongInputException("Esta aula não pertence a este módulo")
 
             lesson = self.__lessons.pop(lesson_id)
             self.__module_controller.remove_module_lesson(module_id, lesson)
@@ -105,7 +105,7 @@ class LessonController:
     def edit_lesson(self):
         try:
             if len(self.__lessons) == 0:
-                MissingEntityException("Não há aulas cadastradas")
+                raise MissingEntityException("Não há aulas cadastradas")
 
             lesson_id = self.list_lessons()
             if lesson_id is None:
@@ -130,7 +130,7 @@ class LessonController:
     def list_lessons(self, module_id=None):
         try:
             if len(self.__lessons) == 0:
-                MissingEntityException("Não há aulas cadastradas")
+                raise MissingEntityException("Não há aulas cadastradas")
 
             if module_id is None:
                 module_id = self.__module_controller.list_modules()

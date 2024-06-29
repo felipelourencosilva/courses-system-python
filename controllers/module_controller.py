@@ -56,7 +56,7 @@ class ModuleController:
     def add_module(self):
         try:
             if len(self.__course_controller.get_courses()) == 0:
-                MissingParentException("Não é possível adicionar um Módulo sem um Curso no sistema")
+                raise MissingParentException("Não é possível adicionar um Módulo sem um Curso no sistema")
 
             course_id = self.__course_controller.list_courses()
             if course_id is None:
@@ -80,7 +80,7 @@ class ModuleController:
     def remove_module(self):
         try:
             if len(self.__modules) == 0:
-                MissingEntityException("Não há módulos cadastrados")
+                raise MissingEntityException("Não há módulos cadastrados")
 
             course_id = self.course_controller.list_courses()
             if course_id is None:
@@ -103,7 +103,7 @@ class ModuleController:
     def edit_module(self):
         try:
             if len(self.__modules) == 0:
-                MissingEntityException("Não há módulos cadastrados")
+                raise MissingEntityException("Não há módulos cadastrados")
 
             course_id = self.__course_controller.list_courses()
             if course_id is None:
@@ -123,7 +123,7 @@ class ModuleController:
                 raise EmptyInputException()
 
             if self.__modules[module_id] not in self.__course_controller.get_course(course_id).modules:
-                WrongInputException("Este módulo não pertence a este curso")
+                raise WrongInputException("Este módulo não pertence a este curso")
 
 
             module.title = module_data["title"]
@@ -133,26 +133,29 @@ class ModuleController:
             self.__module_view.show_message(e)
 
     def list_modules(self, course_id=None):
-        if len(self.__modules) == 0:
-            MissingEntityException("Não há módulos cadastrados")
+        try:
+            if len(self.__modules) == 0:
+                raise MissingEntityException("Não há módulos cadastrados")
 
-        if course_id is None:
-            course_id = self.course_controller.list_courses()
             if course_id is None:
+                course_id = self.course_controller.list_courses()
+                if course_id is None:
+                    return
+
+            course = self.__course_controller.get_course(course_id)
+
+            if len(course.modules) == 0:
+                self.__module_view.show_message("Não há módulos cadastrados nesse curso")
                 return
 
-        course = self.__course_controller.get_course(course_id)
-
-        if len(course.modules) == 0:
-            self.__module_view.show_message("Não há módulos cadastrados nesse curso")
-            return
-
-        modules_info = []
-        for module in course.modules:
-            modules_info.append([module.title, module.description,
-                                 module.id])
-        module_id = self.__module_view.show_modules(modules_info)
-        return module_id
+            modules_info = []
+            for module in course.modules:
+                modules_info.append([module.title, module.description,
+                                     module.id])
+            module_id = self.__module_view.show_modules(modules_info)
+            return module_id
+        except MissingEntityException as e:
+            self.__module_view.show_message(e)
 
     def to_lesson_view(self):
         self.__lesson_controller.show_view()
