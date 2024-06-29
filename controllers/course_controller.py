@@ -202,7 +202,7 @@ class CourseController:
             self.__system_controller.sale_controller.add_sale(user, course, affiliate)
             self.__course_view.show_success_message("Curso adquirido com sucesso")
         except (MissingParentException, WrongInputException,
-                RepeatedCourseException, NotEnoughBalanceException) as e:
+                RepeatedCourseException, NotEnoughBalanceException, MissingEntityException) as e:
             self.__course_view.show_message(e)
 
     def to_module_view(self):

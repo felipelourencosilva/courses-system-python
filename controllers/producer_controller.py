@@ -104,7 +104,7 @@ class ProducerController:
     def list_producer(self):
         try:
             if len(self.__producers) == 0:
-                MissingEntityException("Não há produtores cadastrados")
+                raise MissingEntityException("Não há produtores cadastrados")
             producers_data = []
             for producer in self.__producers:
                 producers_data.append([

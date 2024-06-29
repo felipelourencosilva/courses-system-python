@@ -103,7 +103,7 @@ class AffiliateController:
     def list_affiliates(self, show_no_affiliate_button=False):
         try:
             if len(self.__affiliates) == 0 and not show_no_affiliate_button:
-                MissingEntityException("Não há afiliados cadastrados")
+                raise MissingEntityException("Não há afiliados cadastrados")
 
             affiliates_data = []
             for affiliate in self.__affiliates:

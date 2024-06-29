@@ -30,7 +30,7 @@ class AbstractView(ABC):
         sg.ChangeLookAndFeel('DarkRed2')
         layout = [
             [sg.Text('Importante:', font=("Helvica", 25))],
-            [sg.Text(msg, size=(40, 1))],
+            [sg.Text(msg, size=(60, 1))],
             [sg.Button('Ok')]
         ]
         message_window = sg.Window('Mensagem').Layout(layout)
@@ -41,7 +41,7 @@ class AbstractView(ABC):
         sg.ChangeLookAndFeel('LightGreen6')
         layout = [
             [sg.Text('Sucesso:', font=("Helvica", 25))],
-            [sg.Text(msg, size=(40, 1))],
+            [sg.Text(msg, size=(60, 1))],
             [sg.Button('Ok')]
         ]
         success_message_window = sg.Window('Mensagem').Layout(layout)
