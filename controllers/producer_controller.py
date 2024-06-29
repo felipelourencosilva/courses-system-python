@@ -51,8 +51,19 @@ class ProducerController:
             if not producer_data["cpf"].isdigit():
                 raise WrongInputException('CPF precisa ser um número.')
 
-            producer = Producer(producer_data["name"], producer_data["surname"],
-                                producer_data["email"], producer_data["password"], int(producer_data["cpf"]))
+            cpf = int(producer_data["cpf"])
+            for user in self.__system_controller.user_controller.get_users():
+                if user.cpf == cpf:
+                    raise WrongInputException('Este CPF já foi utilizado.')
+
+            producer = Producer(
+                producer_data["name"],
+                producer_data["surname"],
+                producer_data["email"],
+                producer_data["password"],
+                cpf
+            )
+
             self.__producers.append(producer)
             self.__producer_view.show_success_message("Produtor cadastrado com sucesso")
         except (WrongInputException, EmptyInputException) as e:

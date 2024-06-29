@@ -67,8 +67,19 @@ class UserController:
             if not user_data["cpf"].isdigit():
                 raise WrongInputException('CPF precisa ser um número.')
 
-            user = User(user_data["name"], user_data["surname"],
-                        user_data["email"], user_data["password"], int(user_data["cpf"]))
+            cpf = int(user_data["cpf"])
+            for user in self.get_users():
+                if user.cpf == cpf:
+                    raise WrongInputException('Este CPF já foi utilizado.')
+
+
+            user = User(
+                user_data["name"],
+                user_data["surname"],
+                user_data["email"],
+                user_data["password"],
+                cpf
+            )
 
             self.__users.append(user)
             self.__user_view.show_success_message("Usuário cadastrado com sucesso")
@@ -118,8 +129,14 @@ class UserController:
             users_info = []
             for user in self.get_users():
                 course_names = [c.name for c in user.courses]
-                users_info.append([user.name + " " + user.surname, user.email, user.password, user.cpf, user.balance,
-                                    " ".join(course_names)])
+                users_info.append([
+                    user.name + " " + user.surname,
+                    user.email,
+                    user.password,
+                    user.cpf,
+                    user.balance,
+                    ", ".join(course_names)
+                ])
 
             return self.__user_view.show_users(users_info)  # should return user cpf
         except MissingEntityException as e:

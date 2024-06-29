@@ -51,12 +51,17 @@ class AffiliateController:
             if not affiliate_data["cpf"].isdigit():
                 raise WrongInputException('CPF precisa ser um número.')
 
+            cpf = int(affiliate_data["cpf"])
+            for user in self.__system_controller.user_controller.get_users():
+                if user.cpf == cpf:
+                    raise WrongInputException('Este CPF já foi utilizado.')
+
             affiliate = Affiliate(
                 affiliate_data["name"],
                 affiliate_data["surname"],
                 affiliate_data["email"],
                 affiliate_data["password"],
-                int(affiliate_data["cpf"])
+                cpf
             )
             self.__affiliates.append(affiliate)
             self.__affiliate_view.show_success_message("Afiliado cadastrado com sucesso")
