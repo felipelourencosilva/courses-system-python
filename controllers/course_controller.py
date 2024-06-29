@@ -3,6 +3,8 @@ from exceptions.missing_entity_exception import MissingEntityException
 from exceptions.missing_parent_exception import MissingParentException
 from exceptions.negative_value_exception import NegativeValueException
 from exceptions.wrong_input_exception import WrongInputException
+from exceptions.not_enough_balance_exception import NotEnoughBalanceException
+from exceptions.repeated_course_exception import RepeatedCourseException
 from views.course_view import *
 from entities.course import *
 from controllers.module_controller import *
@@ -177,11 +179,10 @@ class CourseController:
             course = self.__courses[course_id]
 
             if self.__system_controller.user_controller.user_has_course(cpf, course):
-                self.__course_view.show_message("Você já possui esse curso")
+                raise RepeatedCourseException()
                 return
             if not self.__system_controller.user_controller.user_has_enough_balance(cpf, course):
-                self.__course_view.show_message("Você não possui saldo suficiente")
-                return
+                raise NotEnoughBalanceException()
 
             affiliate_cpf = self.__system_controller.affiliate_controller.list_affiliates(True)
             if affiliate_cpf is None:
@@ -196,7 +197,8 @@ class CourseController:
             user = self.__system_controller.user_controller.get_user_by_cpf(cpf)
             self.__system_controller.sale_controller.add_sale(user, course, affiliate)
             self.__course_view.show_success_message("Curso adquirido com sucesso")
-        except (MissingParentException, WrongInputException) as e:
+        except (MissingParentException, WrongInputException,
+                RepeatedCourseException, NotEnoughBalanceException) as e:
             self.__course_view.show_message(e)
 
     def to_module_view(self):
