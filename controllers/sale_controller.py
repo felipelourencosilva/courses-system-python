@@ -37,16 +37,21 @@ class SaleController:
             options[chosen_option]()
 
     def generate_full_report(self):
-        messages = [self.show_most_sold_course(True), self.show_course_with_most_profit(True),
-                    self.show_user_with_most_courses(True), self.show_producer_with_most_sales(True),
-                    self.show_producer_with_most_profit(True), self.show_affiliate_with_most_sales(True),
-                    self.show_affiliate_with_most_profit(True)]
+        messages = [
+            self.get_most_sold_course(),
+            self.get_course_with_most_profit(),
+            self.get_user_with_most_courses(),
+            self.get_producer_with_most_sales(),
+            self.get_producer_with_most_profit(),
+            self.get_affiliate_with_most_sales(),
+            self.get_affiliate_with_most_profit()
+        ]
         self.__sale_view.show_complete_report(messages)
 
     def add_sale(self, user, course, affiliate=None):
         self.__sales.append(Sale(user, course, affiliate))
 
-    def show_most_sold_course(self, forCompleteReport=False):
+    def get_most_sold_course(self):
         counter = {}
         for sale in self.__sales:
             if sale.course not in counter:
@@ -64,11 +69,14 @@ class SaleController:
             str += "Não houve nenhuma venda até o momento."
         else:
             str += f"{best[0].name}, com um total de {best[1]} venda(s)."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_course_with_most_profit(self, forCompleteReport=False):
+    def show_most_sold_course(self):
+        self.__sale_view.show_single_report(
+            self.get_most_sold_course()
+        )
+
+    def get_course_with_most_profit(self):
         counter = {}
         for sale in self.__sales:
             if sale.course not in counter:
@@ -86,11 +94,14 @@ class SaleController:
             str += "Não houve nenhuma venda até o momento."
         else:
             str += f"{best[0].name}, com um lucro total de ${best[1]}."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_user_with_most_courses(self, forCompleteReport=False):
+    def show_course_with_most_profit(self):
+        self.__sale_view.show_single_report(
+            self.get_course_with_most_profit()
+        )
+
+    def get_user_with_most_courses(self):
         counter = {}
         for sale in self.__sales:
             if sale.user not in counter:
@@ -108,11 +119,14 @@ class SaleController:
             str += "Nenhum usuário comprou nenhum curso até o momento."
         else:
             str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} curso(s)."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_producer_with_most_sales(self, forCompleteReport=False):
+    def show_user_with_most_courses(self):
+        self.__sale_view.show_single_report(
+            self.get_user_with_most_courses()
+        )
+
+    def get_producer_with_most_sales(self):
         counter = {}
         for sale in self.__sales:
             if sale.course.producer not in counter:
@@ -130,16 +144,21 @@ class SaleController:
             str += "Não houve nenhuma venda até o momento."
         else:
             str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} venda(s)."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_producer_with_most_profit(self, forCompleteReport=False):
+    def show_producer_with_most_sales(self):
+        self.__sale_view.show_single_report(
+            self.get_producer_with_most_sales()
+        )
+
+    def get_producer_with_most_profit(self):
         counter = {}
         for sale in self.__sales:
             if sale.course.producer not in counter:
                 counter[sale.course.producer] = 0
-            counter[sale.course.producer] += sale.course.price - sale.course.commission_price
+            counter[sale.course.producer] += sale.course.price
+            if sale.affiliate is not None:
+                counter[sale.course.producer] -= sale.course.commission_price
 
         best = [None, 0]
         for key in counter:
@@ -152,11 +171,14 @@ class SaleController:
             str += "Não houve nenhuma venda até o momento."
         else:
             str += f"{best[0].name} {best[0].surname}, com um lucro total de ${best[1]}."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_affiliate_with_most_sales(self, forCompleteReport=False):
+    def show_producer_with_most_profit(self):
+        self.__sale_view.show_single_report(
+            self.get_producer_with_most_profit()
+        )
+
+    def get_affiliate_with_most_sales(self):
         counter = {}
         for sale in self.__sales:
             if sale.affiliate is not None:
@@ -175,11 +197,14 @@ class SaleController:
             str += "Não houve nenhuma venda comissionada até o momento."
         else:
             str += f"{best[0].name} {best[0].surname}, com um total de {best[1]} venda(s)."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
 
-    def show_affiliate_with_most_profit(self, forCompleteReport=False):
+    def show_affiliate_with_most_sales(self):
+        self.__sale_view.show_single_report(
+            self.get_affiliate_with_most_sales()
+        )
+
+    def get_affiliate_with_most_profit(self):
         counter = {}
         for sale in self.__sales:
             if sale.affiliate is not None:
@@ -198,6 +223,9 @@ class SaleController:
             str += "Não houve nenhuma venda comissionada até o momento."
         else:
             str += f"{best[0].name} {best[0].surname}, com um total de ${best[1]} em comissões."
-        if forCompleteReport:
-            return str
-        self.__sale_view.show_single_report(str)
+        return str
+
+    def show_affiliate_with_most_profit(self):
+        self.__sale_view.show_single_report(
+            self.get_affiliate_with_most_profit()
+        )

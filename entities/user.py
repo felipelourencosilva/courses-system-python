@@ -80,3 +80,9 @@ class User:
 
     def add_balance(self, value):
         self.__balance += value
+
+    def __eq__(self, other):
+        return self.__cpf == other.__cpf
+
+    def __hash__(self):
+        return hash(self.__cpf)

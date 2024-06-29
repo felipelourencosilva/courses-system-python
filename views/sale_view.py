@@ -9,7 +9,8 @@ class SaleView(AbstractView):
 
     def show_single_report(self, msg: str):
         layout = [
-            [sg.Text(f"{msg}", font=("Helvica", 14))],
+            [sg.Text("Relatório", font=("Helvica", 25))],
+            [sg.Text(msg, size=(100, 1))],
             [sg.Button('Voltar')]
         ]
 
