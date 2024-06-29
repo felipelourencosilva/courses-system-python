@@ -119,7 +119,7 @@ class UserController:
 
     def list_users(self):
         try:
-            if len(self.__users) == 0:
+            if len(self.get_users()) == 0:
                 raise MissingEntityException("Não há usuários cadastrados")
 
             users_info = []

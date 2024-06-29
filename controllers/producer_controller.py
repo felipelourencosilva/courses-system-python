@@ -120,6 +120,8 @@ class ProducerController:
 
     def remove_producer(self):
         producer_cpf = self.list_producer()
+        if producer_cpf is None:
+            return
 
         producer = self.get_producer_by_cpf(producer_cpf)
         self.__producers.remove(producer)

@@ -58,7 +58,7 @@ class CommentController:
     def remove_comment(self):
         try:
             if len(self.__comments) == 0:
-                MissingEntityException("Não há comentários cadastrados")
+                raise MissingEntityException("Não há comentários cadastrados")
 
             lesson_id = self.__lesson_controller.list_lessons()
             if lesson_id is None:
@@ -78,7 +78,7 @@ class CommentController:
     def edit_comment(self):
         try:
             if len(self.__comments) == 0:
-                MissingEntityException("Não há comentários cadastrados")
+                raise MissingEntityException("Não há comentários cadastrados")
 
             comment_id = self.list_comments()
             if comment_id is None:
@@ -100,7 +100,7 @@ class CommentController:
     def list_comments(self, lesson_id=None):
         try:
             if len(self.__comments) == 0:
-                MissingEntityException("Não há comentários cadastrados")
+                raise MissingEntityException("Não há comentários cadastrados")
 
             if lesson_id is None:
                 lesson_id = self.__lesson_controller.list_lessons()

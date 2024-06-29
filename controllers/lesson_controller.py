@@ -1,6 +1,3 @@
-from exceptions.empty_input_exception import EmptyInputException
-from exceptions.missing_entity_exception import MissingEntityException
-from exceptions.missing_parent_exception import MissingParentException
 from exceptions.wrong_input_exception import WrongInputException
 from views.lesson_view import *
 from entities.lesson import *

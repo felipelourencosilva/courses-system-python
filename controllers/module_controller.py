@@ -44,7 +44,7 @@ class ModuleController:
 
     def add_module_lesson(self, id: int, lesson: Lesson):
         if id is None or id not in self.__modules or not isinstance(lesson, Lesson):
-            WrongInputException("Curso não encontrado.")
+            raise WrongInputException("Curso não encontrado.")
 
         module = self.get_module(id)
         module.add_lesson(lesson)
