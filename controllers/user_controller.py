@@ -200,7 +200,7 @@ class UserController:
             if value is None:
                 return
 
-            if not value.isdigit() or float(value) < 0:
+            if float(value) < 0:
                 raise WrongInputException("Digite o valor corretamente")
 
             value = float(value)
@@ -208,6 +208,8 @@ class UserController:
             self.__user_view.show_success_message("Saldo adicionado com sucesso")
         except (WrongInputException, MissingEntityException) as e:
             self.__user_view.show_message(e)
+        except ValueError:
+            self.__user_view.show_message("Digite o valor corretamente")
 
     def previous_view(self):
         self.__system_controller.show_view()
