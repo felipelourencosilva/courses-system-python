@@ -73,22 +73,6 @@ class ModuleView(AbstractView):
         module_id = module_data[module_row][2]  # because 2nd position is the id
         return int(module_id)
 
-    def read_course_id(self):
-        return self.read_int_range(
-            "Digite o ID do curso: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )
-
-    def read_module_id(self):
-        return self.read_int_range(
-            "Digite o ID do módulo: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )
-
     def open(self, window):
         button, values = window.Read()
         return button, values

@@ -65,14 +65,6 @@ class AbstractView(ABC):
         else:
             return int(num)
 
-    def read_int_range(self, default_msg: str, error_msg: str, min: int, max: int):
-        while True:
-            num = self.read_int(default_msg, error_msg)
-            if num < min or num > max:
-                self.show_message(error_msg)
-            else:
-                return num
-
     def read_float(self, default_msg: str):
         layout = [
             [sg.Text(f'{default_msg}', font=("Helvica", 25))],
@@ -88,24 +80,6 @@ class AbstractView(ABC):
             return
 
         return values['float']
-
-    def read_letters_string(self, default_msg: str, error_msg: str):
-        while True:
-            str = input(default_msg)
-            if not re.search("^[^0-9!@#$%&*]*$", str):
-                self.show_message(error_msg)
-            else:
-                return str
-
-    def read_email(self,  default_msg: str, error_msg: str):
-        while True:
-            email = input(default_msg)
-            try:
-                if "@" not in email or ".com" in email:
-                    raise WrongInputException()
-                return email
-            except WrongInputException():
-                self.show_message(error_msg)
 
     def read_cpf(self, default_msg: str = None, error_msg: str = None):
         layout = [

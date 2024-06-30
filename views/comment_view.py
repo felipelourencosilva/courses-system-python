@@ -27,7 +27,7 @@ class CommentView(AbstractView):
         button, values = self.open(edit_module_window)
         edit_module_window.Close()
 
-        if button in (None, 'Cancelar'):
+        if button in (None, 'Voltar'):
             return
         return values
 
@@ -69,19 +69,3 @@ class CommentView(AbstractView):
         comment_row = values["comment"][0]
         comment_id = comment_data[comment_row][1]  # because 1st position is the id
         return int(comment_id)
-
-    def read_lesson_id(self):
-        return self.read_int_range(
-            "Digite o ID da aula: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )
-
-    def read_comment_id(self):
-        return self.read_int_range(
-            "Digite o ID do comentário: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )

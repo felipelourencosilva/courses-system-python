@@ -74,19 +74,3 @@ class LessonView(AbstractView):
         lesson_row = values["lesson"][0]
         lesson_id = lesson_data[lesson_row][2]  # because 2nd position is the id
         return int(lesson_id)
-
-    def read_lesson_id(self):
-        return self.read_int_range(
-            "Digite o ID da aula: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )
-
-    def read_module_id(self):
-        return self.read_int_range(
-            "Digite o ID do módulo: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )

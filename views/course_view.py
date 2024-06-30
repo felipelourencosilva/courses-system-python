@@ -71,11 +71,3 @@ class CourseView(AbstractView):
         course_row = values["course"][0]
         course_id = course_data[course_row][3]  # because 4th position is the id
         return int(course_id)
-
-    def read_id(self):
-        return self.read_int_range(
-            "Digite o ID do curso: ",
-            "O ID precisa ser um inteiro entre 1 e 1000",
-            1,
-            1000
-        )
